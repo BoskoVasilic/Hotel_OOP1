@@ -1,4 +1,4 @@
-package hotel_projekat;
+package main;
 
 public class Main {
 
