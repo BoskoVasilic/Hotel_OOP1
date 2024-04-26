@@ -1,22 +1,25 @@
 package entity;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Rezervacija {
 	
 	protected int id;
-	protected String datumPrijave;
-	protected String datumOdjave;
-	protected ArrayList<Soba> sobe;
+	protected LocalDate datumPrijave;
+	protected LocalDate datumOdjave;
+	protected TipSobe tipSobe;
+	protected int brojLjudi;
 	protected ArrayList<DodatnaUsluga> dodatneUsluge;
 	protected double ukupnaCena;
 	
-	public Rezervacija(int id, String datumPrijave, String datumOdjave, ArrayList<Soba> sobe,
+	public Rezervacija(int id, LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe, int brojLjudi,
 			ArrayList<DodatnaUsluga> dodatneUsluge) {
 		this.id = id;
 		this.datumPrijave = datumPrijave;
 		this.datumOdjave = datumOdjave;
-		this.sobe = sobe;
+		this.tipSobe = tipSobe;
+		this.brojLjudi = brojLjudi;
 		this.dodatneUsluge = dodatneUsluge;
 		this.ukupnaCena = this.izracunajUkupnuCenu();
 	}
@@ -29,30 +32,38 @@ public class Rezervacija {
 		this.id = id;
 	}
 
-	public String getDatumPrijave() {
+	public LocalDate getDatumPrijave() {
 		return datumPrijave;
 	}
 
-	public void setDatumPrijave(String datumPrijave) {
+	public void setDatumPrijave(LocalDate datumPrijave) {
 		this.datumPrijave = datumPrijave;
 	}
 
-	public String getDatumOdjave() {
+	public LocalDate getDatumOdjave() {
 		return datumOdjave;
 	}
 
-	public void setDatumOdjave(String datumOdjave) {
+	public void setDatumOdjave(LocalDate datumOdjave) {
 		this.datumOdjave = datumOdjave;
 	}
 
-	public ArrayList<Soba> getSobe() {
-		return sobe;
+	public TipSobe getTipSobe() {
+		return tipSobe;
 	}
 
-	public void setSobe(ArrayList<Soba> sobe) {
-		this.sobe = sobe;
+	public void setSobe(TipSobe tipSobe) {
+		this.tipSobe = tipSobe;
 	}
-
+	
+	public int getBrojLjudi() {
+		return brojLjudi;
+	}
+	
+	public void setBrojLjudi(int brojLjudi) {
+		this.brojLjudi = brojLjudi;
+	}
+	
 	public ArrayList<DodatnaUsluga> getDodatneUsluge() {
 		return dodatneUsluge;
 	}
@@ -69,14 +80,9 @@ public class Rezervacija {
 		this.ukupnaCena = ukupnaCena;
 	}
 	
-	public double izracunajUkupnuCenu() {
+	protected double izracunajUkupnuCenu() {
 		double ukupnaCena = 0;
-		for (Soba soba : sobe) {
-			ukupnaCena += soba.getCena();
-		}
-		for (DodatnaUsluga dodatnaUsluga : dodatneUsluge) {
-			ukupnaCena += dodatnaUsluga.getCena();
-		}
+		
 		return ukupnaCena;
 	}
 

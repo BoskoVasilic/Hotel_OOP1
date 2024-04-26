@@ -1,16 +1,20 @@
 package entity;
 
+import java.util.ArrayList;
+
 public class Soba {
 	protected int brojSobe;
-	protected int brojKreveta;
+	protected TipSobe tipSobe;
 	protected StatusSobe statusSobe;
-	protected double cena;
+	protected ArrayList<Oprema> opremljenostSobe;
+	protected boolean pusackaSoba;
 	
-	public Soba(int brojSobe, int brojKreveta, StatusSobe statusSobe, double cena) {
+	public Soba(int brojSobe, TipSobe tipSobe, StatusSobe statusSobe, ArrayList<Oprema> opremljenostSobe, boolean pusackaSoba) {
 		this.brojSobe = brojSobe;
-		this.brojKreveta = brojKreveta;
+		this.tipSobe = tipSobe;
 		this.statusSobe = statusSobe;
-		this.cena = cena;
+		this.opremljenostSobe = opremljenostSobe;
+		this.pusackaSoba = pusackaSoba;
 	}
 
 	public int getBrojSobe() {
@@ -21,12 +25,12 @@ public class Soba {
 		this.brojSobe = brojSobe;
 	}
 
-	public int getBrojKreveta() {
-		return brojKreveta;
+	public TipSobe getTipSobe() {
+		return tipSobe;
 	}
-
-	public void setBrojKreveta(int brojKreveta) {
-		this.brojKreveta = brojKreveta;
+	
+	public void setTipSobe(TipSobe tipSobe) {
+		this.tipSobe = tipSobe;
 	}
 
 	public StatusSobe getStatusSobe() {
@@ -36,14 +40,22 @@ public class Soba {
 	public void setStatusSobe(StatusSobe statusSobe) {
 		this.statusSobe = statusSobe;
 	}
-
-	public double getCena() {
-		return cena;
-	}
-
-	public void setCena(double cena) {
-		this.cena = cena;
+	
+	public ArrayList<Oprema> getOpremljenostSobe() {
+		return opremljenostSobe;
 	}
 	
+	public void setOpremljenostSobe(ArrayList<Oprema> opremljenostSobe) {
+		this.opremljenostSobe = opremljenostSobe;
+	}
+	
+	public boolean isPusackaSoba() {
+		return pusackaSoba;
+	}
+	
+	public void setPusackaSoba(boolean pusackaSoba) {
+		this.pusackaSoba = pusackaSoba;
+	}
+
 
 }
