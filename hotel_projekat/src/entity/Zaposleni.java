@@ -1,12 +1,14 @@
 package entity;
 
+import java.time.LocalDate;
+
 public class Zaposleni extends Korisnik {
 	protected StrucnaSprema strucnaSprema;
 	protected int godineStaza;
 	protected double plata;
 	protected Osnovica osnovica;
 	
-	public Zaposleni(String ime, String prezime, Pol pol, String datumRodjenja, String telefon, String adresa,
+	public Zaposleni(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa,
 			String korisnickoIme, String lozinka, StrucnaSprema strucnaSprema, int godineStaza, Osnovica osnovica) {
 		super(ime, prezime, pol, datumRodjenja, telefon, adresa, korisnickoIme, lozinka);
 		this.strucnaSprema = strucnaSprema;
@@ -57,8 +59,12 @@ public class Zaposleni extends Korisnik {
 	
 	@Override
 	public String toString() {
-		return super.toString() + "Stručna sprema: " + strucnaSprema + "\nGodine staža: " + godineStaza + "\nPlata: "
+		return super.toString() + "\nStručna sprema: " + strucnaSprema + "\nGodine staža: " + godineStaza + "\nPlata: "
 				+ Math.round(plata) + "\n";
+	}
+	
+	public String toFile() {
+		return super.toFile() + "," + strucnaSprema + "," + godineStaza + "," + Math.round(plata);
 	}
 
 }

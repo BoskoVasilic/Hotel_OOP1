@@ -1,16 +1,19 @@
 package entity;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class Korisnik {
     protected String ime;
     protected String prezime;
     protected Pol pol;
-    protected String datumRodjenja;
+    protected LocalDate datumRodjenja;
     protected String telefon;
     protected String adresa;
     protected String korisnickoIme;
     protected String lozinka;
     
-	public Korisnik(String ime, String prezime, Pol pol, String datumRodjenja, String telefon, String adresa,
+	public Korisnik(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa,
 			String korisnickoIme, String lozinka) {
 		this.ime = ime;
 		this.prezime = prezime;
@@ -46,11 +49,11 @@ public class Korisnik {
 		this.pol = pol;
 	}
 
-	public String getDatumRodjenja() {
+	public LocalDate getDatumRodjenja() {
 		return datumRodjenja;
 	}
 
-	public void setDatumRodjenja(String datumRodjenja) {
+	public void setDatumRodjenja(LocalDate datumRodjenja) {
 		this.datumRodjenja = datumRodjenja;
 	}
 
@@ -88,9 +91,13 @@ public class Korisnik {
 	
 	@Override
 	public String toString() {
-		return "Korisnik [ime=" + ime + ", prezime=" + prezime + ", pol=" + pol + ", datumRodjenja=" + datumRodjenja
-				+ ", telefon=" + telefon + ", adresa=" + adresa + ", korisnickoIme=" + korisnickoIme + ", lozinka="
-				+ lozinka + "]";
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
+		return "Ime: " + ime + "\nPrezime: " + prezime + "\nPol: " + pol + "\nDatum rodjenja: " + datumRodjenja.format(format)
+				+ "\nTelefon: " + telefon + "\nAdresa: " + adresa + "\nKorisničko ime: " + korisnickoIme;
 	}
 	
+	public String toFile() {
+		return ime + "," + prezime + "," + pol + "," + datumRodjenja + "," + telefon + "," + adresa + ","
+				+ korisnickoIme + "," + lozinka;
+	}
 }
