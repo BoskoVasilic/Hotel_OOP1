@@ -7,6 +7,7 @@ import entity.Pol;
 import entity.StrucnaSprema;
 import manage.AdministratorManager;
 import manage.RecepcionerManager;
+import manage.SobaricaManager;
 import manage.ZaposleniManager;
 
 public class Main {
@@ -25,8 +26,13 @@ public class Main {
 		//rm.dodajRecepcionera("Nikola", "Nikolic", Pol.M, LocalDate.parse("12.05.1970.", format), "0643332122", "Jevrejska 9", "nikola", "nikola123", StrucnaSprema.IV, 20);
 		//rm.sacuvajRecepcionere();
 		
+		SobaricaManager sm = new SobaricaManager("data/sobarice.csv");
+		sm.ucitajSobarice();
+		//sm.dodajSobaricu("Jana", "Janic", Pol.Z, LocalDate.parse("15.08.1995.", format), "0655165075", "Bulevar Vojvode Stepe 15", "jana", "jana123", StrucnaSprema.III, 10);
+		sm.sacuvajSobarice();
+		
 		ZaposleniManager zm = new ZaposleniManager();
-		zm.prikaziSveZaposlene(am, rm);
+		zm.prikaziSveZaposlene(am, rm, sm);
 		
 		rm.obrisiRecepcionera("nikola");
 	}

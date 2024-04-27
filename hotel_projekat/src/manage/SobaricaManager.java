@@ -15,10 +15,12 @@ import entity.StrucnaSprema;
 public class SobaricaManager {
 	private String sobaricaFile;
 	private ArrayList<Sobarica> sobarice;
+	private SobaManager sm;
 	
 	public SobaricaManager(String sobaricaFile) {
 		this.sobaricaFile = sobaricaFile;
 		this.sobarice = new ArrayList<Sobarica>();
+		this.sm = new SobaManager("data/sobe.txt");
 	}
 	
 	public ArrayList<Sobarica> getSobarice() {
@@ -32,6 +34,16 @@ public class SobaricaManager {
 			while ((linija = br.readLine()) != null) {
 				String[] tokeni = linija.split(",");
 				Sobarica s = new Sobarica(tokeni[0], tokeni[1], Pol.valueOf(tokeni[2]), LocalDate.parse(tokeni[3]), tokeni[4], tokeni[5], tokeni[6], tokeni[7], StrucnaSprema.valueOf(tokeni[8]), Integer.parseInt(tokeni[9]));
+				s.setBrojSobaZaSredjivanje(Integer.parseInt(tokeni[10]));
+				for (String brojSobe : tokeni[11].substring(1, tokeni[11].length() - 1).split(", ")) {
+					s.getSobeZaSredjivanje().add(sm.nadjiSobu(Integer.parseInt(brojSobe)));
+				}
+				LocalDate danasnjiDatum = LocalDate.now();
+				LocalDate datum = LocalDate.parse(tokeni[12]);
+				if (danasnjiDatum.isEqual(datum) != true) {
+					s.setDatum(danasnjiDatum);
+					s.setBrojSobaZaSredjivanje(0);
+				}
 				this.sobarice.add(s);
 			}
 			br.close();
