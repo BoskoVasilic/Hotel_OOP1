@@ -5,6 +5,12 @@ public class TipSobe {
 	protected String naziv;
 	protected int brojKreveta;
 	protected int brojOsoba;
+	
+	public TipSobe() {
+		this.naziv = "";
+		this.brojKreveta = 0;
+		this.brojOsoba = 0;
+	}
 
 	public TipSobe(String naziv, int brojKreveta, int brojOsoba) {
 		this.naziv = naziv;

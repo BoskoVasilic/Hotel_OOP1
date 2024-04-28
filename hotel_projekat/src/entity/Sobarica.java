@@ -47,7 +47,7 @@ public class Sobarica extends Zaposleni {
 		for (Soba s : sobeZaSredjivanje) {
 			brojeviSoba.add(s.getBrojSobe());
 		}
-		return super.toString() + "\nBroj soba za sredjivanje dodeljenih danas: " + brojSobaZaSredjivanje + "\nTrenutno dodeljene sobe: " + brojeviSoba;
+		return super.toString() + "Broj soba za sredjivanje dodeljenih danas: " + brojSobaZaSredjivanje + "\nTrenutno dodeljene sobe: " + brojeviSoba;
 	}
 	
 	public String toFile() {
@@ -55,7 +55,7 @@ public class Sobarica extends Zaposleni {
 		for (Soba s : sobeZaSredjivanje) {
 			brojeviSoba.add(s.getBrojSobe());
 		}
-		return super.toFile() + ", " + brojSobaZaSredjivanje + ", " + brojeviSoba + ", " + datum;
+		return super.toFile() + "," + brojSobaZaSredjivanje + "," + brojeviSoba + "," + datum;
 	}
 		
 }

@@ -34,7 +34,7 @@ public class Gost extends Korisnik {
 		for (Rezervacija r : rezervacije) {
 			idRezervacija.add(r.getId());
 		}
-		return super.toFile() + ", " + idRezervacija;
+		return super.toFile() + "," + idRezervacija;
 	}
 	
 }

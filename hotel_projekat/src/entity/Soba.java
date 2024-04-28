@@ -9,11 +9,11 @@ public class Soba {
 	protected ArrayList<Oprema> opremljenostSobe;
 	protected boolean pusackaSoba;
 	
-	public Soba(int brojSobe, TipSobe tipSobe, StatusSobe statusSobe, ArrayList<Oprema> opremljenostSobe, boolean pusackaSoba) {
+	public Soba(int brojSobe, StatusSobe statusSobe, boolean pusackaSoba) {
 		this.brojSobe = brojSobe;
-		this.tipSobe = tipSobe;
+		this.tipSobe = new TipSobe();
 		this.statusSobe = statusSobe;
-		this.opremljenostSobe = opremljenostSobe;
+		this.opremljenostSobe = new ArrayList<Oprema>();
 		this.pusackaSoba = pusackaSoba;
 	}
 
@@ -55,6 +55,14 @@ public class Soba {
 	
 	public void setPusackaSoba(boolean pusackaSoba) {
 		this.pusackaSoba = pusackaSoba;
+	}
+	
+	public String toFile() {
+		ArrayList<String> nazivOpreme = new ArrayList<String>();
+		for (Oprema o : opremljenostSobe) {
+			nazivOpreme.add(o.getNaziv());
+		}
+		return this.brojSobe + "," + tipSobe.naziv + "," + this.statusSobe + "," + nazivOpreme + "," + this.pusackaSoba;
 	}
 
 

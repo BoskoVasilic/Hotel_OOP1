@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import entity.Pol;
 import entity.StrucnaSprema;
 import manage.AdministratorManager;
+import manage.GostManager;
 import manage.RecepcionerManager;
 import manage.SobaricaManager;
 import manage.ZaposleniManager;
@@ -28,13 +29,20 @@ public class Main {
 		
 		SobaricaManager sm = new SobaricaManager("data/sobarice.csv");
 		sm.ucitajSobarice();
-		//sm.dodajSobaricu("Jana", "Janic", Pol.Z, LocalDate.parse("15.08.1995.", format), "0655165075", "Bulevar Vojvode Stepe 15", "jana", "jana123", StrucnaSprema.III, 10);
+		sm.dodajSobaricu("Jana", "Janic", Pol.Z, LocalDate.parse("15.08.1995.", format), "0655165075", "Bulevar Vojvode Stepe 15", "jana", "jana123", StrucnaSprema.III, 10);
 		sm.sacuvajSobarice();
 		
 		ZaposleniManager zm = new ZaposleniManager();
 		zm.prikaziSveZaposlene(am, rm, sm);
 		
-		rm.obrisiRecepcionera("nikola");
+		//rm.obrisiRecepcionera("nikola");
+		//rm.sacuvajRecepcionere();
+		
+		GostManager gm = new GostManager("data/gosti.csv");
+		gm.ucitajGoste();
+		gm.dodajGosta("Milica", "Milic", Pol.Z, LocalDate.parse("12.02.1980.", format), "063128416", "Fruskogorska 12", "milica@gmail.com", "002415874");
+		gm.dodajGosta("Ana", "Anic", Pol.Z, LocalDate.parse("25.05.1998.", format), "0641220906", "Bate Brkica 3", "ana@gmail.com", "002312398");
+		gm.sacuvajGoste();
 	}
 
 }

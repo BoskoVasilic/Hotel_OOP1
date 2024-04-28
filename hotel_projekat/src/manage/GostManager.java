@@ -34,7 +34,7 @@ public class GostManager {
 			while ((linija = br.readLine()) != null) {
 				String[] tokeni = linija.split(",");
 				Gost g = new Gost(tokeni[0], tokeni[1], Pol.valueOf(tokeni[2]), LocalDate.parse(tokeni[3]), tokeni[4], tokeni[5], tokeni[6], tokeni[7]);
-				for (String idRezervacije : tokeni[8].substring(1, tokeni[11].length() - 1).split(", ")) {
+				for (String idRezervacije : tokeni[8].substring(1, tokeni[8].length() - 1).split(", ")) {
 					g.getRezervacije().add(rm.nadjiRezervaciju(Integer.parseInt(idRezervacije)));
 				}
 				this.gosti.add(g);
@@ -48,7 +48,7 @@ public class GostManager {
 	}
 	
 	
-	public boolean sacuvajSobarice() {
+	public boolean sacuvajGoste() {
 		PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(new FileWriter(this.gostFile, false));
@@ -76,4 +76,28 @@ public class GostManager {
 		gosti.add(new Gost(ime, prezime, pol, datumRodjenja, telefon, adresa, email, brojPasosa));
 	}
 	
+	public void izmeniGosta(String korisnickoIme, String ime, String prezime, Pol pol, LocalDate datumRodjenja,
+			String telefon, String adresa, String lozinka) {
+		Gost g = nadjiGosta(korisnickoIme);
+		if (g != null) {
+			g.setIme(ime);
+			g.setPrezime(prezime);
+			g.setPol(pol);
+			g.setDatumRodjenja(datumRodjenja);
+			g.setTelefon(telefon);
+			g.setAdresa(adresa);
+			g.setLozinka(lozinka);
+		}else {
+			System.out.println("Gost sa korisnickim imenom " + korisnickoIme + " ne postoji!");
+		}
+	}
+	
+	public void obrisiGosta(String korisnickoIme) {
+		Gost g = nadjiGosta(korisnickoIme);
+		if (g != null) {
+			gosti.remove(g);
+		} else {
+			System.out.println("Gost sa korisnickim imenom " + korisnickoIme + " ne postoji!");
+		}
+	}
 }
