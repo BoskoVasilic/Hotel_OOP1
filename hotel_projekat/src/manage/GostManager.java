@@ -35,7 +35,9 @@ public class GostManager {
 				String[] tokeni = linija.split(",");
 				Gost g = new Gost(tokeni[0], tokeni[1], Pol.valueOf(tokeni[2]), LocalDate.parse(tokeni[3]), tokeni[4], tokeni[5], tokeni[6], tokeni[7]);
 				for (String idRezervacije : tokeni[8].substring(1, tokeni[8].length() - 1).split(", ")) {
-					g.getRezervacije().add(rm.nadjiRezervaciju(Integer.parseInt(idRezervacije)));
+					if(!idRezervacije.equals("")) {
+						g.getRezervacije().add(rm.nadjiRezervaciju(Integer.parseInt(idRezervacije)));
+					}
 				}
 				this.gosti.add(g);
 			}

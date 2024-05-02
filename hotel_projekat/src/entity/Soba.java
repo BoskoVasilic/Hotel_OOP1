@@ -16,6 +16,15 @@ public class Soba {
 		this.opremljenostSobe = new ArrayList<Oprema>();
 		this.pusackaSoba = pusackaSoba;
 	}
+	
+	public Soba(int brojSobe, TipSobe tipSobe, StatusSobe statusSobe, ArrayList<Oprema> opremljenostSobe,
+			boolean pusackaSoba) {
+		this.brojSobe = brojSobe;
+		this.tipSobe = tipSobe;
+		this.statusSobe = statusSobe;
+		this.opremljenostSobe = opremljenostSobe;
+		this.pusackaSoba = pusackaSoba;
+	}
 
 	public int getBrojSobe() {
 		return brojSobe;
@@ -57,10 +66,18 @@ public class Soba {
 		this.pusackaSoba = pusackaSoba;
 	}
 	
+	@Override
+	public String toString() {
+		return "Soba [brojSobe=" + brojSobe + ", tipSobe=" + tipSobe + ", statusSobe=" + statusSobe
+				+ ", opremljenostSobe=" + opremljenostSobe + ", pusackaSoba=" + pusackaSoba + "]";
+	}
+	
 	public String toFile() {
 		ArrayList<String> nazivOpreme = new ArrayList<String>();
 		for (Oprema o : opremljenostSobe) {
-			nazivOpreme.add(o.getNaziv());
+			if (o != null) {
+				nazivOpreme.add(o.getNaziv());
+			}
 		}
 		return this.brojSobe + "," + tipSobe.naziv + "," + this.statusSobe + "," + nazivOpreme + "," + this.pusackaSoba;
 	}

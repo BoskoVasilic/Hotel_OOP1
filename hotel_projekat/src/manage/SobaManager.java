@@ -5,22 +5,24 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
-import entity.Gost;
-import entity.Pol;
+import entity.Oprema;
 import entity.Soba;
 import entity.StatusSobe;
 import entity.TipSobe;
 
 public class SobaManager {
-	String sobaFile;
-	ArrayList<Soba> sobe;
+	private String sobaFile;
+	private ArrayList<Soba> sobe;
+	private TipSobeManager tsm;
+	private OpremaManager om;
 	
 	public SobaManager(String sobaFile) {
 		this.sobaFile = sobaFile;
 		this.sobe = new ArrayList<Soba>();
+		this.tsm = new TipSobeManager("data/tipoviSoba.csv");
+		this.om = new OpremaManager("data/oprema.csv");
 	}
 	
 	public ArrayList<Soba> getSobe() {
@@ -31,13 +33,14 @@ public class SobaManager {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(this.sobaFile));
 			String linija = null;
+			String regex = ",(?![^\\[]*\\])";
 			while ((linija = br.readLine()) != null) {
-				String[] tokeni = linija.split(",");
+				String[] tokeni = linija.split(regex);
 				Soba s = new Soba(Integer.parseInt(tokeni[0]), StatusSobe.valueOf(tokeni[2]), Boolean.parseBoolean(tokeni[4]));
 				for (String nazivOpreme : tokeni[3].substring(1, tokeni[3].length() - 1).split(", ")) {
-					//g.getRezervacije().add(rm.nadjiRezervaciju(Integer.parseInt(idRezervacije)));
+					s.getOpremljenostSobe().add(om.nadjiOpremu(nazivOpreme.trim()));
 				}
-				//s.setTipSobe(ts.nadjiTipSobe(Integer.parseInt(tokeni[1])));
+				s.setTipSobe(tsm.nadjiTipSobe(tokeni[1]));
 				this.sobe.add(s);
 			}
 			br.close();
@@ -71,6 +74,33 @@ public class SobaManager {
 			}
 		}
 		return null;
+	}
+	
+	public void dodajSobu(int brojSobe, TipSobe tipSobe, StatusSobe statusSobe, ArrayList<Oprema> opremljenostSobe, boolean pusacka) {
+        Soba s = new Soba(brojSobe, tipSobe, statusSobe, opremljenostSobe, pusacka);
+        sobe.add(s);
+    }
+	
+	public void izmeniSobu(int brojSobe, TipSobe tipSobe, StatusSobe statusSobe, ArrayList<Oprema> opremljenostSobe,
+			boolean pusacka) {
+		Soba soba = nadjiSobu(brojSobe);
+		if (soba != null) {
+			soba.setTipSobe(tipSobe);
+			soba.setStatusSobe(statusSobe);
+			soba.setOpremljenostSobe(opremljenostSobe);
+			soba.setPusackaSoba(pusacka);
+		} else {
+			System.out.println("Soba sa brojem " + brojSobe + " ne postoji u sistemu.");
+		}
+	}
+	
+	public void obrisiSobu(int brojSobe) {
+		Soba soba = nadjiSobu(brojSobe);
+		if (soba != null) {
+			sobe.remove(soba);
+		} else {
+			System.out.println("Soba sa brojem " + brojSobe + " ne postoji u sistemu.");
+		}
 	}
 	
 }

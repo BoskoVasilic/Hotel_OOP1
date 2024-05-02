@@ -1,0 +1,5 @@
+1,jednokrevetna (1),SLOBODNA,[TV, Klima],false
+2,dvokrevetna (2),SLOBODNA,[TV, Klima, Mini-bar],true
+3,dvokrevetna (1+1),SLOBODNA,[TV, Klima],false
+4,trokrevetna (2+1),SLOBODNA,[Klima, Mini-bar],true
+5,dvokrevetna (2),SLOBODNA,[TV, Klima],true

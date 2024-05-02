@@ -3,12 +3,16 @@ package main;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import entity.Pol;
-import entity.StrucnaSprema;
+import entity.TipSobe;
 import manage.AdministratorManager;
+import manage.CenovnikManager;
+import manage.DodatnaUslugaManager;
 import manage.GostManager;
+import manage.OpremaManager;
 import manage.RecepcionerManager;
+import manage.SobaManager;
 import manage.SobaricaManager;
+import manage.TipSobeManager;
 import manage.ZaposleniManager;
 
 public class Main {
@@ -29,8 +33,8 @@ public class Main {
 		
 		SobaricaManager sm = new SobaricaManager("data/sobarice.csv");
 		sm.ucitajSobarice();
-		sm.dodajSobaricu("Jana", "Janic", Pol.Z, LocalDate.parse("15.08.1995.", format), "0655165075", "Bulevar Vojvode Stepe 15", "jana", "jana123", StrucnaSprema.III, 10);
-		sm.sacuvajSobarice();
+		//sm.dodajSobaricu("Jana", "Janic", Pol.Z, LocalDate.parse("15.08.1995.", format), "0655165075", "Bulevar Vojvode Stepe 15", "jana", "jana123", StrucnaSprema.III, 10);
+		//sm.sacuvajSobarice();
 		
 		ZaposleniManager zm = new ZaposleniManager();
 		zm.prikaziSveZaposlene(am, rm, sm);
@@ -40,9 +44,54 @@ public class Main {
 		
 		GostManager gm = new GostManager("data/gosti.csv");
 		gm.ucitajGoste();
-		gm.dodajGosta("Milica", "Milic", Pol.Z, LocalDate.parse("12.02.1980.", format), "063128416", "Fruskogorska 12", "milica@gmail.com", "002415874");
-		gm.dodajGosta("Ana", "Anic", Pol.Z, LocalDate.parse("25.05.1998.", format), "0641220906", "Bate Brkica 3", "ana@gmail.com", "002312398");
-		gm.sacuvajGoste();
+		//gm.dodajGosta("Milica", "Milic", Pol.Z, LocalDate.parse("12.02.1980.", format), "063128416", "Fruskogorska 12", "milica@gmail.com", "002415874");
+		//gm.dodajGosta("Ana", "Anic", Pol.Z, LocalDate.parse("25.05.1998.", format), "0641220906", "Bate Brkica 3", "ana@gmail.com", "002312398");
+		//gm.sacuvajGoste();
+		
+		TipSobeManager tsm = new TipSobeManager("data/tipoviSoba.csv");
+		tsm.ucitajTipoveSoba();
+		//tsm.dodajTipSobe("jednokrevetna (1)", 1, 1);
+		//tsm.dodajTipSobe("dvokrevetna (2)", 1, 2);
+		//tsm.dodajTipSobe("dvokrevetna (1+1)", 2, 2);
+		//tsm.dodajTipSobe("trokrevetna (2+1)", 2, 3);
+		//tsm.sacuvajTipoveSoba();
+		
+		OpremaManager om = new OpremaManager("data/oprema.csv");
+		om.ucitajOpremu();
+		//om.dodajOpremu("TV");
+		//om.dodajOpremu("Klima");
+		//om.dodajOpremu("Mini-bar");
+		//om.sacuvajOpremu();
+		
+		SobaManager som = new SobaManager("data/sobe.csv");
+		som.ucitajSobe();
+		//som.dodajSobu(1, tsm.nadjiTipSobe("jednokrevetna (1)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("TV"), om.nadjiOpremu("Klima"))), false);
+		//som.dodajSobu(2, tsm.nadjiTipSobe("dvokrevetna (2)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("TV"), om.nadjiOpremu("Klima"), om.nadjiOpremu("Mini-bar"))), true);
+		//som.dodajSobu(3, tsm.nadjiTipSobe("dvokrevetna (1+1)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("TV"), om.nadjiOpremu("Klima"))), false);
+		//som.dodajSobu(4, tsm.nadjiTipSobe("trokrevetna (2+1)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("Klima"), om.nadjiOpremu("Mini-bar"))), true);
+		//som.dodajSobu(5, tsm.nadjiTipSobe("dvokrevetna (2)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("TV"), om.nadjiOpremu("Klima"))), true);
+		//som.sacuvajSobe();
+		
+		//som.izmeniSobu(2, tsm.nadjiTipSobe("trokrevetna (2+1)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("TV"), om.nadjiOpremu("Klima"), om.nadjiOpremu("Mini-bar"))), true);
+		//som.sacuvajSobe();
+		
+		DodatnaUslugaManager dum = new DodatnaUslugaManager("data/dodatneUsluge.csv");
+		dum.ucitajDodatneUsluge();
+		//dum.dodajDodatnuUslugu("dorucak");
+		//dum.dodajDodatnuUslugu("rucak");
+		//dum.dodajDodatnuUslugu("vecera");
+		//dum.dodajDodatnuUslugu("bazen");
+		//dum.dodajDodatnuUslugu("spa centar");
+		//dum.sacuvajDodatneUsluge();
+		
+		//dum.obrisiDodatnuUslugu("spa centar");
+		//dum.sacuvajDodatneUsluge();
+		
+		CenovnikManager cm = new CenovnikManager("data/cenovnik.csv");
+		cm.ucitajCenovnike();
+		cm.dodajCenovnik(LocalDate.parse("01.01.2024.", format), LocalDate.parse("31.12.2024.", format));
+		cm.sacuvajCenovnike();
+		
 	}
 
 }

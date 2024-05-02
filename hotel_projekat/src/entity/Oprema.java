@@ -15,4 +15,7 @@ public class Oprema {
 		this.naziv = naziv;
 	}
 	
+	public String toFile() {
+		return this.naziv;
+	}
 }

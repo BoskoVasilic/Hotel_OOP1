@@ -4,7 +4,7 @@ public class DodatnaUsluga {
 	
 	protected String naziv;
 	
-	public DodatnaUsluga(String naziv, double cena) {
+	public DodatnaUsluga(String naziv) {
 		this.naziv = naziv;
 	}
 
@@ -15,5 +15,8 @@ public class DodatnaUsluga {
 	public void setNaziv(String naziv) {
 		this.naziv = naziv;
 	}
-
+	
+	public String toFile() {
+		return this.naziv;
+	}
 }

@@ -42,6 +42,14 @@ public class TipSobe {
 		this.brojOsoba = brojOsoba;
 	}
 	
+	@Override
+	public String toString() {
+		return "TipSobe [naziv=" + naziv + ", brojKreveta=" + brojKreveta + ", brojOsoba=" + brojOsoba + "]";
+	}
+	
+	public String toFile() {
+		return this.naziv + "," + this.brojKreveta + "," + this.brojOsoba;
+	}
 	
 
 }
