@@ -3,9 +3,12 @@ package entity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import manage.CenovnikManager;
+
 public class Rezervacija {
 	
 	protected int id;
+	protected Gost rezervisao;
 	protected LocalDate datumPrijave;
 	protected LocalDate datumOdjave;
 	protected TipSobe tipSobe;
@@ -13,15 +16,16 @@ public class Rezervacija {
 	protected ArrayList<DodatnaUsluga> dodatneUsluge;
 	protected double ukupnaCena;
 	
-	public Rezervacija(int id, LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe, int brojLjudi,
-			ArrayList<DodatnaUsluga> dodatneUsluge) {
+	public Rezervacija(int id, Gost rezervisao,LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe, int brojLjudi,
+			ArrayList<DodatnaUsluga> dodatneUsluge, double ukupnaCena) {
 		this.id = id;
+		this.rezervisao = rezervisao;
 		this.datumPrijave = datumPrijave;
 		this.datumOdjave = datumOdjave;
 		this.tipSobe = tipSobe;
 		this.brojLjudi = brojLjudi;
 		this.dodatneUsluge = dodatneUsluge;
-		this.ukupnaCena = this.izracunajUkupnuCenu();
+		this.ukupnaCena = ukupnaCena;
 	}
 
 	public int getId() {
@@ -31,7 +35,15 @@ public class Rezervacija {
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	
+	public Gost getRezervisao() {
+		return rezervisao;
+	}
+	
+	public void setRezervisao(Gost rezervisao) {
+		this.rezervisao = rezervisao;
+	}
+	
 	public LocalDate getDatumPrijave() {
 		return datumPrijave;
 	}
@@ -82,8 +94,18 @@ public class Rezervacija {
 	
 	protected double izracunajUkupnuCenu() {
 		double ukupnaCena = 0;
-		
+		CenovnikManager cm = new CenovnikManager("data/cenovnik.csv");
+		for (LocalDate datum = datumPrijave; datum.isBefore(datumOdjave); datum = datum.plusDays(1)) {
+			cm.ucitajCenovnike();
+			Cenovnik cenovnik = cm.nadjiCenovnikZaDatum(datum);
+			ukupnaCena += cenovnik.dobaviCenu("TipoviSoba", tipSobe.getNaziv());
+			ukupnaCena += dodatneUsluge.stream().mapToDouble(du -> cenovnik.dobaviCenu("DodatneUsluge", du.getNaziv())).sum();
+		}
 		return ukupnaCena;
 	}
-
+	
+	public String toFile() {
+        return id + "," + rezervisao.getKorisnickoIme() + "," + datumPrijave + "," + datumOdjave + "," + tipSobe.getNaziv() + "," + brojLjudi + "," + dodatneUsluge + "," + ukupnaCena;
+    }
+	
 }

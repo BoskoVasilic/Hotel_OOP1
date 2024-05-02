@@ -36,11 +36,14 @@ public class SobaManager {
 			String regex = ",(?![^\\[]*\\])";
 			while ((linija = br.readLine()) != null) {
 				String[] tokeni = linija.split(regex);
-				Soba s = new Soba(Integer.parseInt(tokeni[0]), StatusSobe.valueOf(tokeni[2]), Boolean.parseBoolean(tokeni[4]));
+				tsm.ucitajTipoveSoba();
+				TipSobe tipSobe = tsm.nadjiTipSobe(tokeni[1]);
+				ArrayList<Oprema> oprema = new ArrayList<Oprema>();
+				om.ucitajOpremu();
 				for (String nazivOpreme : tokeni[3].substring(1, tokeni[3].length() - 1).split(", ")) {
-					s.getOpremljenostSobe().add(om.nadjiOpremu(nazivOpreme.trim()));
+					oprema.add(om.nadjiOpremu(nazivOpreme.trim()));
 				}
-				s.setTipSobe(tsm.nadjiTipSobe(tokeni[1]));
+				Soba s = new Soba(Integer.parseInt(tokeni[0]), tipSobe,StatusSobe.valueOf(tokeni[2]), oprema,Boolean.parseBoolean(tokeni[4]));
 				this.sobe.add(s);
 			}
 			br.close();

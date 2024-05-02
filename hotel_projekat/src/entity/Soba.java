@@ -9,14 +9,6 @@ public class Soba {
 	protected ArrayList<Oprema> opremljenostSobe;
 	protected boolean pusackaSoba;
 	
-	public Soba(int brojSobe, StatusSobe statusSobe, boolean pusackaSoba) {
-		this.brojSobe = brojSobe;
-		this.tipSobe = new TipSobe();
-		this.statusSobe = statusSobe;
-		this.opremljenostSobe = new ArrayList<Oprema>();
-		this.pusackaSoba = pusackaSoba;
-	}
-	
 	public Soba(int brojSobe, TipSobe tipSobe, StatusSobe statusSobe, ArrayList<Oprema> opremljenostSobe,
 			boolean pusackaSoba) {
 		this.brojSobe = brojSobe;

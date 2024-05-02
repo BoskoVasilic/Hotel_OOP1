@@ -39,8 +39,38 @@ public class Cenovnik {
 		this.cene = cene;
 	}
 	
+	public double dobaviCenu(String grupa, String stavka) {
+		if (this.cene.containsKey(grupa)) {
+			if (this.cene.get(grupa).containsKey(stavka)) {
+				return this.cene.get(grupa).get(stavka);
+			}
+		}
+		return -1;
+	}
+		
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		this.cene.forEach((k, v) -> {
+			sb.append(k + ": ");
+			v.forEach((k1, v1) -> {
+				sb.append(k1 + "=" + v1 + ", ");
+			});
+		});
+		return "Cenovnik [pocetakVazenja=" + pocetakVazenja + ", krajVazenja=" + krajVazenja + ", cene="
+				+ sb.toString().substring(0, sb.length() - 2) + "]";
+	}
+	
 	public String toFile() {
-		return this.pocetakVazenja + "," + this.krajVazenja + "," + this.cene;
+		StringBuilder sb = new StringBuilder();
+		this.cene.forEach((k, v) -> {
+			sb.append(",");
+			sb.append(k + ",");
+			v.forEach((k1, v1) -> {
+				sb.append(k1 + "=" + v1 + ",");
+			});
+		});
+		return this.pocetakVazenja + "," + this.krajVazenja + sb.toString().substring(0, sb.length() - 1);
 	}
 	
 }

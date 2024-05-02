@@ -19,9 +19,8 @@ public class TipSobeManager {
 		this.tipoviSoba = new ArrayList<TipSobe>();
 	}
 	
-	public TipSobe[] getTipoviSoba() {
-		System.out.println("*************************" + this.tipoviSoba.size());
-		return this.tipoviSoba.toArray(new TipSobe[tipoviSoba.size()]);
+	public ArrayList<TipSobe> getTipoviSoba() {
+		return tipoviSoba;
 	}
 	
 	public boolean ucitajTipoveSoba() {
@@ -31,9 +30,7 @@ public class TipSobeManager {
 			while ((linija = br.readLine()) != null) {
 				String[] tokeni = linija.split(",");
 				TipSobe ts = new TipSobe(tokeni[0], Integer.parseInt(tokeni[1]), Integer.parseInt(tokeni[2]));
-				System.out.println(ts);
 				this.tipoviSoba.add(ts);
-				System.out.println(this.tipoviSoba + "---------------" + tipoviSoba.size());
 			}
 			br.close();
 		} catch (IOException e) {
@@ -56,6 +53,11 @@ public class TipSobeManager {
 			System.out.println("Greska prilikom upisa u fajl!");
 		}
 		return true;
+	}
+	
+	public void dodajTipSobe(String naziv, int brojKreveta, int brojOsoba) {
+		TipSobe ts = new TipSobe(naziv, brojKreveta, brojOsoba);
+		this.tipoviSoba.add(ts);
 	}
 
     

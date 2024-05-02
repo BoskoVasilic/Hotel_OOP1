@@ -33,6 +33,7 @@ public class SobaricaManager {
 			String linija = null;
 			while ((linija = br.readLine()) != null) {
 				String[] tokeni = linija.split(",");
+				sm.ucitajSobe();
 				Sobarica s = new Sobarica(tokeni[0], tokeni[1], Pol.valueOf(tokeni[2]), LocalDate.parse(tokeni[3]), tokeni[4], tokeni[5], tokeni[6], tokeni[7], StrucnaSprema.valueOf(tokeni[8]), Integer.parseInt(tokeni[9]));
 				s.setBrojSobaZaSredjivanje(Integer.parseInt(tokeni[11]));
 				for (String brojSobe : tokeni[11].substring(1, tokeni[12].length() - 1).split(", ")) {

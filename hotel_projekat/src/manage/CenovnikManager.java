@@ -37,8 +37,20 @@ public class CenovnikManager {
 			String linija = null;
 			while ((linija = br.readLine()) != null) {
 				String[] tokeni = linija.split(",");
-				Cenovnik c = new Cenovnik(LocalDate.parse(tokeni[0]), LocalDate.parse(tokeni[1]), new HashMap<String, HashMap<String, Double>>());
-				//dodati ucitavanje cena u HashMap
+				HashMap<String, HashMap<String, Double>> cene = new HashMap<String, HashMap<String, Double>>();
+				String grupa = tokeni[2];
+				cene.put(tokeni[2], new HashMap<String, Double>());
+				for (int i = 3; i < tokeni.length; i++) {
+					if(tokeni[i].equals("")) {
+						cene.put(tokeni[i + 1], new HashMap<String, Double>());
+						grupa = tokeni[i + 1];
+						i++;
+					} else {
+						String[] stavka = tokeni[i].split("=");
+						cene.get(grupa).put(stavka[0], Double.parseDouble(stavka[1]));
+					}
+				}
+				Cenovnik c = new Cenovnik(LocalDate.parse(tokeni[0]), LocalDate.parse(tokeni[1]), cene);
 				this.cenovnici.add(c);
 			}
 			br.close();
@@ -86,17 +98,19 @@ public class CenovnikManager {
 		return !(krajVazenja.isBefore(pocetakVazenjaNovi) || pocetakVazenja.isAfter(krajVazenjaNovi));
 	}
 	
-	public HashMap<String, HashMap<String, Double>> unesiCene() {
+	private HashMap<String, HashMap<String, Double>> unesiCene() {
 		Scanner sc = new Scanner(System.in);
 		HashMap<String, HashMap<String, Double>> cene = new HashMap<String, HashMap<String, Double>>();
-		TipSobe[] tipoviSoba = tsm.getTipoviSoba();
+		tsm.ucitajTipoveSoba();
+		ArrayList<TipSobe> tipoviSoba = tsm.getTipoviSoba();
 		cene.put("TipoviSoba", new HashMap<String, Double>());
-		for(int i = 0; i < tipoviSoba.length; i++) {
-			System.out.println("Unesite cene za tip sobe: " + tipoviSoba[i].getNaziv());
+		for (TipSobe ts : tipoviSoba) {
+			System.out.println("Unesite cene za tip sobe: " + ts.getNaziv());
 			double cena = sc.nextDouble();
 			sc.nextLine();
-			cene.get("TipoviSoba").put(tipoviSoba[i].getNaziv(), cena);
+			cene.get("TipoviSoba").put(ts.getNaziv(), cena);
 		}
+		dum.ucitajDodatneUsluge();
 		ArrayList<DodatnaUsluga> dodatneUsluge = dum.getDodatneUsluge();
 		cene.put("DodatneUsluge", new HashMap<String, Double>());
 		for (DodatnaUsluga du : dodatneUsluge) {
@@ -121,11 +135,25 @@ public class CenovnikManager {
 		this.cenovnici.add(c);
 	}
 	
-	public void izmeniCenovnik(LocalDate pocetakVazenja, LocalDate krajVazenja,
-			HashMap<String, HashMap<String, Double>> cene) {
+	public void izmeniCenovnikKomplet(LocalDate pocetakVazenja, LocalDate krajVazenja) {
 		Cenovnik c = nadjiCenovnik(pocetakVazenja, krajVazenja);
 		if (c != null) {
+			HashMap<String, HashMap<String, Double>> cene = unesiCene();
 			c.setCene(cene);
+		} else {
+			System.out.println("Cenovnik za uneti period ne postoji u sistemu.");
+		}
+	}
+	
+	public void izmeniStavkuCenovnika(LocalDate pocetakVazenja, LocalDate krajVazenja, String grupa, String stavka,
+			double cena) {
+		Cenovnik c = nadjiCenovnik(pocetakVazenja, krajVazenja);
+		if (c != null) {
+			if (c.getCene().containsKey(grupa)) {
+				c.getCene().get(grupa).put(stavka, cena);
+			} else {
+				System.out.println("Grupa " + grupa + " ne postoji u cenovniku.");
+			}
 		} else {
 			System.out.println("Cenovnik za uneti period ne postoji u sistemu.");
 		}

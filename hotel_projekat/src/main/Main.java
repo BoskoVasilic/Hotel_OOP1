@@ -1,9 +1,11 @@
 package main;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import entity.TipSobe;
+import entity.Oprema;
+import entity.StatusSobe;
 import manage.AdministratorManager;
 import manage.CenovnikManager;
 import manage.DodatnaUslugaManager;
@@ -89,8 +91,11 @@ public class Main {
 		
 		CenovnikManager cm = new CenovnikManager("data/cenovnik.csv");
 		cm.ucitajCenovnike();
-		cm.dodajCenovnik(LocalDate.parse("01.01.2024.", format), LocalDate.parse("31.12.2024.", format));
-		cm.sacuvajCenovnike();
+		//cm.dodajCenovnik(LocalDate.parse("01.01.2024.", format), LocalDate.parse("31.12.2024.", format));
+		//cm.sacuvajCenovnike();
+		
+		//cm.izmeniStavkuCenovnika(LocalDate.parse("01.01.2024.", format), LocalDate.parse("31.12.2024.", format), "DodatneUsluge", "dorucak", 450.0);
+		//cm.sacuvajCenovnike();
 		
 	}
 
