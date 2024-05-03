@@ -37,4 +37,12 @@ public class Gost extends Korisnik {
 		return super.toFile() + "," + idRezervacija;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Gost) {
+			Gost gost = (Gost) obj;
+			return this.getKorisnickoIme().equals(gost.getKorisnickoIme());
+		}
+		return false;
+	}
 }

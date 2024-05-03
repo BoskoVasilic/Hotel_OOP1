@@ -27,6 +27,7 @@ public class TipSobeManager {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(this.tipSobeFile));
 			String linija = null;
+			this.tipoviSoba.clear();
 			while ((linija = br.readLine()) != null) {
 				String[] tokeni = linija.split(",");
 				TipSobe ts = new TipSobe(tokeni[0], Integer.parseInt(tokeni[1]), Integer.parseInt(tokeni[2]));
@@ -88,6 +89,4 @@ public class TipSobeManager {
 			System.out.println("Tip sobe " + naziv + " ne postoji u sistemu.");
 		}
 	}
-	
-	
 }

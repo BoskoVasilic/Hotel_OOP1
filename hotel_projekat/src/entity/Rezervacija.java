@@ -15,9 +15,36 @@ public class Rezervacija {
 	protected int brojLjudi;
 	protected ArrayList<DodatnaUsluga> dodatneUsluge;
 	protected double ukupnaCena;
+	protected StatusRezervacije statusRezervacije;
 	
-	public Rezervacija(int id, Gost rezervisao,LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe, int brojLjudi,
+	public Rezervacija(int id, Gost rezervisao,LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe,
 			ArrayList<DodatnaUsluga> dodatneUsluge, double ukupnaCena) {
+		this.id = id;
+		this.rezervisao = rezervisao;
+		this.datumPrijave = datumPrijave;
+		this.datumOdjave = datumOdjave;
+		this.tipSobe = tipSobe;
+		this.brojLjudi = 0;
+		this.dodatneUsluge = dodatneUsluge;
+		this.ukupnaCena = ukupnaCena;
+		this.statusRezervacije = StatusRezervacije.NA_ČEKANJU;
+	}
+	
+	public Rezervacija(int id, Gost rezervisao, LocalDate datumPrijave, LocalDate datumOdjave, int brojLjudi, 
+			ArrayList<DodatnaUsluga> dodatneUsluge, double ukupnaCena) {
+		this.id = id;
+		this.rezervisao = rezervisao;
+		this.datumPrijave = datumPrijave;
+		this.datumOdjave = datumOdjave;
+		this.tipSobe = null;
+		this.brojLjudi = brojLjudi;
+		this.dodatneUsluge = dodatneUsluge;
+		this.ukupnaCena = ukupnaCena;
+		this.statusRezervacije = StatusRezervacije.NA_ČEKANJU;
+	}
+	
+	public Rezervacija(int id, Gost rezervisao, LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe,
+			int brojLjudi, ArrayList<DodatnaUsluga> dodatneUsluge, double ukupnaCena, StatusRezervacije statusRezervacije) {
 		this.id = id;
 		this.rezervisao = rezervisao;
 		this.datumPrijave = datumPrijave;
@@ -26,6 +53,7 @@ public class Rezervacija {
 		this.brojLjudi = brojLjudi;
 		this.dodatneUsluge = dodatneUsluge;
 		this.ukupnaCena = ukupnaCena;
+		this.statusRezervacije = statusRezervacije;
 	}
 
 	public int getId() {
@@ -64,7 +92,7 @@ public class Rezervacija {
 		return tipSobe;
 	}
 
-	public void setSobe(TipSobe tipSobe) {
+	public void setTipSobe(TipSobe tipSobe) {
 		this.tipSobe = tipSobe;
 	}
 	
@@ -92,11 +120,19 @@ public class Rezervacija {
 		this.ukupnaCena = ukupnaCena;
 	}
 	
-	protected double izracunajUkupnuCenu() {
+	public StatusRezervacije getStatusRezervacije() {
+		return statusRezervacije;
+	}
+	
+	public void setStatusRezervacije(StatusRezervacije statusRezervacije) {
+		this.statusRezervacije = statusRezervacije;
+	}
+	
+	public double izracunajUkupnuCenu() {
 		double ukupnaCena = 0;
 		CenovnikManager cm = new CenovnikManager("data/cenovnik.csv");
+		cm.ucitajCenovnike();
 		for (LocalDate datum = datumPrijave; datum.isBefore(datumOdjave); datum = datum.plusDays(1)) {
-			cm.ucitajCenovnike();
 			Cenovnik cenovnik = cm.nadjiCenovnikZaDatum(datum);
 			ukupnaCena += cenovnik.dobaviCenu("TipoviSoba", tipSobe.getNaziv());
 			ukupnaCena += dodatneUsluge.stream().mapToDouble(du -> cenovnik.dobaviCenu("DodatneUsluge", du.getNaziv())).sum();
@@ -104,8 +140,14 @@ public class Rezervacija {
 		return ukupnaCena;
 	}
 	
+	@Override
+	public String toString() {
+		return "Datum prijave: " + datumPrijave + "\nDatum odjave: " + datumOdjave + "\nTip sobe: " + tipSobe.getNaziv() + "\nBroj ljudi: " + brojLjudi + "\nDodatne usluge: " + dodatneUsluge + "\nUkupna cena: " + ukupnaCena + "\nStatus rezervacije: " + statusRezervacije;
+
+	}
+	
 	public String toFile() {
-        return id + "," + rezervisao.getKorisnickoIme() + "," + datumPrijave + "," + datumOdjave + "," + tipSobe.getNaziv() + "," + brojLjudi + "," + dodatneUsluge + "," + ukupnaCena;
+        return id + "," + rezervisao.getKorisnickoIme() + "," + datumPrijave + "," + datumOdjave + "," + tipSobe.getNaziv() + "," + brojLjudi + "," + dodatneUsluge + "," + ukupnaCena + "," + statusRezervacije;
     }
 	
 }

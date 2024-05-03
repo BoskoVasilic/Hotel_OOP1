@@ -1,17 +1,18 @@
 package main;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import entity.Oprema;
-import entity.StatusSobe;
+import entity.DodatnaUsluga;
 import manage.AdministratorManager;
 import manage.CenovnikManager;
 import manage.DodatnaUslugaManager;
 import manage.GostManager;
 import manage.OpremaManager;
 import manage.RecepcionerManager;
+import manage.RezervacijaManager;
 import manage.SobaManager;
 import manage.SobaricaManager;
 import manage.TipSobeManager;
@@ -39,7 +40,7 @@ public class Main {
 		//sm.sacuvajSobarice();
 		
 		ZaposleniManager zm = new ZaposleniManager();
-		zm.prikaziSveZaposlene(am, rm, sm);
+		zm.prikaziSveZaposlene();
 		
 		//rm.obrisiRecepcionera("nikola");
 		//rm.sacuvajRecepcionere();
@@ -96,6 +97,22 @@ public class Main {
 		
 		//cm.izmeniStavkuCenovnika(LocalDate.parse("01.01.2024.", format), LocalDate.parse("31.12.2024.", format), "DodatneUsluge", "dorucak", 450.0);
 		//cm.sacuvajCenovnike();
+		
+		som.ispisiSlobodneTipoveSoba(LocalDate.parse("01.08.2024.", format), LocalDate.parse("31.08.2024.", format));
+		
+		RezervacijaManager rezM = new RezervacijaManager("data/rezervacije.csv");
+		rezM.ucitajRezervacije();
+		rezM.dodajRezervacijuPoTipu(gm.nadjiGosta("milica@gmail.com"), LocalDate.parse("13.08.2024.", format), LocalDate.parse("23.08.2024.", format), tsm.nadjiTipSobe("trokrevetna (2+1)"), new ArrayList<DodatnaUsluga>(Arrays.asList(dum.nadjiDodatnuUslugu("dorucak"), dum.nadjiDodatnuUslugu("vecera"))));
+		rezM.sacuvajRezervacije();
+		
+		som.ispisiSlobodneTipoveSoba(LocalDate.parse("01.06.2024.", format), LocalDate.parse("30.06.2024.", format));
+		
+		gm.ucitajGoste();
+		rezM.dodajRezervacijuPoTipu(gm.nadjiGosta("ana@gmail.com"), LocalDate.parse("06.06.2024.", format), LocalDate.parse("12.06.2024.", format), tsm.nadjiTipSobe("dvokrevetna (1+1)"), new ArrayList<DodatnaUsluga>());
+		rezM.sacuvajRezervacije();
+		
+		gm.ucitajGoste();
+		rezM.prikaziRezervacijeZaGosta(gm.nadjiGosta("milica@gmail.com"));
 		
 	}
 

@@ -1,21 +1,81 @@
 package manage;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
+import entity.DodatnaUsluga;
+import entity.Gost;
 import entity.Rezervacija;
+import entity.StatusRezervacije;
+import entity.TipSobe;
 
 public class RezervacijaManager {
 	
 	private String rezervacijaFile;
 	private ArrayList<Rezervacija> rezervacije;
+	private GostManager gm;
+	private TipSobeManager tsm;
+	private DodatnaUslugaManager dum;
 	
 	public RezervacijaManager(String rezervacijaFile) {
 		this.rezervacijaFile = rezervacijaFile;
 		this.rezervacije = new ArrayList<Rezervacija>();
+		this.gm = new GostManager("data/gosti.csv");
+		this.tsm = new TipSobeManager("data/tipoviSoba.csv");
+		this.dum = new DodatnaUslugaManager("data/dodatneUsluge.csv");
+		gm.ucitajGoste();
 	}
 	
 	public ArrayList<Rezervacija> getRezervacije() {
 		return rezervacije;
+	}
+	
+	public boolean ucitajRezervacije() {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(this.rezervacijaFile));
+			String linija = null;
+			String regex = ",(?![^\\[]*\\])";
+			while ((linija = br.readLine()) != null) {
+				String[] tokeni = linija.split(regex);
+				gm.ucitajGoste();
+				Gost gost = gm.nadjiGosta(tokeni[1]);
+				tsm.ucitajTipoveSoba();
+				TipSobe tipSobe = tsm.nadjiTipSobe(tokeni[4]);
+				dum.ucitajDodatneUsluge();
+				ArrayList<DodatnaUsluga> dodatneUsluge = new ArrayList<DodatnaUsluga>();
+				for (String nazivUsluge : tokeni[6].substring(1, tokeni[6].length() - 1).split(", ")) {
+					dodatneUsluge.add(dum.nadjiDodatnuUslugu(nazivUsluge));
+				}
+				Rezervacija r = new Rezervacija(Integer.parseInt(tokeni[0]), gost, LocalDate.parse(tokeni[2]), LocalDate.parse(tokeni[3]), tipSobe, Integer.parseInt(tokeni[5]), dodatneUsluge, Double.parseDouble(tokeni[7]), StatusRezervacije.valueOf(tokeni[8]));
+				this.rezervacije.add(r);
+				gost.getRezervacije().add(r);
+			}
+			br.close();
+		} catch (IOException e) {
+			System.out.println("Greska prilikom citanja fajla!");
+			return false;
+		}
+		return true;
+	}
+	
+	
+	public boolean sacuvajRezervacije() {
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new FileWriter(this.rezervacijaFile, false));
+			for (Rezervacija r : rezervacije) {
+				pw.println(r.toFile());
+			}
+			pw.close();
+		} catch (IOException e) {
+			System.out.println("Greska prilikom upisa u fajl!");
+		}
+		return true;
 	}
 	
 	public Rezervacija nadjiRezervaciju(int id) {
@@ -26,4 +86,61 @@ public class RezervacijaManager {
 		}
 		return null;
 	}
+	
+	public void dodajRezervacijuPoTipu(Gost gost, LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe, ArrayList<DodatnaUsluga> dodatneUsluge) {
+		double cena = 0;
+		int id;
+		if(rezervacije.size() == 0) {
+			id = 1;
+		} else {
+			id = rezervacije.get(rezervacije.size() - 1).getId() + 1;
+		}
+		Rezervacija r = new Rezervacija(id, gost, datumPrijave, datumOdjave, tipSobe, dodatneUsluge, cena);
+		r.setUkupnaCena(r.izracunajUkupnuCenu());
+		rezervacije.add(r);
+		gm.nadjiGosta(gost.getKorisnickoIme()).getRezervacije().add(r);
+		gm.sacuvajGoste();
+	}
+	
+	public void izmeniRezervaciju(int id, Gost gost, LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe,
+			int brojLjudi, ArrayList<DodatnaUsluga> dodatneUsluge) {
+		Rezervacija r = nadjiRezervaciju(id);
+		if (r != null) {
+			r.setRezervisao(gost);
+			r.setDatumPrijave(datumPrijave);
+			r.setDatumOdjave(datumOdjave);
+			r.setTipSobe(tipSobe);
+			r.setBrojLjudi(brojLjudi);
+			r.setDodatneUsluge(dodatneUsluge);
+			r.setUkupnaCena(r.izracunajUkupnuCenu());;
+		} else {
+			System.out.println("Rezervacija sa id " + id + " ne postoji u sistemu.");
+		}
+	}
+	
+	public void obrisiRezervaciju(int id) {
+		Rezervacija r = nadjiRezervaciju(id);
+		if (r != null) {
+			rezervacije.remove(r);
+		} else {
+			System.out.println("Rezervacija sa id " + id + " ne postoji u sistemu.");
+		}
+	}
+	
+	private ArrayList<Rezervacija> dobaviRezervacijeZaGosta(Gost gost) {
+		ArrayList<Rezervacija> rezervacijeZaGosta = new ArrayList<Rezervacija>();
+		for (Rezervacija r : rezervacije) {
+			if (r.getRezervisao().equals(gost)) {
+				rezervacijeZaGosta.add(r);
+			}
+		}
+		return rezervacijeZaGosta;
+	}
+	
+	public void prikaziRezervacijeZaGosta(Gost gost) {
+		ArrayList<Rezervacija> rezervacijeZaGosta = dobaviRezervacijeZaGosta(gost);
+        for (Rezervacija r : rezervacijeZaGosta) {
+            System.out.println(r);
+        }
+    }
 }

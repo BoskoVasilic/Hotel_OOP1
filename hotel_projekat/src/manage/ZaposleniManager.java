@@ -4,8 +4,20 @@ import entity.Sobarica;
 import entity.Zaposleni;
 
 public class ZaposleniManager {
+	private AdministratorManager am;
+	private RecepcionerManager rm;
+	private SobaricaManager sm;
 	
-	public void prikaziSveZaposlene(AdministratorManager am, RecepcionerManager rm, SobaricaManager sm) {
+	public ZaposleniManager() {
+		this.am = new AdministratorManager("data/administratori.csv");
+		this.rm = new RecepcionerManager("data/recepcioneri.csv");
+		this.sm = new SobaricaManager("data/sobarice.csv");
+	}
+	
+	public void prikaziSveZaposlene() {
+		am.ucitajAdministratore();
+		rm.ucitajRecepcionere();
+		sm.ucitajSobarice();
 		System.out.println("------------------------------");
 		System.out.println("Administratori: ");
 		System.out.println("------------------------------");

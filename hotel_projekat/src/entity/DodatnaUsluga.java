@@ -16,6 +16,11 @@ public class DodatnaUsluga {
 		this.naziv = naziv;
 	}
 	
+	@Override
+	public String toString() {
+		return this.naziv;
+	}
+	
 	public String toFile() {
 		return this.naziv;
 	}
