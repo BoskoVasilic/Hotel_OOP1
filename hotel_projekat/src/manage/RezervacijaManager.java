@@ -91,7 +91,7 @@ public class RezervacijaManager {
 		return null;
 	}
 	
-	public void dodajRezervacijuPoTipu(Gost gost, LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe, ArrayList<DodatnaUsluga> dodatneUsluge) {
+	public void dodajRezervacijuPoTipu(Gost gost, LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe, int brojLjudi,ArrayList<DodatnaUsluga> dodatneUsluge) {
 		double cena = 0;
 		int id;
 		if(rezervacije.size() == 0) {
@@ -99,7 +99,7 @@ public class RezervacijaManager {
 		} else {
 			id = rezervacije.get(rezervacije.size() - 1).getId() + 1;
 		}
-		Rezervacija r = new Rezervacija(id, gost, datumPrijave, datumOdjave, tipSobe, dodatneUsluge, cena);
+		Rezervacija r = new Rezervacija(id, gost, datumPrijave, datumOdjave, tipSobe, brojLjudi,dodatneUsluge, cena);
 		r.setUkupnaCena(r.izracunajUkupnuCenu());
 		rezervacije.add(r);
 		gm.nadjiGosta(gost.getKorisnickoIme()).getRezervacije().add(r);

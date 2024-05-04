@@ -29,9 +29,10 @@ public class GostManager {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(this.gostFile));
 			String linija = null;
+			String regex = ",(?![^\\[]*\\])";
 			this.gosti.clear();
 			while ((linija = br.readLine()) != null) {
-				String[] tokeni = linija.split(",");
+				String[] tokeni = linija.split(regex);
 				Gost g = new Gost(tokeni[0], tokeni[1], Pol.valueOf(tokeni[2]), LocalDate.parse(tokeni[3]), tokeni[4], tokeni[5], tokeni[6], tokeni[7]);
 				this.gosti.add(g);
 			}

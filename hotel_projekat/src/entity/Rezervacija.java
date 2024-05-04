@@ -18,14 +18,14 @@ public class Rezervacija {
 	protected double ukupnaCena;
 	protected StatusRezervacije statusRezervacije;
 	
-	public Rezervacija(int id, Gost rezervisao,LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe,
+	public Rezervacija(int id, Gost rezervisao,LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe, int brojLjudi,
 			ArrayList<DodatnaUsluga> dodatneUsluge, double ukupnaCena) {
 		this.id = id;
 		this.rezervisao = rezervisao;
 		this.datumPrijave = datumPrijave;
 		this.datumOdjave = datumOdjave;
 		this.tipSobe = tipSobe;
-		this.brojLjudi = 0;
+		this.brojLjudi = brojLjudi;
 		this.dodatneUsluge = dodatneUsluge;
 		this.ukupnaCena = ukupnaCena;
 		this.statusRezervacije = StatusRezervacije.NA_ČEKANJU;

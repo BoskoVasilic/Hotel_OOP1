@@ -107,12 +107,12 @@ public class Main {
 		
 		rezM.ispisiSlobodneTipoveSoba(LocalDate.parse("01.08.2024.", format), LocalDate.parse("31.08.2024.", format));
 		
-		rezM.dodajRezervacijuPoTipu(gm.nadjiGosta("milica@gmail.com"), LocalDate.parse("13.08.2024.", format), LocalDate.parse("23.08.2024.", format), tsm.nadjiTipSobe("trokrevetna (2+1)"), new ArrayList<DodatnaUsluga>(Arrays.asList(dum.nadjiDodatnuUslugu("dorucak"), dum.nadjiDodatnuUslugu("vecera"))));
+		rezM.dodajRezervacijuPoTipu(gm.nadjiGosta("milica@gmail.com"), LocalDate.parse("13.08.2024.", format), LocalDate.parse("23.08.2024.", format), tsm.nadjiTipSobe("trokrevetna (2+1)"), 3, new ArrayList<DodatnaUsluga>(Arrays.asList(dum.nadjiDodatnuUslugu("dorucak"), dum.nadjiDodatnuUslugu("vecera"))));
 		rezM.sacuvajRezervacije();
 		
 		rezM.ispisiSlobodneTipoveSoba(LocalDate.parse("01.06.2024.", format), LocalDate.parse("30.06.2024.", format));
 		
-		rezM.dodajRezervacijuPoTipu(gm.nadjiGosta("ana@gmail.com"), LocalDate.parse("06.06.2024.", format), LocalDate.parse("12.06.2024.", format), tsm.nadjiTipSobe("dvokrevetna (1+1)"), new ArrayList<DodatnaUsluga>());
+		rezM.dodajRezervacijuPoTipu(gm.nadjiGosta("ana@gmail.com"), LocalDate.parse("06.06.2024.", format), LocalDate.parse("12.06.2024.", format), tsm.nadjiTipSobe("dvokrevetna (1+1)"), 2,new ArrayList<DodatnaUsluga>());
 		rezM.sacuvajRezervacije();
 		
 		rezM.prikaziRezervacijeZaGosta(gm.nadjiGosta("milica@gmail.com"));
