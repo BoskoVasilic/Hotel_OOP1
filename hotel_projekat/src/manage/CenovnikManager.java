@@ -103,7 +103,7 @@ public class CenovnikManager {
 	private HashMap<String, HashMap<String, Double>> unesiCene() {
 		Scanner sc = new Scanner(System.in);
 		HashMap<String, HashMap<String, Double>> cene = new HashMap<String, HashMap<String, Double>>();
-		System.out.println("Unesite cene za cenovnik:");
+		System.out.println("\nUnesite cene za cenovnik:");
 		ArrayList<TipSobe> tipoviSoba = tsm.getTipoviSoba();
 		cene.put("TipoviSoba", new HashMap<String, Double>());
 		for (TipSobe ts : tipoviSoba) {
@@ -121,6 +121,7 @@ public class CenovnikManager {
 			cene.get("DodatneUsluge").put(du.getNaziv(), cena);
 		}
 		sc.close();
+			System.out.println("Uspesno ste uneli cene za cenovnik.\n");
 		return cene;
     }
 	

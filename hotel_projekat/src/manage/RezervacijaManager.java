@@ -13,6 +13,7 @@ import java.util.HashMap;
 import entity.DodatnaUsluga;
 import entity.Gost;
 import entity.Rezervacija;
+import entity.Soba;
 import entity.StatusRezervacije;
 import entity.TipSobe;
 
@@ -55,7 +56,13 @@ public class RezervacijaManager {
 				for (String nazivUsluge : tokeni[6].substring(1, tokeni[6].length() - 1).split(", ")) {
 					dodatneUsluge.add(dum.nadjiDodatnuUslugu(nazivUsluge));
 				}
-				Rezervacija r = new Rezervacija(Integer.parseInt(tokeni[0]), gost, LocalDate.parse(tokeni[2]), LocalDate.parse(tokeni[3]), tipSobe, Integer.parseInt(tokeni[5]), dodatneUsluge, Double.parseDouble(tokeni[7]), StatusRezervacije.valueOf(tokeni[8]));
+				Soba soba;
+				if(tokeni[9].equals("nema")) {
+					soba = null;
+				}else {
+					soba = sm.nadjiSobu(Integer.parseInt(tokeni[9]));
+				}
+				Rezervacija r = new Rezervacija(Integer.parseInt(tokeni[0]), gost, LocalDate.parse(tokeni[2]), LocalDate.parse(tokeni[3]), tipSobe, Integer.parseInt(tokeni[5]), dodatneUsluge, Double.parseDouble(tokeni[7]), StatusRezervacije.valueOf(tokeni[8]), soba);
 				this.rezervacije.add(r);
 				gost.getRezervacije().add(r);
 			}
@@ -116,7 +123,7 @@ public class RezervacijaManager {
 		}
 		for (TipSobe tipSobe : pronadjiSlobodneTipoveSoba(datumPrijave, datumOdjave)) {
 			if (tipSobe.getBrojOsoba() == brojLjudi) {
-				Rezervacija r = new Rezervacija(id, gost, datumPrijave, datumOdjave, tipSobe, brojLjudi, dodatneUsluge, cena, StatusRezervacije.NA_ČEKANJU);
+				Rezervacija r = new Rezervacija(id, gost, datumPrijave, datumOdjave, tipSobe, brojLjudi, dodatneUsluge, cena);
 				r.setUkupnaCena(r.izracunajUkupnuCenu());
 				rezervacije.add(r);
 				gm.nadjiGosta(gost.getKorisnickoIme()).getRezervacije().add(r);
@@ -126,7 +133,7 @@ public class RezervacijaManager {
 		}
 		for (TipSobe tipSobe : pronadjiSlobodneTipoveSoba(datumPrijave, datumOdjave)) {
 			if (tipSobe.getBrojOsoba() > brojLjudi) {
-				Rezervacija r = new Rezervacija(id, gost, datumPrijave, datumOdjave, tipSobe, brojLjudi, dodatneUsluge, cena, StatusRezervacije.NA_ČEKANJU);
+				Rezervacija r = new Rezervacija(id, gost, datumPrijave, datumOdjave, tipSobe, brojLjudi, dodatneUsluge, cena);
 				r.setUkupnaCena(r.izracunajUkupnuCenu());
 				rezervacije.add(r);
 				gm.nadjiGosta(gost.getKorisnickoIme()).getRezervacije().add(r);
