@@ -69,6 +69,10 @@ public class GostManager {
 	}
 	
 	public void dodajGosta(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa, String email, String brojPasosa) {
+		if (nadjiGosta(email) != null) {
+			System.out.println("Gost sa korisnickim imenom " + email + " vec postoji!");
+			return;
+		}
 		gosti.add(new Gost(ime, prezime, pol, datumRodjenja, telefon, adresa, email, brojPasosa));
 	}
 	

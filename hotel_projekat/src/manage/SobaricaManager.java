@@ -20,7 +20,8 @@ public class SobaricaManager {
 	public SobaricaManager(String sobaricaFile) {
 		this.sobaricaFile = sobaricaFile;
 		this.sobarice = new ArrayList<Sobarica>();
-		this.sm = new SobaManager("data/sobe.txt");
+		this.sm = new SobaManager("data/sobe.csv");
+		sm.ucitajSobe();
 	}
 	
 	public ArrayList<Sobarica> getSobarice() {
@@ -31,9 +32,9 @@ public class SobaricaManager {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(this.sobaricaFile));
 			String linija = null;
+			String regex = ",(?![^\\[]*\\])";
 			while ((linija = br.readLine()) != null) {
-				String[] tokeni = linija.split(",");
-				sm.ucitajSobe();
+				String[] tokeni = linija.split(regex);
 				Sobarica s = new Sobarica(tokeni[0], tokeni[1], Pol.valueOf(tokeni[2]), LocalDate.parse(tokeni[3]), tokeni[4], tokeni[5], tokeni[6], tokeni[7], StrucnaSprema.valueOf(tokeni[8]), Integer.parseInt(tokeni[9]));
 				s.setBrojSobaZaSredjivanje(Integer.parseInt(tokeni[11]));
 				for (String brojSobe : tokeni[11].substring(1, tokeni[12].length() - 1).split(", ")) {
@@ -84,6 +85,10 @@ public class SobaricaManager {
 	
 	public void dodajSobaricu(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa,
 			String korisnickoIme, String lozinka, StrucnaSprema strucnaSprema, int godineStaza) {
+		if (nadjiSobaricu(korisnickoIme) != null) {
+			System.out.println("Sobarica sa korisnickim imenom " + korisnickoIme + " vec postoji!");
+			return;
+		}
 		sobarice.add(new Sobarica(ime, prezime, pol, datumRodjenja, telefon, adresa, korisnickoIme, lozinka, strucnaSprema, godineStaza));
 	}
 	

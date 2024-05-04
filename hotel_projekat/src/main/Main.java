@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import entity.DodatnaUsluga;
+import entity.Oprema;
+import entity.Pol;
+import entity.StatusSobe;
+import entity.StrucnaSprema;
 import manage.AdministratorManager;
 import manage.CenovnikManager;
 import manage.DodatnaUslugaManager;
@@ -25,93 +29,92 @@ public class Main {
 	
 		AdministratorManager am = new AdministratorManager("data/administratori.csv");
 		am.ucitajAdministratore();
-		//am.dodajAdministratora("Pera", "Peric", Pol.M, LocalDate.parse("01.01.1990.", format), "0645211452", "Bulevar Oslobodjenja 2", "pera", "pera123", StrucnaSprema.VI, 5);
-		//am.sacuvajAdministratore();
+		am.dodajAdministratora("Pera", "Peric", Pol.M, LocalDate.parse("01.01.1990.", format), "0645211452", "Bulevar Oslobodjenja 2", "pera", "pera123", StrucnaSprema.VI, 5);
+		am.sacuvajAdministratore();
 		
 		RecepcionerManager rm = new RecepcionerManager("data/recepcioneri.csv");
 		rm.ucitajRecepcionere();
-		//rm.dodajRecepcionera("Mika", "Mikic", Pol.M, LocalDate.parse("23.04.1987.", format), "0631445287", "Bulevar Kralja Petra I 15", "mika", "mika123", StrucnaSprema.V, 3);
-		//rm.dodajRecepcionera("Nikola", "Nikolic", Pol.M, LocalDate.parse("12.05.1970.", format), "0643332122", "Jevrejska 9", "nikola", "nikola123", StrucnaSprema.IV, 20);
-		//rm.sacuvajRecepcionere();
+		rm.dodajRecepcionera("Mika", "Mikic", Pol.M, LocalDate.parse("23.04.1987.", format), "0631445287", "Bulevar Kralja Petra I 15", "mika", "mika123", StrucnaSprema.V, 3);
+		rm.dodajRecepcionera("Nikola", "Nikolic", Pol.M, LocalDate.parse("12.05.1970.", format), "0643332122", "Jevrejska 9", "nikola", "nikola123", StrucnaSprema.IV, 20);
+		rm.sacuvajRecepcionere();
 		
 		SobaricaManager sm = new SobaricaManager("data/sobarice.csv");
 		sm.ucitajSobarice();
-		//sm.dodajSobaricu("Jana", "Janic", Pol.Z, LocalDate.parse("15.08.1995.", format), "0655165075", "Bulevar Vojvode Stepe 15", "jana", "jana123", StrucnaSprema.III, 10);
-		//sm.sacuvajSobarice();
+		sm.dodajSobaricu("Jana", "Janic", Pol.Z, LocalDate.parse("15.08.1995.", format), "0655165075", "Bulevar Vojvode Stepe 15", "jana", "jana123", StrucnaSprema.III, 10);
+		sm.sacuvajSobarice();
 		
 		ZaposleniManager zm = new ZaposleniManager();
 		zm.prikaziSveZaposlene();
 		
-		//rm.obrisiRecepcionera("nikola");
-		//rm.sacuvajRecepcionere();
+		rm.obrisiRecepcionera("nikola");
+		rm.sacuvajRecepcionere();
 		
 		GostManager gm = new GostManager("data/gosti.csv");
 		gm.ucitajGoste();
-		//gm.dodajGosta("Milica", "Milic", Pol.Z, LocalDate.parse("12.02.1980.", format), "063128416", "Fruskogorska 12", "milica@gmail.com", "002415874");
-		//gm.dodajGosta("Ana", "Anic", Pol.Z, LocalDate.parse("25.05.1998.", format), "0641220906", "Bate Brkica 3", "ana@gmail.com", "002312398");
-		//gm.sacuvajGoste();
+		gm.dodajGosta("Milica", "Milic", Pol.Z, LocalDate.parse("12.02.1980.", format), "063128416", "Fruskogorska 12", "milica@gmail.com", "002415874");
+		gm.dodajGosta("Ana", "Anic", Pol.Z, LocalDate.parse("25.05.1998.", format), "0641220906", "Bate Brkica 3", "ana@gmail.com", "002312398");
+		gm.sacuvajGoste();
 		
 		TipSobeManager tsm = new TipSobeManager("data/tipoviSoba.csv");
 		tsm.ucitajTipoveSoba();
-		//tsm.dodajTipSobe("jednokrevetna (1)", 1, 1);
-		//tsm.dodajTipSobe("dvokrevetna (2)", 1, 2);
-		//tsm.dodajTipSobe("dvokrevetna (1+1)", 2, 2);
-		//tsm.dodajTipSobe("trokrevetna (2+1)", 2, 3);
-		//tsm.sacuvajTipoveSoba();
+		tsm.dodajTipSobe("jednokrevetna (1)", 1, 1);
+		tsm.dodajTipSobe("dvokrevetna (2)", 1, 2);
+		tsm.dodajTipSobe("dvokrevetna (1+1)", 2, 2);
+		tsm.dodajTipSobe("trokrevetna (2+1)", 2, 3);
+		tsm.sacuvajTipoveSoba();
 		
 		OpremaManager om = new OpremaManager("data/oprema.csv");
 		om.ucitajOpremu();
-		//om.dodajOpremu("TV");
-		//om.dodajOpremu("Klima");
-		//om.dodajOpremu("Mini-bar");
-		//om.sacuvajOpremu();
+		om.dodajOpremu("TV");
+		om.dodajOpremu("Klima");
+		om.dodajOpremu("Mini-bar");
+		om.sacuvajOpremu();
 		
 		SobaManager som = new SobaManager("data/sobe.csv");
 		som.ucitajSobe();
-		//som.dodajSobu(1, tsm.nadjiTipSobe("jednokrevetna (1)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("TV"), om.nadjiOpremu("Klima"))), false);
-		//som.dodajSobu(2, tsm.nadjiTipSobe("dvokrevetna (2)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("TV"), om.nadjiOpremu("Klima"), om.nadjiOpremu("Mini-bar"))), true);
-		//som.dodajSobu(3, tsm.nadjiTipSobe("dvokrevetna (1+1)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("TV"), om.nadjiOpremu("Klima"))), false);
-		//som.dodajSobu(4, tsm.nadjiTipSobe("trokrevetna (2+1)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("Klima"), om.nadjiOpremu("Mini-bar"))), true);
-		//som.dodajSobu(5, tsm.nadjiTipSobe("dvokrevetna (2)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("TV"), om.nadjiOpremu("Klima"))), true);
-		//som.sacuvajSobe();
+		som.dodajSobu(1, tsm.nadjiTipSobe("jednokrevetna (1)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("TV"), om.nadjiOpremu("Klima"))), false);
+		som.dodajSobu(2, tsm.nadjiTipSobe("dvokrevetna (2)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("TV"), om.nadjiOpremu("Klima"), om.nadjiOpremu("Mini-bar"))), true);
+		som.dodajSobu(3, tsm.nadjiTipSobe("dvokrevetna (1+1)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("TV"), om.nadjiOpremu("Klima"))), false);
+		som.dodajSobu(4, tsm.nadjiTipSobe("trokrevetna (2+1)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("Klima"), om.nadjiOpremu("Mini-bar"))), true);
+		som.dodajSobu(5, tsm.nadjiTipSobe("dvokrevetna (2)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("TV"), om.nadjiOpremu("Klima"))), true);
+		som.sacuvajSobe();
 		
-		//som.izmeniSobu(2, tsm.nadjiTipSobe("trokrevetna (2+1)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("TV"), om.nadjiOpremu("Klima"), om.nadjiOpremu("Mini-bar"))), true);
-		//som.sacuvajSobe();
+		som.izmeniSobu(2, tsm.nadjiTipSobe("trokrevetna (2+1)"), StatusSobe.SLOBODNA, new ArrayList<Oprema>(Arrays.asList(om.nadjiOpremu("TV"), om.nadjiOpremu("Klima"), om.nadjiOpremu("Mini-bar"))), true);
+		som.sacuvajSobe();
 		
 		DodatnaUslugaManager dum = new DodatnaUslugaManager("data/dodatneUsluge.csv");
 		dum.ucitajDodatneUsluge();
-		//dum.dodajDodatnuUslugu("dorucak");
-		//dum.dodajDodatnuUslugu("rucak");
-		//dum.dodajDodatnuUslugu("vecera");
-		//dum.dodajDodatnuUslugu("bazen");
-		//dum.dodajDodatnuUslugu("spa centar");
-		//dum.sacuvajDodatneUsluge();
+		dum.dodajDodatnuUslugu("dorucak");
+		dum.dodajDodatnuUslugu("rucak");
+		dum.dodajDodatnuUslugu("vecera");
+		dum.dodajDodatnuUslugu("bazen");
+		dum.dodajDodatnuUslugu("spa centar");
+		dum.sacuvajDodatneUsluge();
 		
-		//dum.obrisiDodatnuUslugu("spa centar");
-		//dum.sacuvajDodatneUsluge();
+		dum.obrisiDodatnuUslugu("spa centar");
+		dum.sacuvajDodatneUsluge();
 		
 		CenovnikManager cm = new CenovnikManager("data/cenovnik.csv");
 		cm.ucitajCenovnike();
-		//cm.dodajCenovnik(LocalDate.parse("01.01.2024.", format), LocalDate.parse("31.12.2024.", format));
-		//cm.sacuvajCenovnike();
+		cm.dodajCenovnik(LocalDate.parse("01.01.2024.", format), LocalDate.parse("31.12.2024.", format));
+		cm.sacuvajCenovnike();
 		
-		//cm.izmeniStavkuCenovnika(LocalDate.parse("01.01.2024.", format), LocalDate.parse("31.12.2024.", format), "DodatneUsluge", "dorucak", 450.0);
-		//cm.sacuvajCenovnike();
-		
-		som.ispisiSlobodneTipoveSoba(LocalDate.parse("01.08.2024.", format), LocalDate.parse("31.08.2024.", format));
+		cm.izmeniStavkuCenovnika(LocalDate.parse("01.01.2024.", format), LocalDate.parse("31.12.2024.", format), "DodatneUsluge", "dorucak", 450.0);
+		cm.sacuvajCenovnike();
 		
 		RezervacijaManager rezM = new RezervacijaManager("data/rezervacije.csv");
 		rezM.ucitajRezervacije();
+		
+		rezM.ispisiSlobodneTipoveSoba(LocalDate.parse("01.08.2024.", format), LocalDate.parse("31.08.2024.", format));
+		
 		rezM.dodajRezervacijuPoTipu(gm.nadjiGosta("milica@gmail.com"), LocalDate.parse("13.08.2024.", format), LocalDate.parse("23.08.2024.", format), tsm.nadjiTipSobe("trokrevetna (2+1)"), new ArrayList<DodatnaUsluga>(Arrays.asList(dum.nadjiDodatnuUslugu("dorucak"), dum.nadjiDodatnuUslugu("vecera"))));
 		rezM.sacuvajRezervacije();
 		
-		som.ispisiSlobodneTipoveSoba(LocalDate.parse("01.06.2024.", format), LocalDate.parse("30.06.2024.", format));
+		rezM.ispisiSlobodneTipoveSoba(LocalDate.parse("01.06.2024.", format), LocalDate.parse("30.06.2024.", format));
 		
-		gm.ucitajGoste();
 		rezM.dodajRezervacijuPoTipu(gm.nadjiGosta("ana@gmail.com"), LocalDate.parse("06.06.2024.", format), LocalDate.parse("12.06.2024.", format), tsm.nadjiTipSobe("dvokrevetna (1+1)"), new ArrayList<DodatnaUsluga>());
 		rezM.sacuvajRezervacije();
 		
-		gm.ucitajGoste();
 		rezM.prikaziRezervacijeZaGosta(gm.nadjiGosta("milica@gmail.com"));
 		
 	}

@@ -44,7 +44,7 @@ public class TipSobe {
 	
 	@Override
 	public String toString() {
-		return "TipSobe [naziv=" + naziv + ", brojKreveta=" + brojKreveta + ", brojOsoba=" + brojOsoba + "]";
+		return "Naziv: " + naziv + "\nBroj kreveta: " + brojKreveta + "\nBroj osoba: " + brojOsoba;
 	}
 	
 	public String toFile() {

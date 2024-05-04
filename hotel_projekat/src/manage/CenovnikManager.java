@@ -25,6 +25,8 @@ public class CenovnikManager {
 		this.cenovnici = new ArrayList<Cenovnik>();
 		this.tsm = new TipSobeManager("data/tipoviSoba.csv");
 		this.dum = new DodatnaUslugaManager("data/dodatneUsluge.csv");
+		tsm.ucitajTipoveSoba();
+		dum.ucitajDodatneUsluge();
 	}
 	
 	public ArrayList<Cenovnik> getCenovnici() {
@@ -101,20 +103,19 @@ public class CenovnikManager {
 	private HashMap<String, HashMap<String, Double>> unesiCene() {
 		Scanner sc = new Scanner(System.in);
 		HashMap<String, HashMap<String, Double>> cene = new HashMap<String, HashMap<String, Double>>();
-		tsm.ucitajTipoveSoba();
+		System.out.println("Unesite cene za cenovnik:");
 		ArrayList<TipSobe> tipoviSoba = tsm.getTipoviSoba();
 		cene.put("TipoviSoba", new HashMap<String, Double>());
 		for (TipSobe ts : tipoviSoba) {
-			System.out.println("Unesite cene za tip sobe: " + ts.getNaziv());
+			System.out.println("Unesite cenu za tip sobe: " + ts.getNaziv());
 			double cena = sc.nextDouble();
 			sc.nextLine();
 			cene.get("TipoviSoba").put(ts.getNaziv(), cena);
 		}
-		dum.ucitajDodatneUsluge();
 		ArrayList<DodatnaUsluga> dodatneUsluge = dum.getDodatneUsluge();
 		cene.put("DodatneUsluge", new HashMap<String, Double>());
 		for (DodatnaUsluga du : dodatneUsluge) {
-			System.out.println("Unesite cene za dodatnu uslugu: " + du.getNaziv());
+			System.out.println("Unesite cenu za dodatnu uslugu: " + du.getNaziv());
 			double cena = sc.nextDouble();
 			sc.nextLine();
 			cene.get("DodatneUsluge").put(du.getNaziv(), cena);

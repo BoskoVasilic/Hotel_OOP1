@@ -60,8 +60,7 @@ public class Soba {
 	
 	@Override
 	public String toString() {
-		return "Soba [brojSobe=" + brojSobe + ", tipSobe=" + tipSobe + ", statusSobe=" + statusSobe
-				+ ", opremljenostSobe=" + opremljenostSobe + ", pusackaSoba=" + pusackaSoba + "]";
+		return "Broj sobe: " + brojSobe + "\nTip sobe: " + tipSobe + "\nStatus sobe: " + statusSobe + "\nOpremljenost sobe: " + opremljenostSobe + "\nPusacka soba: " + pusackaSoba;
 	}
 	
 	public String toFile() {

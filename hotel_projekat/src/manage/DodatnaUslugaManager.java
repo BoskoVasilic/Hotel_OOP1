@@ -65,6 +65,10 @@ public class DodatnaUslugaManager {
 	}
 	
 	public void dodajDodatnuUslugu(String naziv) {
+		if (this.nadjiDodatnuUslugu(naziv) != null) {
+			System.out.println("Dodatna usluga sa nazivom " + naziv + " vec postoji!");
+			return;
+		}
 		DodatnaUsluga du = new DodatnaUsluga(naziv);
 		dodatneUsluge.add(du);
 	}

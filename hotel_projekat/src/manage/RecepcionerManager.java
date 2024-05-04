@@ -70,6 +70,10 @@ public class RecepcionerManager {
 	
 	public void dodajRecepcionera(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa,
 			String korisnickoIme, String lozinka, StrucnaSprema strucnaSprema, int godineStaza) {
+		if (nadjiRecepcionera(korisnickoIme) != null) {
+			System.out.println("Recepcioner sa korisnickim imenom " + korisnickoIme + " vec postoji!");
+			return;
+		}
 		recepcioneri.add(new Zaposleni(ime, prezime, pol, datumRodjenja, telefon, adresa, korisnickoIme, lozinka, strucnaSprema, godineStaza, Osnovica.Recepcioner));
 	}
 	

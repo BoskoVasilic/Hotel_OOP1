@@ -56,12 +56,6 @@ public class TipSobeManager {
 		return true;
 	}
 	
-	public void dodajTipSobe(String naziv, int brojKreveta, int brojOsoba) {
-		TipSobe ts = new TipSobe(naziv, brojKreveta, brojOsoba);
-		this.tipoviSoba.add(ts);
-	}
-
-    
 	public TipSobe nadjiTipSobe(String naziv) {
 		for (TipSobe ts : tipoviSoba) {
 			if (ts.getNaziv().equals(naziv)) {
@@ -70,6 +64,16 @@ public class TipSobeManager {
 		}
 		return null;
 	}
+	
+	public void dodajTipSobe(String naziv, int brojKreveta, int brojOsoba) {
+		TipSobe ts = new TipSobe(naziv, brojKreveta, brojOsoba);
+		if (this.nadjiTipSobe(naziv) != null) {
+			System.out.println("Tip sobe " + naziv + " vec postoji u sistemu.");
+			return;
+		}
+		this.tipoviSoba.add(ts);
+	}
+	
 
 	public void izmeniTipSobe(String naziv, int brojKreveta, int brojOsoba) {
 		TipSobe ts = this.nadjiTipSobe(naziv);

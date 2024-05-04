@@ -57,8 +57,7 @@ public class Cenovnik {
 				sb.append(k1 + "=" + v1 + ", ");
 			});
 		});
-		return "Cenovnik [pocetakVazenja=" + pocetakVazenja + ", krajVazenja=" + krajVazenja + ", cene="
-				+ sb.toString().substring(0, sb.length() - 2) + "]";
+		return "Pocetak vazenja " + pocetakVazenja + "\nKraj vazenja: " + krajVazenja + "\n" + sb.toString().substring(0, sb.length() - 1);
 	}
 	
 	public String toFile() {

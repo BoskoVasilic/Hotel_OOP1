@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import entity.DodatnaUsluga;
 import entity.Gost;
@@ -21,6 +22,7 @@ public class RezervacijaManager {
 	private GostManager gm;
 	private TipSobeManager tsm;
 	private DodatnaUslugaManager dum;
+	private SobaManager sm;
 	
 	public RezervacijaManager(String rezervacijaFile) {
 		this.rezervacijaFile = rezervacijaFile;
@@ -28,7 +30,11 @@ public class RezervacijaManager {
 		this.gm = new GostManager("data/gosti.csv");
 		this.tsm = new TipSobeManager("data/tipoviSoba.csv");
 		this.dum = new DodatnaUslugaManager("data/dodatneUsluge.csv");
+		this.sm = new SobaManager("data/sobe.csv");
 		gm.ucitajGoste();
+		tsm.ucitajTipoveSoba();
+		dum.ucitajDodatneUsluge();
+		sm.ucitajSobe();
 	}
 	
 	public ArrayList<Rezervacija> getRezervacije() {
@@ -42,11 +48,8 @@ public class RezervacijaManager {
 			String regex = ",(?![^\\[]*\\])";
 			while ((linija = br.readLine()) != null) {
 				String[] tokeni = linija.split(regex);
-				gm.ucitajGoste();
 				Gost gost = gm.nadjiGosta(tokeni[1]);
-				tsm.ucitajTipoveSoba();
 				TipSobe tipSobe = tsm.nadjiTipSobe(tokeni[4]);
-				dum.ucitajDodatneUsluge();
 				ArrayList<DodatnaUsluga> dodatneUsluge = new ArrayList<DodatnaUsluga>();
 				for (String nazivUsluge : tokeni[6].substring(1, tokeni[6].length() - 1).split(", ")) {
 					dodatneUsluge.add(dum.nadjiDodatnuUslugu(nazivUsluge));
@@ -125,6 +128,37 @@ public class RezervacijaManager {
 		} else {
 			System.out.println("Rezervacija sa id " + id + " ne postoji u sistemu.");
 		}
+	}
+	
+	private ArrayList<TipSobe> pronadjiSlobodneTipoveSoba(LocalDate pocetak, LocalDate kraj){
+		ArrayList<TipSobe> slobodniTipovi = new ArrayList<TipSobe>();
+		HashMap<String, Integer> brojSobaPoTipu = sm.getBrojSobaPoTipu();
+		for (TipSobe ts : tsm.getTipoviSoba()) {
+			boolean slobodan = true;
+			for (Rezervacija r : rezervacije) {
+				if (r.getDatumPrijave().isBefore(kraj) && r.getDatumOdjave().isAfter(pocetak) && r.getTipSobe().getNaziv().equals(ts.getNaziv())) {
+					if (brojSobaPoTipu.get(ts.getNaziv()) - 1 == 0) {
+						slobodan = false;
+						break;
+					} else {
+						brojSobaPoTipu.put(ts.getNaziv(), brojSobaPoTipu.get(ts.getNaziv()) - 1);
+					}	
+				}
+			}
+			if (slobodan) {
+				slobodniTipovi.add(ts);
+			}
+		}
+		return slobodniTipovi;
+	}
+	
+	public void ispisiSlobodneTipoveSoba(LocalDate pocetak, LocalDate kraj) {
+		ArrayList<TipSobe> slobodniTipovi = pronadjiSlobodneTipoveSoba(pocetak, kraj);
+		StringBuilder sb = new StringBuilder();
+		for (TipSobe ts : slobodniTipovi) {
+			sb.append(ts.getNaziv() + "\n");
+		}
+		System.out.println(sb.toString());
 	}
 	
 	private ArrayList<Rezervacija> dobaviRezervacijeZaGosta(Gost gost) {

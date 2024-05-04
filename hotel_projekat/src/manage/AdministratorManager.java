@@ -73,6 +73,10 @@ public class AdministratorManager {
 	
 	public void dodajAdministratora(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa,
 			String korisnickoIme, String lozinka, StrucnaSprema strucnaSprema, int godineStaza) {
+		if (nadjiAdministratora(korisnickoIme) != null) {
+			System.out.println("Administrator sa korisnickim imenom " + korisnickoIme + " vec postoji!");
+			return;
+		}
 		administratori.add(new Zaposleni(ime, prezime, pol, datumRodjenja, telefon, adresa, korisnickoIme, lozinka, strucnaSprema, godineStaza, Osnovica.Administarator));
 	}
 	

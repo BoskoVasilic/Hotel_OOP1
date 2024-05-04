@@ -12,12 +12,12 @@ public class ZaposleniManager {
 		this.am = new AdministratorManager("data/administratori.csv");
 		this.rm = new RecepcionerManager("data/recepcioneri.csv");
 		this.sm = new SobaricaManager("data/sobarice.csv");
-	}
-	
-	public void prikaziSveZaposlene() {
 		am.ucitajAdministratore();
 		rm.ucitajRecepcionere();
 		sm.ucitajSobarice();
+	}
+	
+	public void prikaziSveZaposlene() {
 		System.out.println("------------------------------");
 		System.out.println("Administratori: ");
 		System.out.println("------------------------------");
