@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -105,6 +106,36 @@ public class RezervacijaManager {
 		gm.sacuvajGoste();
 	}
 	
+	public void dodajRezervacijuPoBrojuLjudi(Gost gost, LocalDate datumPrijave, LocalDate datumOdjave, int brojLjudi, ArrayList<DodatnaUsluga> dodatneUsluge) {
+		double cena = 0;
+		int id;
+		if(rezervacije.size() == 0) {
+			id = 1;
+		} else {
+			id = rezervacije.get(rezervacije.size() - 1).getId() + 1;
+		}
+		for (TipSobe tipSobe : pronadjiSlobodneTipoveSoba(datumPrijave, datumOdjave)) {
+			if (tipSobe.getBrojOsoba() == brojLjudi) {
+				Rezervacija r = new Rezervacija(id, gost, datumPrijave, datumOdjave, tipSobe, brojLjudi, dodatneUsluge, cena, StatusRezervacije.NA_ČEKANJU);
+				r.setUkupnaCena(r.izracunajUkupnuCenu());
+				rezervacije.add(r);
+				gm.nadjiGosta(gost.getKorisnickoIme()).getRezervacije().add(r);
+				gm.sacuvajGoste();
+				return;
+			}
+		}
+		for (TipSobe tipSobe : pronadjiSlobodneTipoveSoba(datumPrijave, datumOdjave)) {
+			if (tipSobe.getBrojOsoba() > brojLjudi) {
+				Rezervacija r = new Rezervacija(id, gost, datumPrijave, datumOdjave, tipSobe, brojLjudi, dodatneUsluge, cena, StatusRezervacije.NA_ČEKANJU);
+				r.setUkupnaCena(r.izracunajUkupnuCenu());
+				rezervacije.add(r);
+				gm.nadjiGosta(gost.getKorisnickoIme()).getRezervacije().add(r);
+				gm.sacuvajGoste();
+				return;
+			}
+		}
+	}
+	
 	public void izmeniRezervaciju(int id, Gost gost, LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe,
 			int brojLjudi, ArrayList<DodatnaUsluga> dodatneUsluge) {
 		Rezervacija r = nadjiRezervaciju(id);
@@ -158,7 +189,8 @@ public class RezervacijaManager {
 		for (TipSobe ts : slobodniTipovi) {
 			sb.append(ts.getNaziv() + "\n");
 		}
-		System.out.println(sb.toString());
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
+		System.out.println("Slobodni tipovi soba za period od " + pocetak.format(format) + " do " + kraj.format(format) + ":\n" + sb.toString());
 	}
 	
 	private ArrayList<Rezervacija> dobaviRezervacijeZaGosta(Gost gost) {
@@ -173,6 +205,7 @@ public class RezervacijaManager {
 	
 	public void prikaziRezervacijeZaGosta(Gost gost) {
 		ArrayList<Rezervacija> rezervacijeZaGosta = dobaviRezervacijeZaGosta(gost);
+		System.out.println("Rezervacije za gosta " + gost.getKorisnickoIme() + ":");
         for (Rezervacija r : rezervacijeZaGosta) {
             System.out.println(r);
         }

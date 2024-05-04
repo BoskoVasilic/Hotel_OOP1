@@ -1,6 +1,7 @@
 package entity;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import manage.CenovnikManager;
@@ -25,19 +26,6 @@ public class Rezervacija {
 		this.datumOdjave = datumOdjave;
 		this.tipSobe = tipSobe;
 		this.brojLjudi = 0;
-		this.dodatneUsluge = dodatneUsluge;
-		this.ukupnaCena = ukupnaCena;
-		this.statusRezervacije = StatusRezervacije.NA_ČEKANJU;
-	}
-	
-	public Rezervacija(int id, Gost rezervisao, LocalDate datumPrijave, LocalDate datumOdjave, int brojLjudi, 
-			ArrayList<DodatnaUsluga> dodatneUsluge, double ukupnaCena) {
-		this.id = id;
-		this.rezervisao = rezervisao;
-		this.datumPrijave = datumPrijave;
-		this.datumOdjave = datumOdjave;
-		this.tipSobe = null;
-		this.brojLjudi = brojLjudi;
 		this.dodatneUsluge = dodatneUsluge;
 		this.ukupnaCena = ukupnaCena;
 		this.statusRezervacije = StatusRezervacije.NA_ČEKANJU;
@@ -142,7 +130,8 @@ public class Rezervacija {
 	
 	@Override
 	public String toString() {
-		return "Datum prijave: " + datumPrijave + "\nDatum odjave: " + datumOdjave + "\nTip sobe: " + tipSobe.getNaziv() + "\nBroj ljudi: " + brojLjudi + "\nDodatne usluge: " + dodatneUsluge + "\nUkupna cena: " + ukupnaCena + "\nStatus rezervacije: " + statusRezervacije;
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
+		return "Datum prijave: " + datumPrijave.format(format) + "\nDatum odjave: " + datumOdjave.format(format) + "\nTip sobe: " + tipSobe.getNaziv() + "\nBroj ljudi: " + brojLjudi + "\nDodatne usluge: " + dodatneUsluge + "\nUkupna cena: " + ukupnaCena + "\nStatus rezervacije: " + statusRezervacije;
 
 	}
 	
