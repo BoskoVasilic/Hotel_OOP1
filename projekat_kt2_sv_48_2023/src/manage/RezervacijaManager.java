@@ -174,7 +174,7 @@ public class RezervacijaManager {
 		for (TipSobe ts : tsm.getTipoviSoba()) {
 			boolean slobodan = true;
 			for (Rezervacija r : rezervacije) {
-				if (r.getDatumPrijave().isBefore(kraj) && r.getDatumOdjave().isAfter(pocetak) && r.getTipSobe().getNaziv().equals(ts.getNaziv())) {
+				if (r.getDatumPrijave().isBefore(kraj) && r.getDatumOdjave().isAfter(pocetak) && r.getTipSobe().getNaziv().equals(ts.getNaziv()) && r.getStatusRezervacije() == StatusRezervacije.POTVRĐENA) {
 					if (brojSobaPoTipu.get(ts.getNaziv()) - 1 == 0) {
 						slobodan = false;
 						break;
