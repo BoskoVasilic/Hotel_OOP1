@@ -18,4 +18,9 @@ public class Oprema {
 	public String toFile() {
 		return this.naziv;
 	}
+	
+	@Override
+	public String toString() {
+		return this.naziv;
+	}
 }

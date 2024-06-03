@@ -1,5 +1,7 @@
 package view;
 
+import java.awt.BorderLayout;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,32 +14,32 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
-import manage.RezervacijaManager;
-import model.RezervacijeModel;
-import java.awt.BorderLayout;
-import java.awt.Font;
+import manage.SobaManager;
+import model.SobeModel;
 
-public class PotvrdaRezervacijaUI extends JFrame {
+
+public class PregledSobaUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private RezervacijaManager rm;
+	private SobaManager sm = new SobaManager("data/sobe.csv");
 	protected TableRowSorter<AbstractTableModel> tableSorter = new TableRowSorter<AbstractTableModel>();
 
-	public PotvrdaRezervacijaUI() {
-		setTitle("Hotel - Pristigle rezervacije");
-		rm = new RezervacijaManager("data/rezervacije.csv");
-		rm.ucitajRezervacije();
+
+	public PregledSobaUI() {
+		sm.ucitajSobe();
 		
+		setTitle("Hotel - Pregled soba");
+		setBounds(100, 100, 800, 300);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 1000, 500);
 		setLocationRelativeTo(null);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		
-		JTable table = new JTable(new RezervacijeModel(rm));
+		JTable table = new JTable(new SobeModel(sm));
 		table.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getTableHeader().setReorderingAllowed(false);
@@ -49,7 +51,7 @@ public class PotvrdaRezervacijaUI extends JFrame {
 		table.setRowSorter(tableSorter);
 		JScrollPane scrollPane = new JScrollPane(table);
 		contentPane.add(scrollPane);
-		
+
 	}
 
 }

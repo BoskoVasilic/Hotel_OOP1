@@ -71,6 +71,13 @@ public class RecepcionerUI extends JFrame {
 		sobe_btn.setBounds(90, 316, 104, 87);
 		contentPane.add(sobe_btn);
 		
+		sobe_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PregledSobaUI pregledSobaFrame = new PregledSobaUI();
+				pregledSobaFrame.setVisible(true);
+			}
+		});
+		
 		JButton dodajGosta_btn = new JButton("");
 		dodajGosta_btn.setIcon(new ImageIcon("img\\add_guest.png"));
 		dodajGosta_btn.addActionListener(new ActionListener() {

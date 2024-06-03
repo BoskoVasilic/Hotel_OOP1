@@ -1,7 +1,11 @@
 package model;
 
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
 import javax.swing.table.AbstractTableModel;
 
+import entity.DodatnaUsluga;
 import entity.Rezervacija;
 import manage.RezervacijaManager;
 
@@ -26,11 +30,36 @@ public class RezervacijeModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
 		Rezervacija r = rm.getRezervacije().get(rowIndex);
 		switch (columnIndex) {
 		case 0:
 			return r.getId();
-
+		case 1:
+			return r.getDatumPrijave().format(format);
+		case 2:
+			return r.getDatumOdjave().format(format);
+		case 3:
+			return r.getTipSobe().getNaziv();
+		case 4:
+			return r.getBrojLjudi();
+		case 5:
+			StringBuilder sb = new StringBuilder();
+			ArrayList<DodatnaUsluga> du = new ArrayList<DodatnaUsluga>();
+			if (r.getDodatneUsluge().get(0) != null) {
+				du = r.getDodatneUsluge();
+				for (int i = 0; i < du.size(); i++) {
+					sb.append(du.get(i).getNaziv());
+					if (i != du.size() - 1) {
+						sb.append(", ");
+					}
+				}
+			return sb.toString();
+		} else {
+			return "nema";
+		}
+		case 6:
+			return r.getUkupnaCena();
 		default:
 			return null;
 		}
