@@ -87,6 +87,13 @@ public class RecepcionerUI extends JFrame {
 		dodajGosta_btn.setBounds(306, 316, 104, 87);
 		contentPane.add(dodajGosta_btn);
 		
+		dodajGosta_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DodavanjeGostaUI dodavanjeGostaFrame = new DodavanjeGostaUI();
+				dodavanjeGostaFrame.setVisible(true);
+			}
+		});
+		
 		JLabel lblNewLabel_1 = new JLabel("REZERVACIJE");
 		lblNewLabel_1.setLabelFor(rezervacije_btn);
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 11));
