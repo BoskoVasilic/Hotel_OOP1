@@ -66,6 +66,13 @@ public class RecepcionerUI extends JFrame {
 		chekInOut_btn.setBounds(306, 137, 104, 87);
 		contentPane.add(chekInOut_btn);
 		
+		chekInOut_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CheckInOutUI checkInOutFrame = new CheckInOutUI();
+				checkInOutFrame.setVisible(true);
+			}
+		});
+		
 		JButton sobe_btn = new JButton("");
 		sobe_btn.setIcon(new ImageIcon("img\\rooms.png"));
 		sobe_btn.setBounds(90, 316, 104, 87);

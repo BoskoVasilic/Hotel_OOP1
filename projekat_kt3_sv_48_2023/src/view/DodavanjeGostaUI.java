@@ -3,6 +3,8 @@ package view;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
@@ -41,9 +43,9 @@ public class DodavanjeGostaUI extends JFrame {
 	private JTextField brTelefona;
 	private JLabel lblAdresa;
 	private JTextField adresa;
-	private JLabel lblBrojPasoa;
+	private JLabel lblEmail;
 	private JTextField email;
-	private JLabel lblBrojPasoa_1;
+	private JLabel lblBrojPasosa;
 	private JTextField brPasosa;
 
 	public DodavanjeGostaUI() {
@@ -125,6 +127,16 @@ public class DodavanjeGostaUI extends JFrame {
 		brTelefona.setBounds(61, 184, 137, 25);
 		contentPane.add(brTelefona);
 		
+		brTelefona.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent ke) {
+				if (((ke.getKeyChar() >= '0' && ke.getKeyChar() <= '9') && brTelefona.getText().length() < 12) || ke.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+					brTelefona.setEditable(true);
+				} else {
+					brTelefona.setEditable(false);
+				}
+			}
+		});
+		
 		lblAdresa = new JLabel("Adresa:");
 		lblAdresa.setBounds(274, 164, 69, 14);
 		contentPane.add(lblAdresa);
@@ -135,25 +147,35 @@ public class DodavanjeGostaUI extends JFrame {
 		adresa.setBounds(274, 184, 147, 25);
 		contentPane.add(adresa);
 		
-		lblBrojPasoa = new JLabel("Email:");
-		lblBrojPasoa.setBounds(61, 228, 86, 14);
-		contentPane.add(lblBrojPasoa);
+		lblEmail = new JLabel("Email:");
+		lblEmail.setBounds(61, 228, 86, 14);
+		contentPane.add(lblEmail);
 		
 		email = new JTextField();
-		lblBrojPasoa.setLabelFor(email);
+		lblEmail.setLabelFor(email);
 		email.setColumns(10);
 		email.setBounds(61, 248, 137, 25);
 		contentPane.add(email);
 		
-		lblBrojPasoa_1 = new JLabel("Broj pasoša:");
-		lblBrojPasoa_1.setBounds(274, 228, 114, 14);
-		contentPane.add(lblBrojPasoa_1);
+		lblBrojPasosa = new JLabel("Broj pasoša:");
+		lblBrojPasosa.setBounds(274, 228, 114, 14);
+		contentPane.add(lblBrojPasosa);
 		
 		brPasosa = new JTextField();
-		lblBrojPasoa_1.setLabelFor(brPasosa);
+		lblBrojPasosa.setLabelFor(brPasosa);
 		brPasosa.setColumns(10);
 		brPasosa.setBounds(274, 248, 147, 25);
 		contentPane.add(brPasosa);
+		
+		brPasosa.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent ke) {
+				if (((ke.getKeyChar() >= '0' && ke.getKeyChar() <= '9') && brPasosa.getText().length() < 9) || ke.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+					brPasosa.setEditable(true);
+				} else {
+					brPasosa.setEditable(false);
+				}
+			}
+		});
 		
 		JButton dodajGostaBtn = new JButton("Dodaj");
 		dodajGostaBtn.setBounds(332, 298, 89, 23);
@@ -161,29 +183,53 @@ public class DodavanjeGostaUI extends JFrame {
 		
 		dodajGostaBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Pol pol = radioBtnPolM.isSelected() ? Pol.M : Pol.Z;
-				String datumRodjenja = datePicker.getJFormattedTextField().getText();
+				boolean validno = true;
+				Pol pol = null;
+				String imeGosta = "";
+				String prezimeGosta = "";
+				String datumRodjenja = "";
+				String telefon = "";
+				String adresaGosta = "";
+				String emailGosta = "";
+				String brPasosaGosta = "";
 				DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
-				String imeGosta = ime.getText();
-				String prezimeGosta = prezime.getText();
-				String telefon = brTelefona.getText();
-				String adresaGosta = adresa.getText();
-				String emailGosta = email.getText();
-				String brPasosaGosta = brPasosa.getText();
-
-				gm.dodajGosta(imeGosta, prezimeGosta, pol, LocalDate.parse(datumRodjenja, format), telefon, adresaGosta, emailGosta, brPasosaGosta);
-				gm.sacuvajGoste();
+				if (radioBtnPolM.isSelected() == false && radioBtnPolZ.isSelected() == false) {
+					validno = false;
+				}else {
+					pol = radioBtnPolM.isSelected() ? Pol.M : Pol.Z;
+				}
+				if (ime.getText().equals("") || prezime.getText().equals("")
+						|| datePicker.getJFormattedTextField().getText().equals("") || brTelefona.getText().equals("")
+						|| adresa.getText().equals("") || email.getText().equals("") || brPasosa.getText().equals("")) {
+					validno = false;
+				}else {
+					datumRodjenja = datePicker.getJFormattedTextField().getText();
+					imeGosta = ime.getText();
+					prezimeGosta = prezime.getText();
+					telefon = brTelefona.getText();
+					adresaGosta = adresa.getText();
+					emailGosta = email.getText();
+					brPasosaGosta = brPasosa.getText();
+				}
 				
-				JOptionPane.showMessageDialog(null, "Gost je uspešno dodat!");
-				
-				ime.setText("");
-				prezime.setText("");
-				bg.clearSelection();
-				datePicker.getJFormattedTextField().setText("");
-				brTelefona.setText("");
-				adresa.setText("");
-				email.setText("");
-				brPasosa.setText("");
+				if (validno == false) {
+					JOptionPane.showMessageDialog(null, "Morate popuniti sva polja!", "Greška", JOptionPane.ERROR_MESSAGE);
+					return;
+				}else {
+					gm.dodajGosta(imeGosta, prezimeGosta, pol, LocalDate.parse(datumRodjenja, format), telefon, adresaGosta, emailGosta, brPasosaGosta);
+					gm.sacuvajGoste();
+					
+					JOptionPane.showMessageDialog(null, "Gost je uspešno dodat!");
+					
+					ime.setText("");
+					prezime.setText("");
+					bg.clearSelection();
+					datePicker.getJFormattedTextField().setText("");
+					brTelefona.setText("");
+					adresa.setText("");
+					email.setText("");
+					brPasosa.setText("");
+				}
 			}
 		});
 		
