@@ -13,7 +13,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
+import entity.DodatnaUsluga;
 import entity.StatusRezervacije;
+import entity.TipSobe;
 import manage.RezervacijaManager;
 import manage.TipSobeManager;
 import manage.DodatnaUslugaManager;
@@ -23,6 +25,9 @@ import java.awt.Font;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
 import javax.swing.ScrollPaneConstants;
@@ -77,11 +82,21 @@ public class PotvrdaRezervacijaUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int red = table.getSelectedRow();
 				if (red != -1) {
-					 int response = JOptionPane.showConfirmDialog(null, "Da li ste sigurni da želite da potvrdite ovu rezervaciju?", "Potvrda", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					int modelRed = table.convertRowIndexToModel(red);
+					int response = JOptionPane.showConfirmDialog(null, "Da li ste sigurni da želite da potvrdite ovu rezervaciju?", "Potvrda", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				    if (response == JOptionPane.NO_OPTION) {
 				      return;
 				    } else if (response == JOptionPane.YES_OPTION) {
-				    	int id = Integer.parseInt(table.getModel().getValueAt(red, 0).toString());
+				    	int id = Integer.parseInt(table.getModel().getValueAt(modelRed, 0).toString());
+				    	DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
+				    	LocalDate pocetak = LocalDate.parse(table.getModel().getValueAt(modelRed, 1).toString(), format);
+				    	LocalDate kraj = LocalDate.parse(table.getModel().getValueAt(modelRed, 2).toString(), format);
+				    	TipSobe tipSobe = tsm.nadjiTipSobe(table.getModel().getValueAt(modelRed, 3).toString());
+						if (rm.isSlobodnaSobaZaPeriod(pocetak, kraj, tipSobe) == false) {
+							JOptionPane.showMessageDialog(null, "Nema slobodnih soba zahtevanog tipa za izabrani period.", "Greška",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
 						rm.promeniStatusRezervacije(id, StatusRezervacije.POTVRĐENA);
 						rm.sacuvajRezervacije();
 						((RezervacijeModel) table.getModel()).fireTableDataChanged();
@@ -101,11 +116,12 @@ public class PotvrdaRezervacijaUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int red = table.getSelectedRow();
 				if (red != -1) {
-					 int response = JOptionPane.showConfirmDialog(null, "Da li ste sigurni da želite da odbijete ovu rezervaciju?", "Potvrda", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					int modelRed = table.convertRowIndexToModel(red);
+					int response = JOptionPane.showConfirmDialog(null, "Da li ste sigurni da želite da odbijete ovu rezervaciju?", "Potvrda", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				    if (response == JOptionPane.NO_OPTION) {
 				      return;
 				    } else if (response == JOptionPane.YES_OPTION) {
-				    	int id = Integer.parseInt(table.getModel().getValueAt(red, 0).toString());
+				    	int id = Integer.parseInt(table.getModel().getValueAt(modelRed, 0).toString());
 						rm.promeniStatusRezervacije(id, StatusRezervacije.ODBIJENA);
 						rm.sacuvajRezervacije();
 						((RezervacijeModel) table.getModel()).fireTableDataChanged();
@@ -121,7 +137,8 @@ public class PotvrdaRezervacijaUI extends JFrame {
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				int red = table.getSelectedRow();
-				if (red != -1) {
+				int modelRed = table.convertRowIndexToModel(red);
+				if (red != -1 && table.getModel().getValueAt(modelRed, 0).toString() != "") {
 					postaviStatusLbl.setEnabled(true);
 					potvrdiRezervacijuBtn.setEnabled(true);
 					odbijRezervacijuBtn.setEnabled(true);
@@ -185,20 +202,55 @@ public class PotvrdaRezervacijaUI extends JFrame {
 		primeniFiltereBtn.setBounds(280, 427, 89, 23);
 		contentPane.add(primeniFiltereBtn);
 		
-		primeniFiltereBtn.addActionListener(new ActionListener() {
+		JButton btnReset = new JButton("Reset");
+		btnReset.setBounds(181, 427, 89, 23);
+		contentPane.add(btnReset);
+		
+		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//get selected checkboxes
-				boolean[] tipoviSoba = new boolean[tsm.getTipoviSoba().size()];
-				boolean[] dodatneUsluge = new boolean[dum.getDodatneUsluge().size()];
 				for (int i = 0; i < tsm.getTipoviSoba().size(); i++) {
 					JCheckBox chckbx = (JCheckBox) panelTipSobe.getComponent(i);
-					tipoviSoba[i] = chckbx.isSelected();
+					chckbx.setSelected(false);
 				}
 				for (int i = 0; i < dum.getDodatneUsluge().size(); i++) {
 					JCheckBox chckbx = (JCheckBox) panelDodatneusluge.getComponent(i);
-					dodatneUsluge[i] = chckbx.isSelected();
+					chckbx.setSelected(false);
 				}
-				((RezervacijeModel) table.getModel()).setFilter(tipoviSoba, dodatneUsluge);
+				rm.setRezervacijeNaCekanju();
+				if (table.getRowSorter() != null) {
+					table.getRowSorter().modelStructureChanged();
+				}
+				((RezervacijeModel) table.getModel()).fireTableDataChanged();
+				postaviStatusLbl.setEnabled(false);
+				potvrdiRezervacijuBtn.setEnabled(false);
+				odbijRezervacijuBtn.setEnabled(false);
+			}
+		});
+		
+		primeniFiltereBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<TipSobe> tipoviSoba = new ArrayList<TipSobe>();
+				ArrayList<DodatnaUsluga> dodatneUsluge = new ArrayList<DodatnaUsluga>();
+				for (int i = 0; i < tsm.getTipoviSoba().size(); i++) {
+					JCheckBox chckbx = (JCheckBox) panelTipSobe.getComponent(i);
+					if (chckbx.isSelected()) {
+						tipoviSoba.add(tsm.getTipoviSoba().get(i));
+					}
+				}
+				for (int i = 0; i < dum.getDodatneUsluge().size(); i++) {
+					JCheckBox chckbx = (JCheckBox) panelDodatneusluge.getComponent(i);
+					if (chckbx.isSelected()) {
+						dodatneUsluge.add(dum.getDodatneUsluge().get(i));
+					}
+				}
+				if (tipoviSoba.size() == 0 && dodatneUsluge.size() == 0) {
+					rm.setRezervacijeNaCekanju();
+				}else {
+					rm.setFilter(tipoviSoba, dodatneUsluge);
+				}
+				if (table.getRowSorter() != null) {
+		            table.getRowSorter().modelStructureChanged();
+		        }
 				((RezervacijeModel) table.getModel()).fireTableDataChanged();
 			}
 		});

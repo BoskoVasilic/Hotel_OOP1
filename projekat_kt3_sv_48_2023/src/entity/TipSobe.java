@@ -51,5 +51,17 @@ public class TipSobe {
 		return this.naziv + "," + this.brojKreveta + "," + this.brojOsoba;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof TipSobe) {
+			TipSobe ts = (TipSobe) obj;
+			if (this.naziv.equals(ts.getNaziv()) && this.brojKreveta == ts.getBrojKreveta()
+					&& this.brojOsoba == ts.getBrojOsoba()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 
 }

@@ -24,4 +24,15 @@ public class DodatnaUsluga {
 	public String toFile() {
 		return this.naziv;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof DodatnaUsluga) {
+			DodatnaUsluga du = (DodatnaUsluga) obj;
+			if (this.naziv.equals(du.getNaziv())) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

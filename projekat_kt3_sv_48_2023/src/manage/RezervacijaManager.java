@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
 import entity.DodatnaUsluga;
 import entity.Gost;
 import entity.Rezervacija;
@@ -25,10 +26,12 @@ public class RezervacijaManager {
 	private TipSobeManager tsm;
 	private DodatnaUslugaManager dum;
 	private SobaManager sm;
+	private ArrayList<Rezervacija> filtriraneRezervacije;
 	
 	public RezervacijaManager(String rezervacijaFile) {
 		this.rezervacijaFile = rezervacijaFile;
 		this.rezervacije = new ArrayList<Rezervacija>();
+		this.filtriraneRezervacije = new ArrayList<Rezervacija>();
 		this.gm = new GostManager("data/gosti.csv");
 		this.tsm = new TipSobeManager("data/tipoviSoba.csv");
 		this.dum = new DodatnaUslugaManager("data/dodatneUsluge.csv");
@@ -43,16 +46,35 @@ public class RezervacijaManager {
 		return rezervacije;
 	}
 	
-	public ArrayList<Rezervacija> getRezervacijeNaCekanju(){
+	public void setRezervacijeNaCekanju(){
 		ArrayList<Rezervacija> rezervacijeNaCekanju = new ArrayList<Rezervacija>();
 		for (Rezervacija r : rezervacije) {
 			if (r.getStatusRezervacije() == StatusRezervacije.NA_ČEKANJU) {
 				rezervacijeNaCekanju.add(r);
 			}
 		}
-		return rezervacijeNaCekanju;
+		this.filtriraneRezervacije = rezervacijeNaCekanju;
 	}
 	
+	public void setFilter(ArrayList<TipSobe> tipoviSoba, ArrayList<DodatnaUsluga> dodatneUsluge) {
+		ArrayList<Rezervacija> rezervacijeNaCekanju = this.getRezervacijeNaCekanju();
+        ArrayList<Rezervacija> rezervacijeFiltrirane = new ArrayList<Rezervacija>();
+        for (Rezervacija r : rezervacijeNaCekanju) {
+            boolean tipSobeMatch = (tipoviSoba == null || tipoviSoba.size() == 0 || tipoviSoba.contains(r.getTipSobe()));
+            boolean dodatneUslugeMatch = (dodatneUsluge == null || dodatneUsluge.size() == 0 || r.getDodatneUsluge().containsAll(dodatneUsluge));
+
+            if (tipSobeMatch && dodatneUslugeMatch) {
+                rezervacijeFiltrirane.add(r);
+            }
+        }
+        this.filtriraneRezervacije = rezervacijeFiltrirane;
+ 
+    }
+	
+    public ArrayList<Rezervacija> getRezervacijeNaCekanju() {
+		return this.filtriraneRezervacije;
+	}
+    
 	public boolean ucitajRezervacije() {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(this.rezervacijaFile));
@@ -208,6 +230,14 @@ public class RezervacijaManager {
 		}
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
 		System.out.println("Slobodni tipovi soba za period od " + pocetak.format(format) + " do " + kraj.format(format) + ":\n" + sb.toString());
+	}
+	
+	public boolean isSlobodnaSobaZaPeriod(LocalDate pocetak, LocalDate kraj, TipSobe tipSobe) {
+		ArrayList<TipSobe> slobodniTipovi = pronadjiSlobodneTipoveSoba(pocetak, kraj);
+		if (slobodniTipovi.size() == 0 || slobodniTipovi.contains(tipSobe) == false) {
+			return false;
+		}
+		return true;
 	}
 	
 	private ArrayList<Rezervacija> dobaviRezervacijeZaGosta(Gost gost) {
