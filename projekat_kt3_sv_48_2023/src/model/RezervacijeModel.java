@@ -20,7 +20,7 @@ public class RezervacijeModel extends AbstractTableModel {
 	
 	@Override
 	public int getRowCount() {
-		return rm.getRezervacije().size();
+		return rm.getRezervacijeNaCekanju().size();
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class RezervacijeModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
-		Rezervacija r = rm.getRezervacije().get(rowIndex);
+		Rezervacija r = rm.getRezervacijeNaCekanju().get(rowIndex);
 		switch (columnIndex) {
 		case 0:
 			return r.getId();
@@ -74,6 +74,41 @@ public class RezervacijeModel extends AbstractTableModel {
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 		return this.getValueAt(0, columnIndex).getClass();
+	}
+	
+	public void setFilter(boolean[] tipoviSoba, boolean[] dodatneUsluge) {
+		ArrayList<Rezervacija> rezervacijeNaCekanju = rm.getRezervacijeNaCekanju();
+        ArrayList<Rezervacija> rezervacijeFiltrirane = new ArrayList<Rezervacija>();
+        for (Rezervacija r : rezervacijeNaCekanju) {
+            boolean tipSobeOk = false;
+            boolean dodatneUslugeOk = false;
+            if (r.getTipSobe() == null) {
+                tipSobeOk = true;
+            } else {
+                for (int i = 0; i < tipoviSoba.length; i++) {
+                    if (tipoviSoba[i] && r.getTipSobe().getNaziv().equals(rm.getTipoviSoba().get(i).getNaziv())) {
+                        tipSobeOk = true;
+                        break;
+                    }
+                }
+            }
+            if (r.getDodatneUsluge().get(0) == null) {
+                dodatneUslugeOk = true;
+            } else {
+                for (int i = 0; i < dodatneUsluge.length; i++) {
+                    if (dodatneUsluge[i] && r.getDodatneUsluge().get(i).getNaziv().equals(rm.getDodatneUsluge().get(i).getNaziv())) {
+                        dodatneUslugeOk = true;
+                        break;
+                    }
+                }
+            }
+            if (tipSobeOk && dodatneUslugeOk) {
+                rezervacijeFiltrirane.add(r);
+            }
+        }
+        rm.setRezervacijeNaCekanju(rezervacijeFiltrirane);
+    }
+		
 	}
 
 }

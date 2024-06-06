@@ -43,6 +43,16 @@ public class RezervacijaManager {
 		return rezervacije;
 	}
 	
+	public ArrayList<Rezervacija> getRezervacijeNaCekanju(){
+		ArrayList<Rezervacija> rezervacijeNaCekanju = new ArrayList<Rezervacija>();
+		for (Rezervacija r : rezervacije) {
+			if (r.getStatusRezervacije() == StatusRezervacije.NA_ČEKANJU) {
+				rezervacijeNaCekanju.add(r);
+			}
+		}
+		return rezervacijeNaCekanju;
+	}
+	
 	public boolean ucitajRezervacije() {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(this.rezervacijaFile));
@@ -217,4 +227,13 @@ public class RezervacijaManager {
             System.out.println(r);
         }
     }
+	
+	public void promeniStatusRezervacije(int id, StatusRezervacije status) {
+		Rezervacija r = nadjiRezervaciju(id);
+		if (r != null) {
+			r.setStatusRezervacije(status);
+		} else {
+			System.out.println("Rezervacija sa id " + id + " ne postoji u sistemu.");
+		}
+	}
 }
