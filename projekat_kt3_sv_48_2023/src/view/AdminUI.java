@@ -13,6 +13,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class AdminUI extends JFrame {
@@ -61,10 +63,16 @@ public class AdminUI extends JFrame {
 		lblNewLabel.setBounds(110, 34, 277, 37);
 		contentPane.add(lblNewLabel);
 		
-		JButton rezervacije_btn = new JButton("");
-		rezervacije_btn.setIcon(new ImageIcon("img\\add_employee.png"));
-		rezervacije_btn.setBounds(26, 104, 104, 87);
-		contentPane.add(rezervacije_btn);
+		JButton zaposleniBtn = new JButton("");
+		zaposleniBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ZaposleniUI frame = new ZaposleniUI();
+				frame.setVisible(true);
+			}
+		});
+		zaposleniBtn.setIcon(new ImageIcon("img\\add_employee.png"));
+		zaposleniBtn.setBounds(26, 104, 104, 87);
+		contentPane.add(zaposleniBtn);
 		
 		JLabel lblNewLabel_1 = new JLabel("ZAPOSLENI");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -72,10 +80,10 @@ public class AdminUI extends JFrame {
 		lblNewLabel_1.setBounds(34, 193, 90, 14);
 		contentPane.add(lblNewLabel_1);
 		
-		JButton rezervacije_btn_1 = new JButton("");
-		rezervacije_btn_1.setIcon(new ImageIcon("img\\price_list.png"));
-		rezervacije_btn_1.setBounds(193, 104, 104, 87);
-		contentPane.add(rezervacije_btn_1);
+		JButton cenovniciBtn = new JButton("");
+		cenovniciBtn.setIcon(new ImageIcon("img\\price_list.png"));
+		cenovniciBtn.setBounds(193, 104, 104, 87);
+		contentPane.add(cenovniciBtn);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("CENOVNICI");
 		lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -83,10 +91,10 @@ public class AdminUI extends JFrame {
 		lblNewLabel_1_1.setBounds(201, 193, 90, 14);
 		contentPane.add(lblNewLabel_1_1);
 		
-		JButton rezervacije_btn_2 = new JButton("");
-		rezervacije_btn_2.setIcon(new ImageIcon("img\\additionalServices.png"));
-		rezervacije_btn_2.setBounds(358, 104, 104, 87);
-		contentPane.add(rezervacije_btn_2);
+		JButton dodatneUslugeBtn = new JButton("");
+		dodatneUslugeBtn.setIcon(new ImageIcon("img\\additionalServices.png"));
+		dodatneUslugeBtn.setBounds(358, 104, 104, 87);
+		contentPane.add(dodatneUslugeBtn);
 		
 		JLabel lblNewLabel_1_2 = new JLabel("DODATNE USLUGE");
 		lblNewLabel_1_2.setHorizontalAlignment(SwingConstants.CENTER);
@@ -94,10 +102,10 @@ public class AdminUI extends JFrame {
 		lblNewLabel_1_2.setBounds(352, 193, 116, 14);
 		contentPane.add(lblNewLabel_1_2);
 		
-		JButton rezervacije_btn_3 = new JButton("");
-		rezervacije_btn_3.setIcon(new ImageIcon("img\\room_type.png"));
-		rezervacije_btn_3.setBounds(26, 227, 104, 87);
-		contentPane.add(rezervacije_btn_3);
+		JButton tipoviSobaBtn = new JButton("");
+		tipoviSobaBtn.setIcon(new ImageIcon("img\\room_type.png"));
+		tipoviSobaBtn.setBounds(26, 227, 104, 87);
+		contentPane.add(tipoviSobaBtn);
 		
 		JLabel lblNewLabel_1_3 = new JLabel("TIPOVI SOBA");
 		lblNewLabel_1_3.setHorizontalAlignment(SwingConstants.CENTER);
@@ -105,10 +113,10 @@ public class AdminUI extends JFrame {
 		lblNewLabel_1_3.setBounds(34, 316, 90, 14);
 		contentPane.add(lblNewLabel_1_3);
 		
-		JButton rezervacije_btn_1_1 = new JButton("");
-		rezervacije_btn_1_1.setIcon(new ImageIcon("img\\rooms.png"));
-		rezervacije_btn_1_1.setBounds(193, 227, 104, 87);
-		contentPane.add(rezervacije_btn_1_1);
+		JButton sobeBtn = new JButton("");
+		sobeBtn.setIcon(new ImageIcon("img\\rooms.png"));
+		sobeBtn.setBounds(193, 227, 104, 87);
+		contentPane.add(sobeBtn);
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("SOBE");
 		lblNewLabel_1_1_1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -116,10 +124,10 @@ public class AdminUI extends JFrame {
 		lblNewLabel_1_1_1.setBounds(201, 316, 90, 14);
 		contentPane.add(lblNewLabel_1_1_1);
 		
-		JButton rezervacije_btn_2_1 = new JButton("");
-		rezervacije_btn_2_1.setIcon(new ImageIcon("img\\equimpment.png"));
-		rezervacije_btn_2_1.setBounds(358, 227, 104, 87);
-		contentPane.add(rezervacije_btn_2_1);
+		JButton opremaBtn = new JButton("");
+		opremaBtn.setIcon(new ImageIcon("img\\equimpment.png"));
+		opremaBtn.setBounds(358, 227, 104, 87);
+		contentPane.add(opremaBtn);
 		
 		JLabel lblNewLabel_1_2_1 = new JLabel("OPREMA");
 		lblNewLabel_1_2_1.setHorizontalAlignment(SwingConstants.CENTER);

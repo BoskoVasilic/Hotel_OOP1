@@ -8,14 +8,16 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import entity.Osnovica;
 import entity.Pol;
+import entity.Pozicija;
 import entity.StrucnaSprema;
 import entity.Zaposleni;
+import entity.Osnovica;
 
 public class RecepcionerManager {
 	private String recepcionerFile;
 	private ArrayList<Zaposleni> recepcioneri;
+	private OsnovicaManager om = OsnovicaManager.getInstance();
 	
 	public RecepcionerManager(String recepcionerFile) {
 		this.recepcionerFile = recepcionerFile;
@@ -32,7 +34,7 @@ public class RecepcionerManager {
 			String linija = null;
 			while ((linija = br.readLine()) != null) {
 				String[] tokeni = linija.split(",");
-				Zaposleni z = new Zaposleni(tokeni[0], tokeni[1], Pol.valueOf(tokeni[2]), LocalDate.parse(tokeni[3]), tokeni[4], tokeni[5], tokeni[6], tokeni[7], StrucnaSprema.valueOf(tokeni[8]), Integer.parseInt(tokeni[9]), Osnovica.Recepcioner);
+				Zaposleni z = new Zaposleni(tokeni[0], tokeni[1], Pol.valueOf(tokeni[2]), LocalDate.parse(tokeni[3]), tokeni[4], tokeni[5], tokeni[6], tokeni[7], StrucnaSprema.valueOf(tokeni[8]), Integer.parseInt(tokeni[9]), new Osnovica(om.nadjiOsnovicu(Pozicija.Recepcioner).getVrednost(), Pozicija.Recepcioner));
 				this.recepcioneri.add(z);
 			}
 			br.close();
@@ -74,7 +76,7 @@ public class RecepcionerManager {
 			System.out.println("Recepcioner sa korisnickim imenom " + korisnickoIme + " vec postoji!");
 			return;
 		}
-		recepcioneri.add(new Zaposleni(ime, prezime, pol, datumRodjenja, telefon, adresa, korisnickoIme, lozinka, strucnaSprema, godineStaza, Osnovica.Recepcioner));
+		recepcioneri.add(new Zaposleni(ime, prezime, pol, datumRodjenja, telefon, adresa, korisnickoIme, lozinka, strucnaSprema, godineStaza, new Osnovica(om.nadjiOsnovicu(Pozicija.Recepcioner).getVrednost(), Pozicija.Recepcioner)));
 	}
 	
 	public void izmeniRecepcionera(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa,

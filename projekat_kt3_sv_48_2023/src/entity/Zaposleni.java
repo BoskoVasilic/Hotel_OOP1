@@ -51,7 +51,7 @@ public class Zaposleni extends Korisnik {
 	
 	protected double formirajPlatu() {
         double koeficijent = strucnaSprema.value();
-		double osnovica = this.osnovica.value();
+		double osnovica = this.osnovica.getVrednost();
 		double dodatak = godineStaza * 50 / 100;
 		plata = koeficijent * osnovica * ((100 + dodatak) / 100);
 		return plata;

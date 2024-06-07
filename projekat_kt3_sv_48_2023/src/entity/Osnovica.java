@@ -1,14 +1,37 @@
 package entity;
 
-public enum Osnovica {
-	Administarator(25000), Recepcioner(20000), Sobarica(13000);
-	double osnovica;
+public class Osnovica {
+	private double vrednost;
+	private Pozicija pozicija;
 	
-	Osnovica(double osnovica) {
-		this.osnovica = osnovica;
+	public Osnovica(double vrednost, Pozicija pozicija) {
+		this.vrednost = vrednost;
+		this.pozicija = pozicija;
 	}
 	
-	public double value() {
-		return osnovica;
+	public double getVrednost() {
+		return vrednost;
 	}
+	
+	public void setVrednost(double vrednost) {
+		this.vrednost = vrednost;
+	}
+	
+	public Pozicija getPozicija() {
+		return pozicija;
+	}
+	
+	public void setPozicija(Pozicija pozicija) {
+		this.pozicija = pozicija;
+	}
+	
+	@Override
+	public String toString() {
+		return pozicija + " " + vrednost;
+	}
+	
+	public String toFile() {
+		return vrednost + "," + pozicija;
+	}
+	
 }

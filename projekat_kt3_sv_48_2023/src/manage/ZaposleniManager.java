@@ -1,5 +1,7 @@
 package manage;
 
+import java.util.ArrayList;
+
 import entity.Sobarica;
 import entity.Zaposleni;
 
@@ -15,6 +17,14 @@ public class ZaposleniManager {
 		am.ucitajAdministratore();
 		rm.ucitajRecepcionere();
 		sm.ucitajSobarice();
+	}
+	
+	public ArrayList<Zaposleni> getZaposleni() {
+		ArrayList<Zaposleni> zaposleni = new ArrayList<Zaposleni>();
+		zaposleni.addAll(am.getAdministratori());
+		zaposleni.addAll(rm.getRecepcioneri());
+		zaposleni.addAll(sm.getSobarice());
+		return zaposleni;
 	}
 	
 	public void prikaziSveZaposlene() {

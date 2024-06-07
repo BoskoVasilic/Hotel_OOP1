@@ -3,15 +3,18 @@ package entity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import manage.OsnovicaManager;
+
 public class Sobarica extends Zaposleni {
 	protected int brojSobaZaSredjivanje;
 	protected ArrayList<Soba> sobeZaSredjivanje;
 	protected LocalDate datum;
+	protected static OsnovicaManager om = OsnovicaManager.getInstance();
 	
 	public Sobarica(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa,
 			String korisnickoIme, String lozinka, StrucnaSprema strucnaSprema, int godineStaza) {
 		super(ime, prezime, pol, datumRodjenja, telefon, adresa, korisnickoIme, lozinka, strucnaSprema, godineStaza,
-				Osnovica.Sobarica);
+				new Osnovica(om.nadjiOsnovicu(Pozicija.Sobarica).getVrednost(), Pozicija.Sobarica));
 		this.brojSobaZaSredjivanje = 0;
 		this.sobeZaSredjivanje = new ArrayList<Soba>();
 		this.datum = LocalDate.now();

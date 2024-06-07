@@ -10,12 +10,14 @@ import java.util.ArrayList;
 
 import entity.Osnovica;
 import entity.Pol;
+import entity.Pozicija;
 import entity.StrucnaSprema;
 import entity.Zaposleni;
 
 public class AdministratorManager {
 	private String adminFile;
 	private ArrayList<Zaposleni> administratori;
+	private OsnovicaManager om = OsnovicaManager.getInstance();
 	
 	
 	public AdministratorManager(String adminFile) {
@@ -35,7 +37,7 @@ public class AdministratorManager {
 			String linija = null;
 			while ((linija = br.readLine()) != null) {
 				String[] tokeni = linija.split(",");
-				Zaposleni z = new Zaposleni(tokeni[0], tokeni[1], Pol.valueOf(tokeni[2]), LocalDate.parse(tokeni[3]), tokeni[4], tokeni[5], tokeni[6], tokeni[7], StrucnaSprema.valueOf(tokeni[8]), Integer.parseInt(tokeni[9]), Osnovica.Administarator);
+				Zaposleni z = new Zaposleni(tokeni[0], tokeni[1], Pol.valueOf(tokeni[2]), LocalDate.parse(tokeni[3]), tokeni[4], tokeni[5], tokeni[6], tokeni[7], StrucnaSprema.valueOf(tokeni[8]), Integer.parseInt(tokeni[9]), new Osnovica(om.nadjiOsnovicu(Pozicija.Administrator).getVrednost(), Pozicija.Administrator));
 				this.administratori.add(z);
 			}
 			br.close();
@@ -77,7 +79,7 @@ public class AdministratorManager {
 			System.out.println("Administrator sa korisnickim imenom " + korisnickoIme + " vec postoji!");
 			return;
 		}
-		administratori.add(new Zaposleni(ime, prezime, pol, datumRodjenja, telefon, adresa, korisnickoIme, lozinka, strucnaSprema, godineStaza, Osnovica.Administarator));
+		administratori.add(new Zaposleni(ime, prezime, pol, datumRodjenja, telefon, adresa, korisnickoIme, lozinka, strucnaSprema, godineStaza, new Osnovica(om.nadjiOsnovicu(Pozicija.Administrator).getVrednost(), Pozicija.Administrator)));
 	}
 	
 	public void izmeniAdministratora(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa,
