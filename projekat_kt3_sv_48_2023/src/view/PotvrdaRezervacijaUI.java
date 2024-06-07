@@ -72,12 +72,20 @@ public class PotvrdaRezervacijaUI extends JFrame {
 		
 		JLabel postaviStatusLbl = new JLabel("Postavite status izabrane rezervacije:");
 		postaviStatusLbl.setEnabled(false);
-		postaviStatusLbl.setBounds(650, 259, 242, 14);
+		postaviStatusLbl.setBounds(650, 236, 242, 14);
 		contentPane.add(postaviStatusLbl);
 		
 		
 		JButton potvrdiRezervacijuBtn = new JButton("POTVRĐENA");
 		potvrdiRezervacijuBtn.setEnabled(false);
+		
+		JButton odbijRezervacijuBtn = new JButton("ODBIJENA");
+		odbijRezervacijuBtn.setEnabled(false);
+		
+		JButton btnReset = new JButton("Reset");
+		btnReset.setBounds(181, 427, 89, 23);
+		contentPane.add(btnReset);
+		
 		potvrdiRezervacijuBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int red = table.getSelectedRow();
@@ -100,6 +108,10 @@ public class PotvrdaRezervacijaUI extends JFrame {
 						rm.promeniStatusRezervacije(id, StatusRezervacije.POTVRĐENA);
 						rm.sacuvajRezervacije();
 						((RezervacijeModel) table.getModel()).fireTableDataChanged();
+						postaviStatusLbl.setEnabled(false);
+						potvrdiRezervacijuBtn.setEnabled(false);
+						odbijRezervacijuBtn.setEnabled(false);
+						btnReset.doClick();
 				    } else if (response == JOptionPane.CLOSED_OPTION) {
 				      return;
 				    }
@@ -107,11 +119,10 @@ public class PotvrdaRezervacijaUI extends JFrame {
 			}
 		});
 		
-		potvrdiRezervacijuBtn.setBounds(700, 290, 106, 23);
+		potvrdiRezervacijuBtn.setBounds(700, 267, 106, 23);
 		contentPane.add(potvrdiRezervacijuBtn);
 		
-		JButton odbijRezervacijuBtn = new JButton("ODBIJENA");
-		odbijRezervacijuBtn.setEnabled(false);
+		
 		odbijRezervacijuBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int red = table.getSelectedRow();
@@ -124,14 +135,21 @@ public class PotvrdaRezervacijaUI extends JFrame {
 				    	int id = Integer.parseInt(table.getModel().getValueAt(modelRed, 0).toString());
 						rm.promeniStatusRezervacije(id, StatusRezervacije.ODBIJENA);
 						rm.sacuvajRezervacije();
+						if (table.getRowSorter() != null) {
+				            table.getRowSorter().modelStructureChanged();
+				        }
 						((RezervacijeModel) table.getModel()).fireTableDataChanged();
+						postaviStatusLbl.setEnabled(false);
+						potvrdiRezervacijuBtn.setEnabled(false);
+						odbijRezervacijuBtn.setEnabled(false);
+						btnReset.doClick();
 				    } else if (response == JOptionPane.CLOSED_OPTION) {
 				      return;
 				    }
 				}
 			}
 		});
-		odbijRezervacijuBtn.setBounds(700, 320, 106, 23);
+		odbijRezervacijuBtn.setBounds(700, 297, 106, 23);
 		contentPane.add(odbijRezervacijuBtn);
 		
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -166,7 +184,6 @@ public class PotvrdaRezervacijaUI extends JFrame {
 		tsm.ucitajTipoveSoba();
 		for (int i = 0; i < tsm.getTipoviSoba().size(); i++) {
 			JCheckBox chckbx = new JCheckBox(tsm.getTipoviSoba().get(i).getNaziv());
-			//chckbx.setBounds(360, 286 + (i * 23), 138, 23);
 			panelTipSobe.add(chckbx);
 		}
 		
@@ -187,7 +204,6 @@ public class PotvrdaRezervacijaUI extends JFrame {
 		dum.ucitajDodatneUsluge();
 		for (int i = 0; i < dum.getDodatneUsluge().size(); i++) {
 			JCheckBox chckbx = new JCheckBox(dum.getDodatneUsluge().get(i).getNaziv());
-			// chckbx.setBounds(360, 286 + (i * 23), 138, 23);
 			panelDodatneusluge.add(chckbx);
 		}
 		
@@ -201,10 +217,6 @@ public class PotvrdaRezervacijaUI extends JFrame {
 		JButton primeniFiltereBtn = new JButton("Primeni");
 		primeniFiltereBtn.setBounds(280, 427, 89, 23);
 		contentPane.add(primeniFiltereBtn);
-		
-		JButton btnReset = new JButton("Reset");
-		btnReset.setBounds(181, 427, 89, 23);
-		contentPane.add(btnReset);
 		
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -252,6 +264,9 @@ public class PotvrdaRezervacijaUI extends JFrame {
 		            table.getRowSorter().modelStructureChanged();
 		        }
 				((RezervacijeModel) table.getModel()).fireTableDataChanged();
+				postaviStatusLbl.setEnabled(false);
+				potvrdiRezervacijuBtn.setEnabled(false);
+				odbijRezervacijuBtn.setEnabled(false);
 			}
 		});
 		

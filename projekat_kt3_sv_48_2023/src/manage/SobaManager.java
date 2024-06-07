@@ -123,4 +123,14 @@ public class SobaManager {
 		return brojSobaPoTipu;
 	}
 	
+	public ArrayList<String> getSlobodneSobeTipa(TipSobe tipSobe, ArrayList<Oprema> zahtevanaOprema) {
+		ArrayList<String> sobeTipa = new ArrayList<String>();
+		for (Soba s : sobe) {
+			if (s.getTipSobe().equals(tipSobe) && s.getStatusSobe() == StatusSobe.SLOBODNA && (zahtevanaOprema.size() == 0 || s.getOpremljenostSobe().containsAll(zahtevanaOprema))) {
+				sobeTipa.add(String.valueOf(s.getBrojSobe()));
+			}
+		}
+		return sobeTipa;
+	}
+	
 }

@@ -32,7 +32,7 @@ public class RecepcionerUI extends JFrame {
 	}
 
 	public RecepcionerUI() {
-		setTitle("Hotel");
+		setTitle("Hotel - Recepcioner");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 500, 500);
 		setLocationRelativeTo(null);

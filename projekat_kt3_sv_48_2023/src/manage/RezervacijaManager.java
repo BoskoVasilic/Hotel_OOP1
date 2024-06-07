@@ -75,6 +75,26 @@ public class RezervacijaManager {
 		return this.filtriraneRezervacije;
 	}
     
+    public ArrayList<Rezervacija> getPotvrdjeneRezervacije() {
+    	ArrayList<Rezervacija> potvrdjeneRezervacije = new ArrayList<Rezervacija>();
+		for (Rezervacija r : rezervacije) {
+			if (r.getStatusRezervacije() == StatusRezervacije.POTVRĐENA && r.getDatumPrijave().isEqual(LocalDate.now())) {
+				potvrdjeneRezervacije.add(r);
+			}
+		}
+		return potvrdjeneRezervacije;
+    }
+    
+    public ArrayList<Rezervacija> getRezervacijeUToku() {
+    	ArrayList<Rezervacija> rezervacijeUToku = new ArrayList<Rezervacija>();
+		for (Rezervacija r : rezervacije) {
+			if (r.getStatusRezervacije() == StatusRezervacije.U_TOKU && r.getDatumOdjave().isEqual(LocalDate.now())) {
+				rezervacijeUToku.add(r);
+			}
+		}
+		return rezervacijeUToku;
+    }
+    
 	public boolean ucitajRezervacije() {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(this.rezervacijaFile));

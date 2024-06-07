@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
+import javax.swing.JButton;
 
 public class loginUI extends JFrame {
 
@@ -46,12 +47,16 @@ public class loginUI extends JFrame {
 		textField.setColumns(10);
 		
 		JLabel lblNewLabel_2_1 = new JLabel("Lozinka:");
-		lblNewLabel_2_1.setBounds(114, 174, 110, 14);
+		lblNewLabel_2_1.setBounds(114, 163, 110, 14);
 		contentPane.add(lblNewLabel_2_1);
 		
 		textField_1 = new JTextField();
 		textField_1.setColumns(10);
-		textField_1.setBounds(114, 191, 192, 20);
+		textField_1.setBounds(114, 180, 192, 20);
 		contentPane.add(textField_1);
+		
+		JButton btnNewButton = new JButton("PRIJAVI SE");
+		btnNewButton.setBounds(163, 222, 89, 23);
+		contentPane.add(btnNewButton);
 	}
 }

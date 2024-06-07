@@ -23,4 +23,13 @@ public class Oprema {
 	public String toString() {
 		return this.naziv;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Oprema) {
+			Oprema o = (Oprema) obj;
+			return this.naziv.equals(o.getNaziv());
+		}
+		return false;
+	}
 }
