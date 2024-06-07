@@ -36,7 +36,7 @@ public class PotvrdaRezervacijaUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private RezervacijaManager rm;
+	private RezervacijaManager rm = RezervacijaManager.getInstance();
 	private TipSobeManager tsm = new TipSobeManager("data/tipoviSoba.csv");
 	protected TableRowSorter<AbstractTableModel> tableSorter = new TableRowSorter<AbstractTableModel>();
 	private JPanel panelTipSobe;
@@ -44,8 +44,6 @@ public class PotvrdaRezervacijaUI extends JFrame {
 
 	public PotvrdaRezervacijaUI() {
 		setTitle("Hotel - Pristigle rezervacije");
-		rm = new RezervacijaManager("data/rezervacije.csv");
-		rm.ucitajRezervacije();
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1000, 500);
@@ -134,6 +132,7 @@ public class PotvrdaRezervacijaUI extends JFrame {
 				    } else if (response == JOptionPane.YES_OPTION) {
 				    	int id = Integer.parseInt(table.getModel().getValueAt(modelRed, 0).toString());
 						rm.promeniStatusRezervacije(id, StatusRezervacije.ODBIJENA);
+						rm.nadjiRezervaciju(id).setUkupnaCena(0.0);
 						rm.sacuvajRezervacije();
 						if (table.getRowSorter() != null) {
 				            table.getRowSorter().modelStructureChanged();
@@ -167,7 +166,6 @@ public class PotvrdaRezervacijaUI extends JFrame {
 				}
 			}
 		});
-		
 		
 		JLabel lblNewLabel_1 = new JLabel("Filteri:");
 		lblNewLabel_1.setBounds(15, 236, 46, 14);

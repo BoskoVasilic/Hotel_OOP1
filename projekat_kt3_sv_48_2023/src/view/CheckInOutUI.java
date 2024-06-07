@@ -42,15 +42,13 @@ public class CheckInOutUI extends JFrame {
 	private JPanel contentPane;
 	protected TableRowSorter<AbstractTableModel> tableSorter = new TableRowSorter<AbstractTableModel>();
 	protected TableRowSorter<AbstractTableModel> tableCheckOutSorter = new TableRowSorter<AbstractTableModel>();
-	private RezervacijaManager rm;
+	private RezervacijaManager rm = RezervacijaManager.getInstance();
 	private TipSobeManager tsm = new TipSobeManager("data/tipoviSoba.csv");
 	private DodatnaUslugaManager dum = new DodatnaUslugaManager("data/dodatneUsluge.csv");
 	private SobaManager sm = new SobaManager("data/sobe.csv");
 
 	public CheckInOutUI() {
 		setTitle("Hotel - Check In / Out");
-		rm = new RezervacijaManager("data/rezervacije.csv");
-		rm.ucitajRezervacije();
 		tsm.ucitajTipoveSoba();
 		dum.ucitajDodatneUsluge();
 		sm.ucitajSobe();

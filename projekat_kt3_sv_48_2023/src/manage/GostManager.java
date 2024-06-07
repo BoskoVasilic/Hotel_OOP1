@@ -15,14 +15,34 @@ public class GostManager {
 	
 	private String gostFile;
 	private ArrayList<Gost> gosti;
+	private Gost ulogovaniGost;
 	
-	public GostManager(String gostFile) {
+	private GostManager(String gostFile) {
 		this.gostFile = gostFile;
 		this.gosti = new ArrayList<Gost>();
+		this.ulogovaniGost = null;
+	}
+	
+	private static GostManager instance;
+	
+	public static GostManager getInstance() {
+		if (instance == null) {
+			instance = new GostManager("data/gosti.csv");
+			instance.ucitajGoste();
+		}
+		return instance;
 	}
 	
 	public ArrayList<Gost> getGosti() {
 		return gosti;
+	}
+	
+	public void setUlogovaniGost(Gost g) {
+		this.ulogovaniGost = g;
+	}
+	
+	public Gost getUlogovaniGost() {
+		return ulogovaniGost;
 	}
 	
 	public boolean ucitajGoste() {

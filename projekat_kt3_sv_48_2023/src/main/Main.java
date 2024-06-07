@@ -49,8 +49,7 @@ public class Main {
 		rm.obrisiRecepcionera("nikola");
 		rm.sacuvajRecepcionere();
 		
-		GostManager gm = new GostManager("data/gosti.csv");
-		gm.ucitajGoste();
+		GostManager gm = GostManager.getInstance();
 		gm.dodajGosta("Milica", "Milic", Pol.Z, LocalDate.parse("12.02.1980.", format), "063128416", "Fruskogorska 12", "milica@gmail.com", "002415874");
 		gm.dodajGosta("Ana", "Anic", Pol.Z, LocalDate.parse("25.05.1998.", format), "0641220906", "Bate Brkica 3", "ana@gmail.com", "002312398");
 		gm.sacuvajGoste();
@@ -102,8 +101,7 @@ public class Main {
 		cm.izmeniStavkuCenovnika(LocalDate.parse("01.01.2024.", format), LocalDate.parse("31.12.2024.", format), "DodatneUsluge", "dorucak", 450.0);
 		cm.sacuvajCenovnike();
 		
-		RezervacijaManager rezM = new RezervacijaManager("data/rezervacije.csv");
-		rezM.ucitajRezervacije();
+		RezervacijaManager rezM = RezervacijaManager.getInstance();
 		
 		rezM.ispisiSlobodneTipoveSoba(LocalDate.parse("01.08.2024.", format), LocalDate.parse("31.08.2024.", format));
 		

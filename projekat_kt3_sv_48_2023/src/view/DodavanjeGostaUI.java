@@ -31,7 +31,7 @@ import javax.swing.JButton;
 public class DodavanjeGostaUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private GostManager gm = new GostManager("data/gosti.csv");
+	private GostManager gm = GostManager.getInstance();
 	private JPanel contentPane;
 	private JTextField ime;
 	private JTextField prezime;
@@ -49,7 +49,6 @@ public class DodavanjeGostaUI extends JFrame {
 	private JTextField brPasosa;
 
 	public DodavanjeGostaUI() {
-		gm.ucitajGoste();
 		setTitle("Hotel - Dodavanje gosta");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 400);
@@ -102,7 +101,6 @@ public class DodavanjeGostaUI extends JFrame {
 		bg.add(radioBtnPolM);
 		bg.add(radioBtnPolZ);
 		
-		//date picker
 		UtilDateModel model = new UtilDateModel();
 		Properties p = new Properties();
 		p.put("text.today", "Today");

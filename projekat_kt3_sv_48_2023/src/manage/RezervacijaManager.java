@@ -28,11 +28,11 @@ public class RezervacijaManager {
 	private SobaManager sm;
 	private ArrayList<Rezervacija> filtriraneRezervacije;
 	
-	public RezervacijaManager(String rezervacijaFile) {
+	private RezervacijaManager(String rezervacijaFile) {
 		this.rezervacijaFile = rezervacijaFile;
 		this.rezervacije = new ArrayList<Rezervacija>();
 		this.filtriraneRezervacije = new ArrayList<Rezervacija>();
-		this.gm = new GostManager("data/gosti.csv");
+		this.gm = GostManager.getInstance();
 		this.tsm = new TipSobeManager("data/tipoviSoba.csv");
 		this.dum = new DodatnaUslugaManager("data/dodatneUsluge.csv");
 		this.sm = new SobaManager("data/sobe.csv");
@@ -42,8 +42,28 @@ public class RezervacijaManager {
 		sm.ucitajSobe();
 	}
 	
+	private static RezervacijaManager instance;
+	
+	public static RezervacijaManager getInstance() {
+		if (instance == null) {
+			instance = new RezervacijaManager("data/rezervacije.csv");
+			instance.ucitajRezervacije();
+		}
+		return instance;
+	}
+	
 	public ArrayList<Rezervacija> getRezervacije() {
 		return rezervacije;
+	}
+	
+	public ArrayList<Rezervacija> getRezervacijeZaGosta() {
+		ArrayList<Rezervacija> rezervacijeZaGosta = new ArrayList<Rezervacija>();
+		for (Rezervacija r : rezervacije) {
+			if (r.getRezervisao().equals(gm.getUlogovaniGost())) {
+				rezervacijeZaGosta.add(r);
+			}
+		}
+		return rezervacijeZaGosta;
 	}
 	
 	public void setRezervacijeNaCekanju(){
