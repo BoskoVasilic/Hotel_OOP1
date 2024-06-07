@@ -21,13 +21,13 @@ import manage.SobaricaManager;
 
 
 
-public class loginUI extends JFrame {
+public class LoginUI extends JFrame {
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					loginUI frame = new loginUI();
+					LoginUI frame = new LoginUI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -45,7 +45,7 @@ public class loginUI extends JFrame {
 	private RecepcionerManager rm = new RecepcionerManager("data/recepcioneri.csv");
 	private SobaricaManager sm = new SobaricaManager("data/sobarice.csv");
 
-	public loginUI() {
+	public LoginUI() {
 		setTitle("Hotel - Prijava");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);

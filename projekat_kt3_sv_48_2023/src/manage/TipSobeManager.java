@@ -93,4 +93,14 @@ public class TipSobeManager {
 			System.out.println("Tip sobe " + naziv + " ne postoji u sistemu.");
 		}
 	}
+	
+	public int maxBrojLjudi() {
+		int max = 0;
+        for (TipSobe ts : tipoviSoba) {
+            if (ts.getBrojOsoba() > max) {
+                max = ts.getBrojOsoba();
+            }
+        }
+        return max;
+	}
 }

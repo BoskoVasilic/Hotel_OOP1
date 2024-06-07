@@ -13,9 +13,11 @@ import java.util.HashMap;
 
 import entity.DodatnaUsluga;
 import entity.Gost;
+import entity.Oprema;
 import entity.Rezervacija;
 import entity.Soba;
 import entity.StatusRezervacije;
+import entity.StatusSobe;
 import entity.TipSobe;
 
 public class RezervacijaManager {
@@ -185,7 +187,7 @@ public class RezervacijaManager {
 		gm.sacuvajGoste();
 	}
 	
-	public void dodajRezervacijuPoBrojuLjudi(Gost gost, LocalDate datumPrijave, LocalDate datumOdjave, int brojLjudi, ArrayList<DodatnaUsluga> dodatneUsluge) {
+	public boolean dodajRezervacijuPoBrojuLjudi(Gost gost, LocalDate datumPrijave, LocalDate datumOdjave, int brojLjudi, ArrayList<DodatnaUsluga> dodatneUsluge) {
 		double cena = 0;
 		int id;
 		if(rezervacije.size() == 0) {
@@ -200,7 +202,7 @@ public class RezervacijaManager {
 				rezervacije.add(r);
 				gm.nadjiGosta(gost.getKorisnickoIme()).getRezervacije().add(r);
 				gm.sacuvajGoste();
-				return;
+				return true;
 			}
 		}
 		for (TipSobe tipSobe : pronadjiSlobodneTipoveSoba(datumPrijave, datumOdjave)) {
@@ -210,9 +212,10 @@ public class RezervacijaManager {
 				rezervacije.add(r);
 				gm.nadjiGosta(gost.getKorisnickoIme()).getRezervacije().add(r);
 				gm.sacuvajGoste();
-				return;
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	public void izmeniRezervaciju(int id, Gost gost, LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe,
@@ -305,5 +308,18 @@ public class RezervacijaManager {
 		} else {
 			System.out.println("Rezervacija sa id " + id + " ne postoji u sistemu.");
 		}
+	}
+	
+	public ArrayList<TipSobe> postojeSobeKojeZadovoljavajuUslove(ArrayList<Oprema> oprema, LocalDate pocetak, LocalDate kraj) {
+		ArrayList<TipSobe> tipoviSoba = new ArrayList<TipSobe>();
+		tipoviSoba = this.pronadjiSlobodneTipoveSoba(pocetak, kraj);
+		ArrayList<TipSobe> tipoviSobaKojeZadovoljavajuUslove = new ArrayList<TipSobe>();
+		for (Soba s : sm.getSobe()) {
+			if (s.getStatusSobe() == StatusSobe.SLOBODNA && tipoviSoba.contains(s.getTipSobe())
+					&& s.getOpremljenostSobe().containsAll(oprema)) {
+				tipoviSobaKojeZadovoljavajuUslove.add(s.getTipSobe());
+			}
+		}
+		return tipoviSobaKojeZadovoljavajuUslove;
 	}
 }

@@ -105,6 +105,10 @@ public class GostUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				DodavanjeRezervacijeUI dr = new DodavanjeRezervacijeUI();
 				dr.setVisible(true);
+				if (table.getRowSorter() != null) {
+		            table.getRowSorter().modelStructureChanged();
+		        }
+				((GostRezervacijeModel) table.getModel()).fireTableDataChanged();
 			}
 		});
 		dodajRezervacijuBtn.setBounds(840, 275, 130, 23);
