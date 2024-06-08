@@ -27,6 +27,7 @@ import entity.TipSobe;
 import manage.DodatnaUslugaManager;
 import manage.RezervacijaManager;
 import manage.SobaManager;
+import manage.SobaricaManager;
 import manage.TipSobeManager;
 import model.CheckInRezervacijeModel;
 import model.CheckOutRezervacijeModel;
@@ -46,6 +47,7 @@ public class CheckInOutUI extends JFrame {
 	private TipSobeManager tsm = new TipSobeManager("data/tipoviSoba.csv");
 	private DodatnaUslugaManager dum = new DodatnaUslugaManager("data/dodatneUsluge.csv");
 	private SobaManager sm = new SobaManager("data/sobe.csv");
+	private SobaricaManager soM = SobaricaManager.getInstance();
 
 	public CheckInOutUI() {
 		setTitle("Hotel - Check In / Out");
@@ -161,7 +163,8 @@ public class CheckInOutUI extends JFrame {
 					    	Rezervacija rezervacija = rm.nadjiRezervaciju(idRezervacije);
 							rezervacija.setStatusRezervacije(StatusRezervacije.ZAVRŠENA);
 							rezervacija.getDodeljenaSoba().setStatusSobe(StatusSobe.SPREMANJE);
-							//dodeliti sobu spremacici
+							sm.sacuvajSobe();
+							soM.dodajSobuZaSredjivanje(rezervacija.getDodeljenaSoba());
 							rm.sacuvajRezervacije();
 							if (tableCheckOut.getRowSorter() != null) {
 								tableCheckOut.getRowSorter().modelStructureChanged();

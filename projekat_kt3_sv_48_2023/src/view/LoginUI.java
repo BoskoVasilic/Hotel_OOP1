@@ -43,7 +43,7 @@ public class LoginUI extends JFrame {
 	private AdministratorManager am = new AdministratorManager("data/administratori.csv");
 	private GostManager gm = GostManager.getInstance();
 	private RecepcionerManager rm = new RecepcionerManager("data/recepcioneri.csv");
-	private SobaricaManager sm = new SobaricaManager("data/sobarice.csv");
+	private SobaricaManager sm = SobaricaManager.getInstance();
 
 	public LoginUI() {
 		setTitle("Hotel - Prijava");
@@ -122,6 +122,7 @@ public class LoginUI extends JFrame {
 				for (int i = 0; i < sm.getSobarice().size(); i++) {
 					if (sm.getSobarice().get(i).getKorisnickoIme().equals(username)
 							&& sm.getSobarice().get(i).getLozinka().equals(password)) {
+						sm.setUlogovanaSobarica(sm.getSobarice().get(i));
 						SobaricaUI sobaricaUI = new SobaricaUI();
 						sobaricaUI.setVisible(true);
 						dispose();

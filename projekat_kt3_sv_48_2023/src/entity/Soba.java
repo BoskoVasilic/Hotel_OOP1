@@ -72,6 +72,15 @@ public class Soba {
 		}
 		return this.brojSobe + "," + tipSobe.naziv + "," + this.statusSobe + "," + nazivOpreme + "," + this.pusackaSoba;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Soba) {
+			Soba s = (Soba) obj;
+			return this.brojSobe == s.brojSobe;
+		}
+		return false;
+	}
 
 
 }

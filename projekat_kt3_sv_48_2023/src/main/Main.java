@@ -38,7 +38,7 @@ public class Main {
 		rm.dodajRecepcionera("Nikola", "Nikolic", Pol.M, LocalDate.parse("12.05.1970.", format), "0643332122", "Jevrejska 9", "nikola", "nikola123", StrucnaSprema.IV, 20);
 		rm.sacuvajRecepcionere();
 		
-		SobaricaManager sm = new SobaricaManager("data/sobarice.csv");
+		SobaricaManager sm = SobaricaManager.getInstance();
 		sm.ucitajSobarice();
 		sm.dodajSobaricu("Jana", "Janic", Pol.Z, LocalDate.parse("15.08.1995.", format), "0655165075", "Bulevar Vojvode Stepe 15", "jana", "jana123", StrucnaSprema.III, 10);
 		sm.sacuvajSobarice();

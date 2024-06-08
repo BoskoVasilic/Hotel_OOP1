@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import entity.Pol;
+import entity.Soba;
 import entity.Sobarica;
 import entity.StrucnaSprema;
 
@@ -16,16 +17,35 @@ public class SobaricaManager {
 	private String sobaricaFile;
 	private ArrayList<Sobarica> sobarice;
 	private SobaManager sm;
+	private Sobarica ulogovanaSobarica;
 	
-	public SobaricaManager(String sobaricaFile) {
+	private SobaricaManager(String sobaricaFile) {
 		this.sobaricaFile = sobaricaFile;
 		this.sobarice = new ArrayList<Sobarica>();
 		this.sm = new SobaManager("data/sobe.csv");
 		sm.ucitajSobe();
 	}
 	
+	private static SobaricaManager instance = null;
+	
+	public static SobaricaManager getInstance() {
+		if (instance == null) {
+			instance = new SobaricaManager("data/sobarice.csv");
+			instance.ucitajSobarice();
+		}
+		return instance;
+	}
+	
 	public ArrayList<Sobarica> getSobarice() {
 		return sobarice;
+	}
+	
+	public Sobarica getUlogovanaSobarica() {
+		return ulogovanaSobarica;
+	}
+	
+	public void setUlogovanaSobarica(Sobarica ulogovanaSobarica) {
+		this.ulogovanaSobarica = ulogovanaSobarica;
 	}
 	
 	public boolean ucitajSobarice() {
@@ -37,7 +57,7 @@ public class SobaricaManager {
 				String[] tokeni = linija.split(regex);
 				Sobarica s = new Sobarica(tokeni[0], tokeni[1], Pol.valueOf(tokeni[2]), LocalDate.parse(tokeni[3]), tokeni[4], tokeni[5], tokeni[6], tokeni[7], StrucnaSprema.valueOf(tokeni[8]), Integer.parseInt(tokeni[9]));
 				s.setBrojSobaZaSredjivanje(Integer.parseInt(tokeni[11]));
-				for (String brojSobe : tokeni[11].substring(1, tokeni[12].length() - 1).split(", ")) {
+				for (String brojSobe : tokeni[12].substring(1, tokeni[12].length() - 1).split(", ")) {
 					if(!brojSobe.equals("")){
 						s.getSobeZaSredjivanje().add(sm.nadjiSobu(Integer.parseInt(brojSobe)));
 					}
@@ -112,7 +132,7 @@ public class SobaricaManager {
 		}
 	}
 	
-	public void obrisiRecepcionera(String korisnickoIme) {
+	public void obrisiSobaricu(String korisnickoIme) {
 		Sobarica sobarica = nadjiSobaricu(korisnickoIme);
 		if (sobarica != null) {
 			sobarice.remove(sobarica);
@@ -121,4 +141,30 @@ public class SobaricaManager {
 		}
 	}
 	
+	private Sobarica nadjiSobaricuSaNajmanjeDodeljenihSoba() {
+		Sobarica minSoba = sobarice.get(0);
+		for (Sobarica sobarica : sobarice) {
+			if (sobarica.getBrojSobaZaSredjivanje() < minSoba.getBrojSobaZaSredjivanje()) {
+				minSoba = sobarica;
+			}
+		}
+		return minSoba;
+		
+	}
+	
+	public void dodajSobuZaSredjivanje(Soba s) {
+		Sobarica sobarica = nadjiSobaricuSaNajmanjeDodeljenihSoba();
+        sobarica.getSobeZaSredjivanje().add(s);
+        sobarica.setBrojSobaZaSredjivanje(sobarica.getBrojSobaZaSredjivanje() + 1);
+        sacuvajSobarice();
+    }
+	
+	public void ukloniSobuZaSredjivanje(Soba s) {
+		Sobarica sobarica = getUlogovanaSobarica();
+		if (sobarica.getSobeZaSredjivanje().contains(s)) {
+			sobarica.getSobeZaSredjivanje().remove(s);
+			sacuvajSobarice();
+		}
+		
+	}
 }
