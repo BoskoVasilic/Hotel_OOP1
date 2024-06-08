@@ -65,13 +65,14 @@ public class TipSobeManager {
 		return null;
 	}
 	
-	public void dodajTipSobe(String naziv, int brojKreveta, int brojOsoba) {
+	public boolean dodajTipSobe(String naziv, int brojKreveta, int brojOsoba) {
 		TipSobe ts = new TipSobe(naziv, brojKreveta, brojOsoba);
 		if (this.nadjiTipSobe(naziv) != null) {
 			System.out.println("Tip sobe " + naziv + " vec postoji u sistemu.");
-			return;
+			return false;
 		}
 		this.tipoviSoba.add(ts);
+		return true;
 	}
 	
 

@@ -81,6 +81,12 @@ public class AdminUI extends JFrame {
 		contentPane.add(lblNewLabel_1);
 		
 		JButton cenovniciBtn = new JButton("");
+		cenovniciBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PregledCenovnikaUI frame = new PregledCenovnikaUI();
+				frame.setVisible(true);
+			}
+		});
 		cenovniciBtn.setIcon(new ImageIcon("img\\price_list.png"));
 		cenovniciBtn.setBounds(193, 104, 104, 87);
 		contentPane.add(cenovniciBtn);
@@ -92,6 +98,12 @@ public class AdminUI extends JFrame {
 		contentPane.add(lblNewLabel_1_1);
 		
 		JButton dodatneUslugeBtn = new JButton("");
+		dodatneUslugeBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PregledDodatnihUslugaUI frame = new PregledDodatnihUslugaUI();
+				frame.setVisible(true);
+			}
+		});
 		dodatneUslugeBtn.setIcon(new ImageIcon("img\\additionalServices.png"));
 		dodatneUslugeBtn.setBounds(358, 104, 104, 87);
 		contentPane.add(dodatneUslugeBtn);
@@ -103,6 +115,12 @@ public class AdminUI extends JFrame {
 		contentPane.add(lblNewLabel_1_2);
 		
 		JButton tipoviSobaBtn = new JButton("");
+		tipoviSobaBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PregledTipovaSobaUI frame = new PregledTipovaSobaUI();
+				frame.setVisible(true);
+			}
+		});
 		tipoviSobaBtn.setIcon(new ImageIcon("img\\room_type.png"));
 		tipoviSobaBtn.setBounds(26, 227, 104, 87);
 		contentPane.add(tipoviSobaBtn);
@@ -114,6 +132,12 @@ public class AdminUI extends JFrame {
 		contentPane.add(lblNewLabel_1_3);
 		
 		JButton sobeBtn = new JButton("");
+		sobeBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminPregledSobaUI frame = new AdminPregledSobaUI();
+				frame.setVisible(true);
+			}
+		});
 		sobeBtn.setIcon(new ImageIcon("img\\rooms.png"));
 		sobeBtn.setBounds(193, 227, 104, 87);
 		contentPane.add(sobeBtn);
@@ -125,6 +149,12 @@ public class AdminUI extends JFrame {
 		contentPane.add(lblNewLabel_1_1_1);
 		
 		JButton opremaBtn = new JButton("");
+		opremaBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PregledOpremeUI frame = new PregledOpremeUI();
+				frame.setVisible(true);
+			}
+		});
 		opremaBtn.setIcon(new ImageIcon("img\\equimpment.png"));
 		opremaBtn.setBounds(358, 227, 104, 87);
 		contentPane.add(opremaBtn);

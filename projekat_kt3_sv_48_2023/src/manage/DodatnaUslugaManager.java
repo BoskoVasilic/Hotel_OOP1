@@ -64,21 +64,24 @@ public class DodatnaUslugaManager {
 		return null;
 	}
 	
-	public void dodajDodatnuUslugu(String naziv) {
+	public boolean dodajDodatnuUslugu(String naziv) {
 		if (this.nadjiDodatnuUslugu(naziv) != null) {
 			System.out.println("Dodatna usluga sa nazivom " + naziv + " vec postoji!");
-			return;
+			return false;
 		}
 		DodatnaUsluga du = new DodatnaUsluga(naziv);
 		dodatneUsluge.add(du);
+		return true;
 	}
 	
-	public void izmeniDodatnuUslugu(String naziv, String noviNaziv) {
+	public boolean izmeniDodatnuUslugu(String naziv, String noviNaziv) {
 		DodatnaUsluga du = this.nadjiDodatnuUslugu(naziv);
-		if (du != null) {
+		if (du != null && this.nadjiDodatnuUslugu(noviNaziv) == null) {
 			du.setNaziv(noviNaziv);
+			return true;
 		} else {
 			System.out.println("Dodatna usluga sa nazivom " + naziv + " ne postoji!");
+			return false;
 		}
 	}
 	

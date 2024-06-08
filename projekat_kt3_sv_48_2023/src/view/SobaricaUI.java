@@ -77,6 +77,7 @@ public class SobaricaUI extends JFrame {
 							sobaManager.nadjiSobu(brojSobe).setStatusSobe(StatusSobe.SLOBODNA);
 							sobaManager.sacuvajSobe();
 							sm.ukloniSobuZaSredjivanje(sobaManager.nadjiSobu(brojSobe));
+							sm.sacuvajSobarice();
 							if (table.getRowSorter() != null) {
 								table.getRowSorter().modelStructureChanged();
 							}

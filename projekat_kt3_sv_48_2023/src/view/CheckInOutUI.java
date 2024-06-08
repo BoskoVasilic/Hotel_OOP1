@@ -167,6 +167,7 @@ public class CheckInOutUI extends JFrame {
 							rezervacija.getDodeljenaSoba().setStatusSobe(StatusSobe.SPREMANJE);
 							sm.sacuvajSobe();
 							soM.dodajSobuZaSredjivanje(rezervacija.getDodeljenaSoba());
+							soM.sacuvajSobarice();
 							rm.sacuvajRezervacije();
 							if (tableCheckOut.getRowSorter() != null) {
 								tableCheckOut.getRowSorter().modelStructureChanged();

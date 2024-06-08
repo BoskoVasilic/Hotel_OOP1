@@ -262,7 +262,7 @@ public class RezervacijaManager {
 			boolean slobodan = true;
 			for (Rezervacija r : rezervacije) {
 				for (ArrayList<Oprema> oprema : opremaPoTipu.get(ts.getNaziv())) {
-					if (r.getDatumPrijave().isBefore(kraj) && r.getDatumOdjave().isAfter(pocetak) && r.getTipSobe().getNaziv().equals(ts.getNaziv()) && (r.getStatusRezervacije() == StatusRezervacije.POTVRĐENA && r.getStatusRezervacije() == StatusRezervacije.U_TOKU)
+					if (r.getDatumPrijave().isBefore(kraj) && r.getDatumOdjave().isAfter(pocetak) && r.getTipSobe().getNaziv().equals(ts.getNaziv()) && (r.getStatusRezervacije() == StatusRezervacije.POTVRĐENA || r.getStatusRezervacije() == StatusRezervacije.U_TOKU)
 							&& (r.getZahtevanaOprema().size() == 0 || oprema.containsAll(r.getZahtevanaOprema()))) {
 						if (brojSobaPoTipu.get(ts.getNaziv()) - 1 == 0) {
 							slobodan = false;

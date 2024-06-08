@@ -156,14 +156,12 @@ public class SobaricaManager {
 		Sobarica sobarica = nadjiSobaricuSaNajmanjeDodeljenihSoba();
         sobarica.getSobeZaSredjivanje().add(s);
         sobarica.setBrojSobaZaSredjivanje(sobarica.getBrojSobaZaSredjivanje() + 1);
-        sacuvajSobarice();
     }
 	
 	public void ukloniSobuZaSredjivanje(Soba s) {
 		Sobarica sobarica = getUlogovanaSobarica();
 		if (sobarica.getSobeZaSredjivanje().contains(s)) {
 			sobarica.getSobeZaSredjivanje().remove(s);
-			sacuvajSobarice();
 		}
 		
 	}

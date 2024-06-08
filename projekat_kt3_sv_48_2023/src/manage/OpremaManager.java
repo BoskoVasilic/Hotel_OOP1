@@ -64,21 +64,24 @@ public class OpremaManager {
 		return null;
 	}
 	
-	public void dodajOpremu(String nazivOpreme) {
+	public boolean dodajOpremu(String nazivOpreme) {
 		if (nadjiOpremu(nazivOpreme) != null) {
 			System.out.println("Oprema sa tim nazivom vec postoji!");
-			return;
+			return false;
 		}
 		Oprema o = new Oprema(nazivOpreme);
 		oprema.add(o);
+		return true;
 	}
 	
-	public void izmeniOpremu(String nazivOpreme, String noviNaziv) {
+	public boolean izmeniOpremu(String nazivOpreme, String noviNaziv) {
 		Oprema o = nadjiOpremu(nazivOpreme);
-		if (o != null) {
+		if (o != null && nadjiOpremu(noviNaziv) == null) {
 			o.setNaziv(noviNaziv);
+			return true;
 		} else {
 			System.out.println("Oprema " + nazivOpreme + " ne postoji u sistemu.");
+			return false;
 		}
 	}
 	

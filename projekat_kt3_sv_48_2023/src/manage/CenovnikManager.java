@@ -137,6 +137,18 @@ public class CenovnikManager {
 		this.cenovnici.add(c);
 	}
 	
+	public boolean dodajCenovnikGui(LocalDate pocetakVazenja, LocalDate krajVazenja, HashMap<String, HashMap<String, Double>> cene) {
+		for(Cenovnik c : cenovnici) {
+			if (proveriPreklapanjeDatuma(c.getPocetakVazenja(), c.getKrajVazenja(), pocetakVazenja, krajVazenja)) {
+				System.out.println("Vec postoji cenovnik za uneti period!");
+				return false;
+			}
+		}
+		Cenovnik c = new Cenovnik(pocetakVazenja, krajVazenja, cene);
+		this.cenovnici.add(c);
+		return true;
+	}
+	
 	public void izmeniCenovnikKomplet(LocalDate pocetakVazenja, LocalDate krajVazenja) {
 		Cenovnik c = nadjiCenovnik(pocetakVazenja, krajVazenja);
 		if (c != null) {
