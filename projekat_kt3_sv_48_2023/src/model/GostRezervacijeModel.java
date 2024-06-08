@@ -68,7 +68,7 @@ public class GostRezervacijeModel extends AbstractTableModel {
 		case 5:
 			StringBuilder sb = new StringBuilder();
 			ArrayList<DodatnaUsluga> du = new ArrayList<DodatnaUsluga>();
-			if (r.getDodatneUsluge().get(0) != null) {
+			if (r.getDodatneUsluge().size() != 0 && r.getDodatneUsluge().get(0) != null) {
 				du = r.getDodatneUsluge();
 				for (int i = 0; i < du.size(); i++) {
 					sb.append(du.get(i).getNaziv());

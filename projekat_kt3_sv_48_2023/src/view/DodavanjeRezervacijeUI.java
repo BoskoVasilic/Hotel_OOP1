@@ -194,11 +194,14 @@ public class DodavanjeRezervacijeUI extends JFrame {
 				ArrayList<TipSobe> tipoviSoba = new ArrayList<TipSobe>();
 				tipoviSoba = rm.postojeSobeKojeZadovoljavajuUslove(oprema, LocalDate.parse(datumPrijave, format), LocalDate.parse(datumOdjave, format));
 				panelTipSobe.removeAll();
+				panelTipSobe.revalidate();
+				panelTipSobe.repaint();
 				for (int i = 0; i < tipoviSoba.size(); i++) {
 					JRadioButton radioBtn = new JRadioButton(tsm.nadjiTipSobe(tipoviSoba.get(i).getNaziv()).getNaziv());
 					panelTipSobe.add(radioBtn);
 				}
 				panelTipSobe.revalidate();
+				panelTipSobe.repaint();
 				ButtonGroup bg = new ButtonGroup();
 				for (int i = 0; i < tipoviSoba.size(); i++) {
 					bg.add((JRadioButton) panelTipSobe.getComponent(i));
@@ -219,7 +222,7 @@ public class DodavanjeRezervacijeUI extends JFrame {
 				TipSobe izabraniTipSobe = null;
 				ArrayList<DodatnaUsluga> dodatneUsluge = new ArrayList<DodatnaUsluga>();
 				DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
-				for (int i = 0; i < tsm.getTipoviSoba().size(); i++) {
+				for (int i = 0; i < tsm.getTipoviSoba().size() - 1; i++) {
 					JRadioButton radioBtn = (JRadioButton) panelTipSobe.getComponent(i);
 					if (radioBtn.isSelected()) {
 						izabraniTipSobe = tsm.nadjiTipSobe(radioBtn.getText());
@@ -232,6 +235,15 @@ public class DodavanjeRezervacijeUI extends JFrame {
 						dodatneUsluge.add(dum.getDodatneUsluge().get(i));
 					}
 				}
+				
+				ArrayList<Oprema> oprema = new ArrayList<Oprema>();
+				
+				for (int i = 0; i < om.getOprema().size(); i++) {
+					JCheckBox chckbx = (JCheckBox) panelOpremljenost.getComponent(i);
+					if (chckbx.isSelected()) {
+						oprema.add(om.getOprema().get(i));
+					}
+				}
 				int brojLjudi = (int) spinner.getValue();
 				
 				int response = JOptionPane.showConfirmDialog(null, "Da li ste sigurni da želite da dodate rezervaciju?", "Dodavanje rezervacije", JOptionPane.YES_NO_OPTION);
@@ -239,17 +251,16 @@ public class DodavanjeRezervacijeUI extends JFrame {
 				      return;
 				    } else if (response == JOptionPane.YES_OPTION) {
 				    	if (izabraniTipSobe == null && brojLjudi != 0 && brojLjudi <= tsm.maxBrojLjudi()) {
-				    		boolean uspesno = rm.dodajRezervacijuPoBrojuLjudi(gm.getUlogovaniGost(), LocalDate.parse(datumPrijave, format), LocalDate.parse(datumOdjave, format), brojLjudi, dodatneUsluge);
+				    		boolean uspesno = rm.dodajRezervacijuPoBrojuLjudi(gm.getUlogovaniGost(), LocalDate.parse(datumPrijave, format), LocalDate.parse(datumOdjave, format), brojLjudi, dodatneUsluge, oprema);
 				    		if (uspesno) {
                     			rm.sacuvajRezervacije();
                     			dispose();
-						} else {
-							JOptionPane.showMessageDialog(null, "Nazalost nema slobodne sobe za uneti period i broj ljudi!", "Greška",
-									JOptionPane.ERROR_MESSAGE);
-						}
+				    		} else {
+				    			JOptionPane.showMessageDialog(null, "Nazalost nema slobodne sobe za uneti period i broj ljudi!", "Greška", JOptionPane.ERROR_MESSAGE);
+				    		}
 				    	}else if (izabraniTipSobe != null) {
 							if(izabraniTipSobe.getBrojOsoba() >= brojLjudi) {
-								rm.dodajRezervacijuPoTipu(gm.getUlogovaniGost(), LocalDate.parse(datumPrijave, format), LocalDate.parse(datumOdjave, format), izabraniTipSobe, brojLjudi, dodatneUsluge);
+								rm.dodajRezervacijuPoTipu(gm.getUlogovaniGost(), LocalDate.parse(datumPrijave, format), LocalDate.parse(datumOdjave, format), izabraniTipSobe, brojLjudi, dodatneUsluge, oprema);
 								rm.sacuvajRezervacije();
 		                    	dispose();
 							}else {

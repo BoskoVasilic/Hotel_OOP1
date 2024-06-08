@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
-import entity.Oprema;
+import entity.DodatnaUsluga;
 import entity.Rezervacija;
 import entity.Soba;
 import entity.StatusRezervacije;
@@ -33,6 +34,7 @@ import model.CheckInRezervacijeModel;
 import model.CheckOutRezervacijeModel;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -118,7 +120,7 @@ public class CheckInOutUI extends JFrame {
                 	int modelRed = table.convertRowIndexToModel(red);
 					int idRezervacije = (int) table.getValueAt(modelRed, 0);
 					TipSobe tipSobe = tsm.nadjiTipSobe(table.getModel().getValueAt(modelRed, 3).toString());
-                    ArrayList<String> slobodneSobe = sm.getSlobodneSobeTipa(tipSobe, new ArrayList<Oprema>());
+                    ArrayList<String> slobodneSobe = sm.getSlobodneSobeTipa(tipSobe, rm.nadjiRezervaciju(idRezervacije).getZahtevanaOprema());
                     if(slobodneSobe.size() == 0) {
                     	JOptionPane.showMessageDialog(null, "Nema slobodnih soba tog tipa.", "Greška", JOptionPane.ERROR_MESSAGE);
                     }else {
@@ -233,6 +235,31 @@ public class CheckInOutUI extends JFrame {
 				}
 			}
 		});
+		
+		JButton refreshBtn = new JButton("");
+		refreshBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (table.getRowSorter() != null) {
+					table.getRowSorter().modelStructureChanged();
+				}
+				if (tableCheckOut.getRowSorter() != null) {
+					tableCheckOut.getRowSorter().modelStructureChanged();
+				}
+				((CheckInRezervacijeModel) table.getModel()).fireTableDataChanged();
+				((CheckOutRezervacijeModel) tableCheckOut.getModel()).fireTableDataChanged();
+				dodeliSobuLbl.setEnabled(false);
+				btnSobe.setEnabled(false);
+				btnDodaj.setEnabled(false);
+				lblDodajDodatnuUslugu.setEnabled(false);
+				odjaviGostaLbl.setEnabled(false);
+				btnOdjava.setEnabled(false);
+			}
+		});
+		ImageIcon icon = new ImageIcon("img\\referesh.png");
+		ImageIcon scaled = new ImageIcon(icon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+		refreshBtn.setIcon(scaled);
+		refreshBtn.setBounds(930, 3, 28, 28);
+		contentPane.add(refreshBtn);
 	}
 	
 	public void dodajDodatnuUslugu(int idRezervacije) {
@@ -278,6 +305,8 @@ public class CheckInOutUI extends JFrame {
 				for (int i = 0; i < panelDodatneUsluge.getComponentCount(); i++) {
 					JCheckBox chckbx = (JCheckBox) panelDodatneUsluge.getComponent(i);
 					if (chckbx.isSelected()) {
+						if (rezervacija.getDodatneUsluge() == null)
+							rezervacija.setDodatneUsluge(new ArrayList<DodatnaUsluga>());
 						rezervacija.getDodatneUsluge().add(dum.nadjiDodatnuUslugu(chckbx.getText()));
 					}
 				}
@@ -299,5 +328,6 @@ public class CheckInOutUI extends JFrame {
         
         window.getContentPane().add(panel);
         window.setVisible(true);
+        
 	}
 }

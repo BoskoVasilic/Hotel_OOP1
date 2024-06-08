@@ -133,4 +133,17 @@ public class SobaManager {
 		return sobeTipa;
 	}
 	
+	public HashMap<String, ArrayList<ArrayList<Oprema>>> getOpremaPoTipuSobe() {
+		HashMap<String, ArrayList<ArrayList<Oprema>>> opremaPoTipuSobe = new HashMap<String, ArrayList<ArrayList<Oprema>>>();
+		for (Soba s : sobe) {
+			if (opremaPoTipuSobe.containsKey(s.getTipSobe().getNaziv())) {
+				opremaPoTipuSobe.get(s.getTipSobe().getNaziv()).add(s.getOpremljenostSobe());
+			} else {
+				ArrayList<ArrayList<Oprema>> oprema = new ArrayList<ArrayList<Oprema>>();
+				oprema.add(s.getOpremljenostSobe());
+				opremaPoTipuSobe.put(s.getTipSobe().getNaziv(), oprema);
+			}
+		}
+		return opremaPoTipuSobe;
+	}
 }

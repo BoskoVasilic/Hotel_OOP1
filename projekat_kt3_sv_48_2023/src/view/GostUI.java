@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Font;
+import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,6 +21,7 @@ import model.GostRezervacijeModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
 public class GostUI extends JFrame {
 
@@ -50,7 +52,7 @@ public class GostUI extends JFrame {
 		contentPane.setLayout(null);
 		table.setRowSorter(tableSorter);
 		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setBounds(5, 40, 974, 215);
+		scrollPane.setBounds(5, 40, 974, 300);
 		contentPane.add(scrollPane);
 		
 		if (table.getRowSorter() != null) {
@@ -97,7 +99,7 @@ public class GostUI extends JFrame {
 				}
 			}
 		});
-		otkaziBtn.setBounds(700, 275, 89, 23);
+		otkaziBtn.setBounds(700, 400, 89, 23);
 		contentPane.add(otkaziBtn);
 		
 		JButton dodajRezervacijuBtn = new JButton("Nova rezervacija");
@@ -111,13 +113,36 @@ public class GostUI extends JFrame {
 				((GostRezervacijeModel) table.getModel()).fireTableDataChanged();
 			}
 		});
-		dodajRezervacijuBtn.setBounds(840, 275, 130, 23);
+		dodajRezervacijuBtn.setBounds(840, 400, 130, 23);
 		contentPane.add(dodajRezervacijuBtn);
 		
 		otkaziLbl.setLabelFor(otkaziBtn);
 		otkaziLbl.setEnabled(false);
-		otkaziLbl.setBounds(532, 279, 200, 14);
+		otkaziLbl.setBounds(532, 404, 200, 14);
 		contentPane.add(otkaziLbl);
+		
+		JLabel ukupniTrosakLbl = new JLabel("Ukupni trošak:");
+		ukupniTrosakLbl.setBounds(730, 351, 200, 14);
+		ukupniTrosakLbl.setText("Ukupan trošak: " + rm.izracunajUkupanTrosakZaGosta());
+		contentPane.add(ukupniTrosakLbl);
+		
+		JButton refreshBtn = new JButton("");
+		refreshBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (table.getRowSorter() != null) {
+					table.getRowSorter().modelStructureChanged();
+				}
+				((GostRezervacijeModel) table.getModel()).fireTableDataChanged();
+				otkaziBtn.setEnabled(false);
+				otkaziLbl.setEnabled(false);
+				ukupniTrosakLbl.setText("Ukupan trošak: " + rm.izracunajUkupanTrosakZaGosta());
+			}
+		});
+		ImageIcon icon = new ImageIcon("img\\referesh.png");
+		ImageIcon scaled = new ImageIcon(icon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+		refreshBtn.setIcon(scaled);
+		refreshBtn.setBounds(930, 5, 30, 30);
+		contentPane.add(refreshBtn);
 		
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {

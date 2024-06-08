@@ -132,10 +132,10 @@ public class LoginUI extends JFrame {
 				for (int i = 0; i < gm.getGosti().size(); i++) {
 					if (gm.getGosti().get(i).getKorisnickoIme().equals(username)
 							&& gm.getGosti().get(i).getLozinka().equals(password)) {
+						gm.setUlogovaniGost(gm.getGosti().get(i));
 						GostUI gostUI = new GostUI();
 						gostUI.setVisible(true);
 						dispose();
-						gm.setUlogovaniGost(gm.getGosti().get(i));
 						return;
 					}
 				}
