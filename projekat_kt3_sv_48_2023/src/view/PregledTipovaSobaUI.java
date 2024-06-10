@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Optional;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,6 +18,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
+import entity.TipSobe;
 import manage.TipSobeManager;
 import model.TipSobeModel;
 
@@ -65,7 +67,7 @@ public class PregledTipovaSobaUI extends JFrame {
 		JButton dodajBtn = new JButton("Dodaj");
 		dodajBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DodajTipSobeUI dts = new DodajTipSobeUI();
+				DodajTipSobeUI dts = new DodajTipSobeUI(Optional.<TipSobe>empty());
 				dts.setVisible(true);
 			}
 		});
@@ -75,6 +77,13 @@ public class PregledTipovaSobaUI extends JFrame {
 		JButton izmeniBtn = new JButton("Izmeni");
 		izmeniBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int red = table.getSelectedRow();
+				int modelRed = table.convertRowIndexToModel(red);
+				if (red != -1) {
+					DodajTipSobeUI dts = new DodajTipSobeUI(
+							Optional.of(tsm.nadjiTipSobe(table.getModel().getValueAt(modelRed, 0).toString())));
+					dts.setVisible(true);
+				}
 			}
 		});
 		izmeniBtn.setEnabled(false);

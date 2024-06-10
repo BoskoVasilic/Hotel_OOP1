@@ -14,6 +14,7 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import entity.Cenovnik;
 import formater.DateLabelFormatter;
 import manage.CenovnikManager;
 import manage.DodatnaUslugaManager;
@@ -24,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Properties;
 import java.awt.event.ActionEvent;
 
@@ -36,7 +38,7 @@ public class DodajCenovnikUI extends JFrame {
 	private DodatnaUslugaManager dum = new DodatnaUslugaManager("data/dodatneUsluge.csv");
 	CenovnikManager cm = new CenovnikManager("data/cenovnik.csv");
 
-	public DodajCenovnikUI() {
+	public DodajCenovnikUI(Optional<Cenovnik> cenovnik) {
 		cm.ucitajCenovnike();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 400);
@@ -48,6 +50,9 @@ public class DodajCenovnikUI extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setTitle("Hotel - Dodaj cenovnik");
+		if (cenovnik.isPresent()) {
+			setTitle("Hotel - Izmeni cenovnik");
+		}
 		
 		JLabel lblNewLabel_2 = new JLabel("Tipovi soba:");
 		lblNewLabel_2.setBounds(20, 127, 69, 14);
@@ -61,7 +66,16 @@ public class DodajCenovnikUI extends JFrame {
 		for (int i = 0; i < tsm.getTipoviSoba().size(); i++) {
 			JLabel label = new JLabel(tsm.getTipoviSoba().get(i).getNaziv());
 			panelTipSobe.add(label);
-			panelTipSobe.add(new JTextField());
+			if (cenovnik.isPresent()) {
+				HashMap<String, Double> cene = cenovnik.get().getCene().get("TipoviSoba");
+				JTextField textField = new JTextField();
+				if (cene.containsKey(tsm.getTipoviSoba().get(i).getNaziv())) {
+					textField.setText(cene.get(tsm.getTipoviSoba().get(i).getNaziv()).toString());
+				}
+				panelTipSobe.add(textField);
+			} else {
+				panelTipSobe.add(new JTextField());
+			}
 		}
 		
 		JLabel lblNewLabel_3 = new JLabel("Pocetak važenja:");
@@ -76,6 +90,12 @@ public class DodajCenovnikUI extends JFrame {
 		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
 		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 		datePicker.setBounds(20, 69, 147, 30);
+		if (cenovnik.isPresent()) {
+			datePicker.getJFormattedTextField()
+					.setText(cenovnik.get().getPocetakVazenja().format(DateTimeFormatter.ofPattern("dd.MM.yyyy.")));
+			datePicker.getJFormattedTextField().setEnabled(false);
+            datePicker.getComponent(1).setEnabled(false);
+		}
 		contentPane.add(datePicker);
 		
 		UtilDateModel model1 = new UtilDateModel();
@@ -85,6 +105,12 @@ public class DodajCenovnikUI extends JFrame {
 		JDatePanelImpl datePanel1 = new JDatePanelImpl(model1, p);
 		JDatePickerImpl datePicker1 = new JDatePickerImpl(datePanel1, new DateLabelFormatter());
 		datePicker1.setBounds(243, 69, 147, 30);
+		if (cenovnik.isPresent()) {
+			datePicker1.getJFormattedTextField()
+					.setText(cenovnik.get().getKrajVazenja().format(DateTimeFormatter.ofPattern("dd.MM.yyyy.")));
+			datePicker1.getJFormattedTextField().setEnabled(false);
+            datePicker1.getComponent(1).setEnabled(false);
+		}
 		contentPane.add(datePicker1);
 		
 		lblNewLabel_3 = new JLabel("Kraj važenja:");
@@ -109,7 +135,16 @@ public class DodajCenovnikUI extends JFrame {
 		for (int i = 0; i < dum.getDodatneUsluge().size(); i++) {
 			JLabel lbl = new JLabel(dum.getDodatneUsluge().get(i).getNaziv());
 			panelDodatneusluge.add(lbl);
-			panelDodatneusluge.add(new JTextField());
+			if (cenovnik.isPresent()) {
+				HashMap<String, Double> cene = cenovnik.get().getCene().get("DodatneUsluge");
+				JTextField textField = new JTextField();
+				if (cene.containsKey(dum.getDodatneUsluge().get(i).getNaziv())) {
+					textField.setText(cene.get(dum.getDodatneUsluge().get(i).getNaziv()).toString());
+				}
+				panelDodatneusluge.add(textField);
+			} else {
+				panelDodatneusluge.add(new JTextField());
+			}
 		}
 		
 		
@@ -122,9 +157,15 @@ public class DodajCenovnikUI extends JFrame {
 		JLabel lblNewLabel = new JLabel("Novi cenovnik:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel.setBounds(10, 11, 161, 22);
+		if (cenovnik.isPresent()) {
+			lblNewLabel.setText("Izmeni cenovnik:");
+		}
 		contentPane.add(lblNewLabel);
 		
 		JButton btnNewButton = new JButton("Dodaj");
+		if (cenovnik.isPresent()) {
+			btnNewButton.setText("Izmeni");
+		}
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				HashMap<String, HashMap<String, Double>> cene = new HashMap<String, HashMap<String, Double>>();
@@ -136,6 +177,13 @@ public class DodajCenovnikUI extends JFrame {
 					if (cena.isEmpty()) {
 						valid = false;
 					}else {
+						try {
+                            Double.parseDouble(cena);
+                        } catch (NumberFormatException ex) {
+							JOptionPane.showMessageDialog(null, "Cena mora biti broj!", "Greška",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+                        }
 						cene.get("TipoviSoba").put(tsm.getTipoviSoba().get(i).getNaziv(), Double.parseDouble(cena));
 					}
 				}
@@ -149,7 +197,11 @@ public class DodajCenovnikUI extends JFrame {
 								Double.parseDouble(cena));
 					}
 				}
-				if (valid) {
+				if (datePicker.getJFormattedTextField().getText().isEmpty()
+						|| datePicker1.getJFormattedTextField().getText().isEmpty()) {
+					valid = false;
+				}
+				if (valid && !cenovnik.isPresent()) {
 					boolean uspesno = cm.dodajCenovnikGui(LocalDate.parse(datePicker.getJFormattedTextField().getText(), format), LocalDate.parse(datePicker1.getJFormattedTextField().getText(), format), cene);
 					if (uspesno) {
 						cm.sacuvajCenovnike();
@@ -159,6 +211,10 @@ public class DodajCenovnikUI extends JFrame {
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
+				}else if(valid && cenovnik.isPresent()){
+					cm.izmeniCenovnikKompletGUI(LocalDate.parse(datePicker.getJFormattedTextField().getText(), format), LocalDate.parse(datePicker1.getJFormattedTextField().getText(), format), cene);
+                    cm.sacuvajCenovnike();
+                    dispose();
 				}else {
                     JOptionPane.showMessageDialog(null, "Morate popuniti sve vrednosti.", "Greška",
                             JOptionPane.ERROR_MESSAGE);

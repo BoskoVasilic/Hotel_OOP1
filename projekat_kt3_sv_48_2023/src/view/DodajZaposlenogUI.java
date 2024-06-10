@@ -88,6 +88,9 @@ public class DodajZaposlenogUI extends JFrame {
 		JLabel lblNewLabel_1 = new JLabel("Dodavanje zaposlenog:");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_1.setBounds(10, 11, 188, 25);
+		if (zaposleni.isPresent()) {
+			lblNewLabel_1.setText("Izmena zaposlenog:");
+		}
 		contentPane.add(lblNewLabel_1);
 		
 		JLabel lblPrezime = new JLabel("Prezime:");

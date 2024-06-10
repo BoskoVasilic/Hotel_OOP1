@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import entity.TipSobe;
 import manage.TipSobeManager;
 
 import javax.swing.JTextField;
@@ -15,6 +16,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Optional;
 import java.awt.event.ActionEvent;
 
 public class DodajTipSobeUI extends JFrame {
@@ -24,7 +26,7 @@ public class DodajTipSobeUI extends JFrame {
 	private JTextField naziv;
 	private TipSobeManager tsm = new TipSobeManager("data/tipoviSoba.csv");
 
-	public DodajTipSobeUI() {
+	public DodajTipSobeUI(Optional<TipSobe> tipSobe) {
 		tsm.ucitajTipoveSoba();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 210, 300);
@@ -40,6 +42,9 @@ public class DodajTipSobeUI extends JFrame {
 		JLabel lblNewLabel = new JLabel("Novi tip sobe:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel.setBounds(10, 11, 117, 22);
+		if (tipSobe.isPresent()) {
+			lblNewLabel.setText("Izmena tipa sobe:");
+		}
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Naziv tipa:");
@@ -48,6 +53,10 @@ public class DodajTipSobeUI extends JFrame {
 		
 		naziv = new JTextField();
 		naziv.setBounds(20, 60, 153, 20);
+		if (tipSobe.isPresent()) {
+			naziv.setText(tipSobe.get().getNaziv());
+			naziv.setEnabled(false);
+		}
 		contentPane.add(naziv);
 		naziv.setColumns(10);
 		
@@ -62,14 +71,23 @@ public class DodajTipSobeUI extends JFrame {
 		JSpinner brojKreveta = new JSpinner();
 		brojKreveta.setModel(new SpinnerNumberModel(0, 0, 20, 1));
 		brojKreveta.setBounds(20, 107, 153, 20);
+		if (tipSobe.isPresent()) {
+			brojKreveta.setValue(tipSobe.get().getBrojKreveta());
+		}
 		contentPane.add(brojKreveta);
 		
 		JSpinner brojLjudi = new JSpinner();
 		brojLjudi.setModel(new SpinnerNumberModel(0, 0, 20, 1));
 		brojLjudi.setBounds(20, 158, 153, 20);
+		if (tipSobe.isPresent()) {
+			brojLjudi.setValue(tipSobe.get().getBrojOsoba());
+		}
 		contentPane.add(brojLjudi);
 		
 		JButton dodajBtn = new JButton("Dodaj");
+		if (tipSobe.isPresent()) {
+			dodajBtn.setText("Izmeni");
+		}
 		dodajBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String nazivTipa = naziv.getText();
@@ -78,17 +96,22 @@ public class DodajTipSobeUI extends JFrame {
 				if (nazivTipa.isEmpty() || brKreveta == 0 || brLjudi == 0) {
 					JOptionPane.showMessageDialog(null, "Morate popuniti sve vrednosti.", "Greška", JOptionPane.ERROR_MESSAGE);
 					return;
-				}
-				boolean uspesno = tsm.dodajTipSobe(nazivTipa, brKreveta, brLjudi);
-				if (uspesno) {
+				}else if(tipSobe.isPresent()) {
+					tsm.izmeniTipSobe(nazivTipa, brKreveta, brLjudi);
 					tsm.sacuvajTipoveSoba();
-					JOptionPane.showMessageDialog(null, "Tip sobe uspešno dodat.");
+					JOptionPane.showMessageDialog(null, "Tip sobe uspešno izmenjen.");
 					dispose();
-				} else {
-					JOptionPane.showMessageDialog(null, "Uneti naziv tipa sobe vec postoji.", "Greška", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-				
+				}else {
+					boolean uspesno = tsm.dodajTipSobe(nazivTipa, brKreveta, brLjudi);
+					if (uspesno) {
+						tsm.sacuvajTipoveSoba();
+						JOptionPane.showMessageDialog(null, "Tip sobe uspešno dodat.");
+						dispose();
+					}else {
+						JOptionPane.showMessageDialog(null, "Uneti naziv tipa sobe vec postoji.", "Greška", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+				}	
 			}
 		});
 		dodajBtn.setBounds(95, 227, 89, 23);

@@ -95,7 +95,6 @@ public class LoginUI extends JFrame {
 		
 		am.ucitajAdministratore();
 		rm.ucitajRecepcionere();
-		sm.ucitajSobarice();
 
 		prijaviSeBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

@@ -141,7 +141,7 @@ public class GostUI extends JFrame {
 		ImageIcon icon = new ImageIcon("img\\referesh.png");
 		ImageIcon scaled = new ImageIcon(icon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
 		refreshBtn.setIcon(scaled);
-		refreshBtn.setBounds(930, 5, 30, 30);
+		refreshBtn.setBounds(910, 5, 30, 30);
 		contentPane.add(refreshBtn);
 		
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -157,5 +157,19 @@ public class GostUI extends JFrame {
 				}
 			}
 		});
+		
+		JButton logoutBtn = new JButton("");
+		logoutBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LoginUI frame = new LoginUI();
+				frame.setVisible(true);
+				dispose();
+			}
+		});
+		ImageIcon icon1 = new ImageIcon("img\\logout.png");
+		ImageIcon scaled1 = new ImageIcon(icon1.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+		logoutBtn.setIcon(scaled1);
+		logoutBtn.setBounds(950, 5, 30, 30);
+		contentPane.add(logoutBtn);
 	}
 }

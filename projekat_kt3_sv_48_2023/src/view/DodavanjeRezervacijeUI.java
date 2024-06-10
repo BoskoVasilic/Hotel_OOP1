@@ -173,6 +173,15 @@ public class DodavanjeRezervacijeUI extends JFrame {
 		JButton pretraziBtn = new JButton("Pretraži");
 		pretraziBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				boolean validno = true;
+				if (datePicker.getJFormattedTextField().getText().isEmpty() || datePicker1.getJFormattedTextField().getText().isEmpty()) {
+					validno = false;
+				}
+				if (!validno) {
+					JOptionPane.showMessageDialog(null, "Morate uneti datum prijave i datum odjave!", "Greška",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				tipoviSobeLbl.setEnabled(true);
 				lblBrojLjudi.setEnabled(true);
 				dodajRezervacijuBtn.setEnabled(true);

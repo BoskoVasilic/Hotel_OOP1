@@ -15,12 +15,14 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
+import entity.Soba;
 import manage.SobaManager;
 import model.SobeModel;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Optional;
 import java.awt.event.ActionEvent;
 
 public class AdminPregledSobaUI extends JFrame {
@@ -66,7 +68,7 @@ public class AdminPregledSobaUI extends JFrame {
 		JButton dodajBtn = new JButton("Dodaj");
 		dodajBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DodajSobu frame = new DodajSobu();
+				DodajSobu frame = new DodajSobu(Optional.<Soba>empty());
 				frame.setVisible(true);
 			}
 		});
@@ -77,6 +79,13 @@ public class AdminPregledSobaUI extends JFrame {
 		izmeniBtn.setEnabled(false);
 		izmeniBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int red = table.getSelectedRow();
+				if (red != -1) {
+					int modelRed = table.convertRowIndexToModel(red);
+					DodajSobu frame = new DodajSobu(Optional
+							.of(sm.nadjiSobu(Integer.parseInt(table.getModel().getValueAt(modelRed, 0).toString()))));
+					frame.setVisible(true);
+				}
 			}
 		});
 		izmeniBtn.setBounds(592, 227, 89, 23);
@@ -94,6 +103,7 @@ public class AdminPregledSobaUI extends JFrame {
 					      return;
 					    } else if (response == JOptionPane.YES_OPTION) {
 					    	sm.obrisiSobu(Integer.parseInt(table.getModel().getValueAt(modelRed, 0).toString()));
+					    	sm.sacuvajSobe();
 							JOptionPane.showMessageDialog(null, "Soba uspešno obrisana.");
 					    	if (table.getRowSorter() != null) {
 								table.getRowSorter().modelStructureChanged();

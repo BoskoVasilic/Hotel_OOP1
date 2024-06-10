@@ -159,6 +159,15 @@ public class CenovnikManager {
 		}
 	}
 	
+	public void izmeniCenovnikKompletGUI(LocalDate pocetakVazenja, LocalDate krajVazenja, HashMap<String, HashMap<String, Double>> cene) {
+		Cenovnik c = nadjiCenovnik(pocetakVazenja, krajVazenja);
+		if (c != null) {
+			c.setCene(cene);
+		} else {
+			System.out.println("Cenovnik za uneti period ne postoji u sistemu.");
+		}
+	}
+	
 	public void izmeniStavkuCenovnika(LocalDate pocetakVazenja, LocalDate krajVazenja, String grupa, String stavka,
 			double cena) {
 		Cenovnik c = nadjiCenovnik(pocetakVazenja, krajVazenja);

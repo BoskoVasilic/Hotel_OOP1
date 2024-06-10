@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Image;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -127,5 +129,19 @@ public class RecepcionerUI extends JFrame {
 		lblNewLabel_1_2_1.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNewLabel_1_2_1.setBounds(315, 403, 90, 14);
 		contentPane.add(lblNewLabel_1_2_1);
+		
+		JButton logoutBtn = new JButton("");
+		logoutBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LoginUI frame = new LoginUI();
+				frame.setVisible(true);
+				dispose();
+			}
+		});
+		ImageIcon icon = new ImageIcon("img\\logout.png");
+		ImageIcon scaled = new ImageIcon(icon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+		logoutBtn.setIcon(scaled);
+		logoutBtn.setBounds(446, 11, 28, 28);
+		contentPane.add(logoutBtn);
 	}
 }

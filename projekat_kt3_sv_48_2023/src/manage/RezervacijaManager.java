@@ -111,7 +111,7 @@ public class RezervacijaManager {
     public ArrayList<Rezervacija> getRezervacijeUToku() {
     	ArrayList<Rezervacija> rezervacijeUToku = new ArrayList<Rezervacija>();
 		for (Rezervacija r : rezervacije) {
-			if (r.getStatusRezervacije() == StatusRezervacije.U_TOKU && r.getDatumOdjave().isEqual(LocalDate.now())) {
+			if (r.getStatusRezervacije() == StatusRezervacije.U_TOKU) {
 				rezervacijeUToku.add(r);
 			}
 		}

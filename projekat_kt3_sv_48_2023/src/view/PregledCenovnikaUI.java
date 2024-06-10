@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,6 +22,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
+import entity.Cenovnik;
 import manage.CenovnikManager;
 import model.CenovnikModel;
 
@@ -66,7 +68,7 @@ public class PregledCenovnikaUI extends JFrame {
 		JButton dodajBtn = new JButton("Dodaj");
 		dodajBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DodajCenovnikUI dc = new DodajCenovnikUI();
+				DodajCenovnikUI dc = new DodajCenovnikUI(Optional.<Cenovnik>empty());
 				dc.setVisible(true);
 				
 			}
@@ -77,7 +79,17 @@ public class PregledCenovnikaUI extends JFrame {
 		JButton izmeniBtn = new JButton("Izmeni");
 		izmeniBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
+				int red = table.getSelectedRow();
+				if (red != -1) {
+					int modelRed = table.convertRowIndexToModel(red);
+					LocalDate pocetak = LocalDate.parse((table.getModel().getValueAt(modelRed, 0).toString()), format);
+					LocalDate kraj = LocalDate.parse((table.getModel().getValueAt(modelRed, 1).toString()), format);
+					Cenovnik c = cm.getCenovnici().stream()
+							.filter(x -> x.getPocetakVazenja().equals(pocetak) && x.getKrajVazenja().equals(kraj)).findFirst().get();
+					DodajCenovnikUI dc = new DodajCenovnikUI(Optional.of(c));
+					dc.setVisible(true);
+				}
 			}
 		});
 		izmeniBtn.setEnabled(false);

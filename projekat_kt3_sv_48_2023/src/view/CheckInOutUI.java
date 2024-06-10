@@ -129,6 +129,8 @@ public class CheckInOutUI extends JFrame {
 							int brojSobe = Integer.parseInt(izbor);
 							Rezervacija rezervacija = rm.nadjiRezervaciju(idRezervacije);
 							Soba soba = sm.nadjiSobu(brojSobe);
+							soba.setStatusSobe(StatusSobe.ZAUZETA);
+							sm.sacuvajSobe();
 							rezervacija.setDodeljenaSoba(soba);
 							rezervacija.setStatusRezervacije(StatusRezervacije.U_TOKU);
 							rm.sacuvajRezervacije();
@@ -164,7 +166,7 @@ public class CheckInOutUI extends JFrame {
 					    } else if (response == JOptionPane.YES_OPTION) {
 					    	Rezervacija rezervacija = rm.nadjiRezervaciju(idRezervacije);
 							rezervacija.setStatusRezervacije(StatusRezervacije.ZAVRŠENA);
-							rezervacija.getDodeljenaSoba().setStatusSobe(StatusSobe.SPREMANJE);
+							sm.nadjiSobu(rezervacija.getDodeljenaSoba().getBrojSobe()).setStatusSobe(StatusSobe.SPREMANJE);
 							sm.sacuvajSobe();
 							soM.dodajSobuZaSredjivanje(rezervacija.getDodeljenaSoba());
 							soM.sacuvajSobarice();

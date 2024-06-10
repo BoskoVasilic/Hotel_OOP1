@@ -27,6 +27,7 @@ import javax.swing.JButton;
 import javax.swing.SpinnerNumberModel;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.awt.event.ActionEvent;
 
 public class DodajSobu extends JFrame {
@@ -38,7 +39,7 @@ public class DodajSobu extends JFrame {
 	private OpremaManager om = new OpremaManager("data/oprema.csv");
 	private SobaManager sm = new SobaManager("data/sobe.csv");
 
-	public DodajSobu() {
+	public DodajSobu(Optional<Soba> soba) {
 		sm.ucitajSobe();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -53,6 +54,9 @@ public class DodajSobu extends JFrame {
 		JLabel lblNewLabel = new JLabel("Nova soba:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel.setBounds(10, 11, 85, 22);
+		if (soba.isPresent()) {
+			lblNewLabel.setText("Izmena sobe:");
+		}
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Broj sobe:");
@@ -62,6 +66,10 @@ public class DodajSobu extends JFrame {
 		JSpinner brojSobe = new JSpinner();
 		brojSobe.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
 		brojSobe.setBounds(96, 41, 55, 20);
+		if (soba.isPresent()) {
+			brojSobe.setValue(soba.get().getBrojSobe());
+			brojSobe.setEnabled(false);
+		}
 		contentPane.add(brojSobe);
 		
 		JLabel lblNewLabel_2 = new JLabel("Tipovi sobe:");
@@ -75,6 +83,10 @@ public class DodajSobu extends JFrame {
 		tsm.ucitajTipoveSoba();
 		for (int i = 0; i < tsm.getTipoviSoba().size(); i++) {
 			JRadioButton radioBtn = new JRadioButton(tsm.nadjiTipSobe(tsm.getTipoviSoba().get(i).getNaziv()).getNaziv());
+			if (soba.isPresent()
+					&& tsm.nadjiTipSobe(tsm.getTipoviSoba().get(i).getNaziv()).equals(soba.get().getTipSobe())) {
+				radioBtn.setSelected(true);
+			}
 			panelTipSobe.add(radioBtn);
 		}
 
@@ -100,6 +112,9 @@ public class DodajSobu extends JFrame {
 		om.ucitajOpremu();
 		for (int i = 0; i <	om.getOprema().size(); i++) {
 			JCheckBox chckbx = new JCheckBox(om.getOprema().get(i).getNaziv());
+			if (soba.isPresent() && soba.get().getOpremljenostSobe().contains(om.getOprema().get(i))) {
+				chckbx.setSelected(true);
+			}
 			panelOprema.add(chckbx);
 		}
 		
@@ -112,13 +127,20 @@ public class DodajSobu extends JFrame {
 		
 		JCheckBox pusackaChckbx = new JCheckBox("Pušačka");
 		pusackaChckbx.setBounds(269, 40, 97, 23);
+		if (soba.isPresent() && soba.get().isPusackaSoba()) {
+			pusackaChckbx.setSelected(true);
+		}
 		contentPane.add(pusackaChckbx);
 		
 		JButton dodajBtn = new JButton("Dodaj");
+		if (soba.isPresent()) {
+			dodajBtn.setText("Izmeni");
+		}
 		dodajBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Oprema> oprema = new ArrayList<Oprema>();
 				TipSobe tipSobe = null;
+				int brojSobeInt = -1;
 				for (int i = 0; i < panelTipSobe.getComponentCount(); i++) {
                     JRadioButton radioBtn = (JRadioButton) panelTipSobe.getComponent(i);
                     if (radioBtn.isSelected()) {
@@ -126,13 +148,21 @@ public class DodajSobu extends JFrame {
                         break;
                     }
                 }
-				int brojSobeInt = (int) brojSobe.getValue();
+				if (tipSobe == null) {
+					JOptionPane.showMessageDialog(null, "Morate izabrati tip sobe.", "Greška",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
+				brojSobeInt = (int) brojSobe.getValue();
 				for (Soba s : sm.getSobe()) {
-					if (s.getBrojSobe() == brojSobeInt) {
+					if (s.getBrojSobe() == brojSobeInt && !soba.isPresent()) {
 						JOptionPane.showMessageDialog(null, "Soba sa unetim brojem već postoji.", "Greška", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 				}
+				
+				
 				for (int i = 0; i < panelOprema.getComponentCount(); i++) {
 					JCheckBox chckbx = (JCheckBox) panelOprema.getComponent(i);
 					if (chckbx.isSelected()) {
@@ -140,10 +170,22 @@ public class DodajSobu extends JFrame {
 					}
 				}
 				boolean pusacka = pusackaChckbx.isSelected();
-				sm.dodajSobu(brojSobeInt, tipSobe, StatusSobe.SLOBODNA, oprema, pusacka);
-				sm.sacuvajSobe();
-				JOptionPane.showMessageDialog(null, "Soba uspešno dodata.");
-				dispose();
+				if (soba.isPresent() && soba.get().getStatusSobe() != StatusSobe.ZAUZETA) {
+					sm.izmeniSobu(brojSobeInt, tipSobe, StatusSobe.SLOBODNA, oprema, pusacka);
+					sm.sacuvajSobe();
+					JOptionPane.showMessageDialog(null, "Soba uspešno izmenjena.");
+					dispose();
+					return;
+				}else if (soba.isPresent() && soba.get().getStatusSobe() == StatusSobe.ZAUZETA) {
+					JOptionPane.showMessageDialog(null, "Soba je zauzeta i ne može se menjati.", "Greška",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}else {
+					sm.dodajSobu(brojSobeInt, tipSobe, StatusSobe.SLOBODNA, oprema, pusacka);
+					sm.sacuvajSobe();
+					JOptionPane.showMessageDialog(null, "Soba uspešno dodata.");
+					dispose();
+				}
 			}
 		});
 		dodajBtn.setBounds(325, 232, 89, 23);
