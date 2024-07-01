@@ -129,7 +129,9 @@ public class ZaposleniManager {
 			rashodi += z.getPlata();
 		}
 		long vremenski_period = ChronoUnit.DAYS.between(pocetakPerioda, krajPerioda);
-		rashodi *= vremenski_period / 30;		
+		if (vremenski_period < 30) {
+            rashodi *= vremenski_period / 30;
+        }		
 		
 		return rashodi;
 	}
