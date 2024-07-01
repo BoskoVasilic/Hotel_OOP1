@@ -58,6 +58,13 @@ public class AdminUI extends JFrame {
 		
 		this.setJMenuBar(menuBar);
 		
+		prihodiRashodi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PrihodiRashodiUI frame = new PrihodiRashodiUI();
+				frame.setVisible(true);
+			}
+		});
+		
 		
 		JLabel lblNewLabel = new JLabel("Dobrodosli administrator");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 24));

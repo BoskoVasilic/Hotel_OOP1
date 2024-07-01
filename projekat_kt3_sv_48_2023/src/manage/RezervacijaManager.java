@@ -352,4 +352,14 @@ public class RezervacijaManager {
         }
         return ukupanTrosak;
     }
+	
+	public double getPrihodi(LocalDate pocetak, LocalDate kraj) {
+		double prihodi = 0;
+		for (Rezervacija r : rezervacije) {
+			if (r.getDatumPrijave().isAfter(pocetak) && r.getDatumOdjave().isBefore(kraj)) {
+				prihodi += r.getUkupnaCena();
+			}
+		}
+		return prihodi;
+	}
 }

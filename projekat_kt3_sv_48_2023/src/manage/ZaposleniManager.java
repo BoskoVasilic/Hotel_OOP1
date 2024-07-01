@@ -1,6 +1,7 @@
 package manage;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 import entity.Osnovica;
@@ -120,5 +121,16 @@ public class ZaposleniManager {
 			return sm.nadjiSobaricu(korisnickoIme);
 		}
 		return null;
+	}
+	
+	public double getRashodi(LocalDate pocetakPerioda, LocalDate krajPerioda) {
+		double rashodi = 0;
+		for (Zaposleni z : getZaposleni()) {
+			rashodi += z.getPlata();
+		}
+		long vremenski_period = ChronoUnit.DAYS.between(pocetakPerioda, krajPerioda);
+		rashodi *= vremenski_period / 30;		
+		
+		return rashodi;
 	}
 }
