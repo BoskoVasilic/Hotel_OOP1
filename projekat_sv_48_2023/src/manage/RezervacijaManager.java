@@ -372,4 +372,73 @@ public class RezervacijaManager {
         }
         return brojPotvrdjenihRezervacija;
 	}
+	
+	public ArrayList<Rezervacija> getObradjeneRezervacije(LocalDate pocetak, LocalDate kraj) {
+		ArrayList<Rezervacija> obradjeneRezervacije = new ArrayList<Rezervacija>();
+		if (pocetak == null || kraj == null) {
+			return obradjeneRezervacije;
+		}
+		for (Rezervacija r : rezervacije) {
+			if (r.getDatumPrijave().isAfter(pocetak) && r.getDatumOdjave().isBefore(kraj)
+					&& r.getStatusRezervacije() != StatusRezervacije.NA_ČEKANJU) {
+				obradjeneRezervacije.add(r);
+			}
+		}
+		return obradjeneRezervacije;
+	}
+	
+	public int getBrojOtkazanihRezervacija(LocalDate pocetak, LocalDate kraj) {
+		int brojOtkazanihRezervacija = 0;
+		for (Rezervacija r : rezervacije) {
+			if (r.getDatumPrijave().isAfter(pocetak) && r.getDatumOdjave().isBefore(kraj)
+					&& r.getStatusRezervacije() == StatusRezervacije.OTKAZANA) {
+				brojOtkazanihRezervacija++;
+			}
+		}
+		return brojOtkazanihRezervacija;
+	}
+	
+	public int getBrojOdbijenihRezervacija(LocalDate pocetak, LocalDate kraj) {
+		int brojOdbijenihRezervacija = 0;
+		for (Rezervacija r : rezervacije) {
+			if (r.getDatumPrijave().isAfter(pocetak) && r.getDatumOdjave().isBefore(kraj)
+					&& r.getStatusRezervacije() == StatusRezervacije.ODBIJENA) {
+				brojOdbijenihRezervacija++;
+			}
+		}
+		return brojOdbijenihRezervacija;
+	}
+	
+	public int getBrojNocenjaPoSobi(LocalDate pocetak, LocalDate kraj, int brojSobe) {
+		int brojNocenja = 0;
+		
+		if (pocetak == null || kraj == null) {
+			return brojNocenja;
+		}
+		
+		for (Rezervacija r : rezervacije) {
+			if (r.getDodeljenaSoba() != null && r.getDodeljenaSoba().getBrojSobe() == brojSobe && r.getDatumPrijave().isAfter(pocetak)
+					&& r.getDatumOdjave().isBefore(kraj) && (r.getStatusRezervacije() == StatusRezervacije.U_TOKU || r.getStatusRezervacije() == StatusRezervacije.ZAVRŠENA)) {
+				brojNocenja += r.getDatumOdjave().getDayOfYear() - r.getDatumPrijave().getDayOfYear();
+			}
+		}
+		
+		return brojNocenja;
+	}
+	
+	public double getPrihodPoSobi(LocalDate pocetak, LocalDate kraj, int brojSobe) {
+		double prihod = 0;
+		
+		if (pocetak == null || kraj == null) {
+			return prihod;
+		}
+		
+		for (Rezervacija r : rezervacije) {
+			if (r.getDodeljenaSoba() != null && r.getDodeljenaSoba().getBrojSobe() == brojSobe && r.getDatumPrijave().isAfter(pocetak)
+					&& r.getDatumOdjave().isBefore(kraj) && (r.getStatusRezervacije() == StatusRezervacije.U_TOKU || r.getStatusRezervacije() == StatusRezervacije.ZAVRŠENA)) {
+				prihod += r.getUkupnaCena();
+			}
+		}
+		return prihod;
+	}
 }

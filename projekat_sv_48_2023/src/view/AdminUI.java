@@ -56,10 +56,12 @@ public class AdminUI extends JFrame {
 		JMenuItem sobariceSobe = new JMenuItem("Sobarice i sobe");
 		JMenuItem potvrdjeneRezervacije = new JMenuItem("Potvrđene rezervacije");
 		JMenuItem obradjeneRezervacije = new JMenuItem("Obrađene rezervacije");
+		JMenuItem prikazSoba = new JMenuItem("Prikaz soba");
 		izvestaji.add(prihodiRashodi);
 		izvestaji.add(sobariceSobe);
 		izvestaji.add(potvrdjeneRezervacije);
 		izvestaji.add(obradjeneRezervacije);
+		izvestaji.add(prikazSoba);
 		menuBar.add(izvestaji);
 		
 		this.setJMenuBar(menuBar);
@@ -88,6 +90,13 @@ public class AdminUI extends JFrame {
 		obradjeneRezervacije.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ObradjeneRezervacijeUI frame = new ObradjeneRezervacijeUI();
+				frame.setVisible(true);
+			}
+		});
+		
+		prikazSoba.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PrikazSobaUI frame = new PrikazSobaUI();
 				frame.setVisible(true);
 			}
 		});
