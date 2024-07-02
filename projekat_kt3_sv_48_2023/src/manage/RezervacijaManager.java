@@ -362,4 +362,14 @@ public class RezervacijaManager {
 		}
 		return prihodi;
 	}
+	
+	public int getBrojPotvrdjenihRezervacija(LocalDate pocetak, LocalDate kraj) {
+		int brojPotvrdjenihRezervacija = 0;
+        for (Rezervacija r : rezervacije) {
+            if (r.getDatumPrijave().isAfter(pocetak) && r.getDatumOdjave().isBefore(kraj) && r.getStatusRezervacije() != StatusRezervacije.NA_ČEKANJU && r.getStatusRezervacije() != StatusRezervacije.OTKAZANA && r.getStatusRezervacije() != StatusRezervacije.ODBIJENA) {
+                brojPotvrdjenihRezervacija++;
+            }
+        }
+        return brojPotvrdjenihRezervacija;
+	}
 }

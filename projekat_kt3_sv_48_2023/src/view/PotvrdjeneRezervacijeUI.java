@@ -21,28 +21,24 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import formater.DateLabelFormatter;
 import manage.RezervacijaManager;
-import manage.ZaposleniManager;
 
-public class PrihodiRashodiUI extends JFrame {
+public class PotvrdjeneRezervacijeUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private RezervacijaManager rm = RezervacijaManager.getInstance();
-	private ZaposleniManager zm = new ZaposleniManager();
 
-	public PrihodiRashodiUI() {
+	public PotvrdjeneRezervacijeUI() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 250);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		zm.getZaposleni();
-		
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		setTitle("Prihodi i rashodi");
 		setLocationRelativeTo(null);
 		setResizable(false);
+		setTitle("Potvrdjene rezervacije");
 		
 		JLabel lblNewLabel_3 = new JLabel("Pocetak perioda:");
 		lblNewLabel_3.setBounds(36, 52, 114, 14);
@@ -71,7 +67,7 @@ public class PrihodiRashodiUI extends JFrame {
 		lblNewLabel_3.setBounds(249, 52, 114, 14);
 		contentPane.add(lblNewLabel_3);
 		
-		JLabel lblNewLabel = new JLabel("PREGLED PRIHODA I RASHODA:");
+		JLabel lblNewLabel = new JLabel("BROJ POTVRĐENIH REZERVACIJA:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblNewLabel.setBounds(10, 11, 299, 23);
 		contentPane.add(lblNewLabel);
@@ -84,21 +80,9 @@ public class PrihodiRashodiUI extends JFrame {
 		separator.setBounds(10, 169, 414, 2);
 		contentPane.add(separator);
 		
-		JLabel prihodLbl = new JLabel("Prihod:");
-		prihodLbl.setBounds(20, 182, 202, 14);
-		contentPane.add(prihodLbl);
-		
-		JLabel rashodLbl = new JLabel("Rashod:");
-		rashodLbl.setBounds(20, 207, 186, 14);
-		contentPane.add(rashodLbl);
-		
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(20, 225, 200, 2);
-		contentPane.add(separator_1);
-		
-		JLabel bilansLbl = new JLabel("Bilans:");
-		bilansLbl.setBounds(20, 232, 186, 14);
-		contentPane.add(bilansLbl);
+		JLabel brPotRezLbl = new JLabel("Broj potvrđenih rezervacija: ");
+		brPotRezLbl.setBounds(20, 182, 262, 14);
+		contentPane.add(brPotRezLbl);
 		
 		prikaziBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -113,14 +97,13 @@ public class PrihodiRashodiUI extends JFrame {
 				}
 				
 				DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
-				double rashodi = zm.getRashodi(LocalDate.parse(datePicker.getJFormattedTextField().getText(), format), LocalDate.parse(datePicker1.getJFormattedTextField().getText(), format));
-				double prihodi = rm.getPrihodi(LocalDate.parse(datePicker.getJFormattedTextField().getText(), format), LocalDate.parse(datePicker1.getJFormattedTextField().getText(), format));
-				double bilans = prihodi - rashodi;
+				int brojPotvrdjenihRezervacija = rm.getBrojPotvrdjenihRezervacija(LocalDate.parse(datePicker.getJFormattedTextField().getText(), format), LocalDate.parse(datePicker1.getJFormattedTextField().getText(), format));
 				
-				prihodLbl.setText("Prihod:            " + prihodi + " RSD");
-				rashodLbl.setText("Rashod:          " + rashodi + " RSD");
-				bilansLbl.setText("Bilans:           " + bilans + " RSD");
+				brPotRezLbl.setText("Broj potvrđenih rezervacija: " + brojPotvrdjenihRezervacija);
+
 			}
 		});
+		
 	}
+
 }

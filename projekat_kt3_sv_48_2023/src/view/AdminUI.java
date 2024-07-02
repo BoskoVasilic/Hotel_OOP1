@@ -53,7 +53,13 @@ public class AdminUI extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu izvestaji = new JMenu("Izveštaji");
 		JMenuItem prihodiRashodi = new JMenuItem("Prihodi/Rashodi");
+		JMenuItem sobariceSobe = new JMenuItem("Sobarice i sobe");
+		JMenuItem potvrdjeneRezervacije = new JMenuItem("Potvrđene rezervacije");
+		JMenuItem obradjeneRezervacije = new JMenuItem("Obrađene rezervacije");
 		izvestaji.add(prihodiRashodi);
+		izvestaji.add(sobariceSobe);
+		izvestaji.add(potvrdjeneRezervacije);
+		izvestaji.add(obradjeneRezervacije);
 		menuBar.add(izvestaji);
 		
 		this.setJMenuBar(menuBar);
@@ -65,6 +71,26 @@ public class AdminUI extends JFrame {
 			}
 		});
 		
+		sobariceSobe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SobariceSobeUI frame = new SobariceSobeUI();
+				frame.setVisible(true);
+			}
+		});
+		
+		potvrdjeneRezervacije.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PotvrdjeneRezervacijeUI frame = new PotvrdjeneRezervacijeUI();
+				frame.setVisible(true);
+			}
+		});
+		
+		obradjeneRezervacije.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ObradjeneRezervacijeUI frame = new ObradjeneRezervacijeUI();
+				frame.setVisible(true);
+			}
+		});
 		
 		JLabel lblNewLabel = new JLabel("Dobrodosli administrator");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 24));
