@@ -31,40 +31,40 @@ public class TipSobeManagerTest {
 
 	@Test
     public void testNadjiTipSobe() {
-        tsm.dodajTipSobe("Standard", 1, 2);
-        TipSobe ts = tsm.nadjiTipSobe("Standard");
+        tsm.dodajTipSobe("Dvokrevetna (2)", 1, 2);
+        TipSobe ts = tsm.nadjiTipSobe("Dvokrevetna (2)");
         assertNotNull(ts);
-        assertEquals("Standard", ts.getNaziv());
+        assertEquals("Dvokrevetna (2)", ts.getNaziv());
     }
 
     @Test
     public void testDodajTipSobe() {
-        boolean rezultat = tsm.dodajTipSobe("Deluxe", 1, 2);
+        boolean rezultat = tsm.dodajTipSobe("Dvokrevetna (2)", 1, 2);
         assertTrue(rezultat);
         assertEquals(1, tsm.getTipoviSoba().size());
     }
 
     @Test
     public void testIzmeniTipSobe() {
-        tsm.dodajTipSobe("Suite", 3, 5);
-        tsm.izmeniTipSobe("Suite", 4, 6);
-        TipSobe ts = tsm.nadjiTipSobe("Suite");
+        tsm.dodajTipSobe("Trokrevetna (3)", 3, 5);
+        tsm.izmeniTipSobe("Trokrevetna (3)", 4, 6);
+        TipSobe ts = tsm.nadjiTipSobe("Trokrevetna (3)");
         assertEquals(4, ts.getBrojKreveta());
         assertEquals(6, ts.getBrojOsoba());
     }
 
     @Test
     public void testObrisiTipSobe() {
-        tsm.dodajTipSobe("Economy", 1, 1);
-        tsm.obrisiTipSobe("Economy");
-        TipSobe ts = tsm.nadjiTipSobe("Economy");
+        tsm.dodajTipSobe("Jednokrevetna (1)", 1, 1);
+        tsm.obrisiTipSobe("Jednokrevetna (1)");
+        TipSobe ts = tsm.nadjiTipSobe("Jednokrevetna (1)");
         assertNull(ts);
     }
 
     @Test
     public void testMaxBrojLjudi() {
-        tsm.dodajTipSobe("Family", 3, 4);
-        tsm.dodajTipSobe("Single", 1, 1);
+        tsm.dodajTipSobe("Trokrevetna (3)", 3, 4);
+        tsm.dodajTipSobe("Jednokrevetna (1)", 1, 1);
         int maxBroj = tsm.maxBrojLjudi();
         assertEquals(4, maxBroj);
     }
