@@ -13,9 +13,19 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.CategoryChartBuilder;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.style.Styler;
+
+import manage.RezervacijaManager;
+
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.awt.event.ActionEvent;
 
 
@@ -23,6 +33,7 @@ public class AdminUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private RezervacijaManager rm = RezervacijaManager.getInstance();
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -63,6 +74,10 @@ public class AdminUI extends JFrame {
 		izvestaji.add(obradjeneRezervacije);
 		izvestaji.add(prikazSoba);
 		menuBar.add(izvestaji);
+		JMenu grafikoni = new JMenu("Grafikoni");
+		JMenuItem prihodiUPrethodnojGodini = new JMenuItem("Prihodi u prethodnih 12 meseci");
+		grafikoni.add(prihodiUPrethodnojGodini);
+		menuBar.add(grafikoni);
 		
 		this.setJMenuBar(menuBar);
 		
@@ -98,6 +113,33 @@ public class AdminUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				PrikazSobaUI frame = new PrikazSobaUI();
 				frame.setVisible(true);
+			}
+		});
+		
+		prihodiUPrethodnojGodini.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LocalDate pocetak = LocalDate.now().minusMonths(12);
+		        LocalDate kraj = LocalDate.now();
+		        
+		        HashMap<String, Double> data = rm.getPrihodiPoTipuSobe(pocetak, kraj);
+
+		        CategoryChart chart = new CategoryChartBuilder().width(800).height(600).title("Prihodi po tipu sobe").xAxisTitle("Tip sobe").yAxisTitle("Prihod").build();
+		        chart.getStyler().setLegendPosition(Styler.LegendPosition.OutsideS);
+	            chart.getStyler().setPlotGridLinesVisible(true);
+	            chart.getStyler().setChartTitleVisible(true);
+	            chart.getStyler().setChartTitleFont(new Font("Arial", Font.PLAIN, 18));
+	            chart.getStyler().setAxisTitleFont(new Font("Arial", Font.PLAIN, 14));
+	            chart.getStyler().setAxisTickLabelsFont(new Font("Arial", Font.PLAIN, 12));
+		        
+		        chart.addSeries("Prihodi", new ArrayList<>(data.keySet()), new ArrayList<>(data.values()));
+
+		        Thread t = new Thread(new Runnable() {
+		            @Override
+		            public void run() {
+		            	new SwingWrapper<>(chart).displayChart();
+		            }
+		        });
+		        t.start();
 			}
 		});
 		

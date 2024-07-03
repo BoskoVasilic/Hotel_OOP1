@@ -441,4 +441,24 @@ public class RezervacijaManager {
 		}
 		return prihod;
 	}
+	
+	public HashMap<String, Double> getPrihodiPoTipuSobe(LocalDate pocetak, LocalDate kraj) {
+		HashMap<String, Double> prihodiPoTipuSobe = new HashMap<String, Double>();
+		
+		for (TipSobe ts : tsm.getTipoviSoba()) {
+			prihodiPoTipuSobe.put(ts.getNaziv(), 0.0);
+		}
+		
+		for (Rezervacija r : rezervacije) {
+			if (r.getDatumPrijave().isAfter(pocetak) && r.getDatumOdjave().isBefore(kraj)) {
+				if (prihodiPoTipuSobe.containsKey(r.getTipSobe().getNaziv())) {
+					prihodiPoTipuSobe.put(r.getTipSobe().getNaziv(),
+							prihodiPoTipuSobe.get(r.getTipSobe().getNaziv()) + r.getUkupnaCena());
+				} else {
+					prihodiPoTipuSobe.put(r.getTipSobe().getNaziv(), r.getUkupnaCena());
+				}
+			}
+		}
+		return prihodiPoTipuSobe;
+	}
 }
