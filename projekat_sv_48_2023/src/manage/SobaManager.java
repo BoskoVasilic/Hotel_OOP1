@@ -80,16 +80,17 @@ public class SobaManager {
 		return null;
 	}
 	
-	public void dodajSobu(int brojSobe, TipSobe tipSobe, StatusSobe statusSobe, ArrayList<Oprema> opremljenostSobe, boolean pusacka) {
+	public boolean dodajSobu(int brojSobe, TipSobe tipSobe, StatusSobe statusSobe, ArrayList<Oprema> opremljenostSobe, boolean pusacka) {
         Soba s = new Soba(brojSobe, tipSobe, statusSobe, opremljenostSobe, pusacka);
 		if (nadjiSobu(brojSobe) != null) {
 			System.out.println("Soba sa brojem " + brojSobe + " vec postoji u sistemu.");
-			return;
+			return false;
 		}
         sobe.add(s);
+        return true;
     }
 	
-	public void izmeniSobu(int brojSobe, TipSobe tipSobe, StatusSobe statusSobe, ArrayList<Oprema> opremljenostSobe,
+	public boolean izmeniSobu(int brojSobe, TipSobe tipSobe, StatusSobe statusSobe, ArrayList<Oprema> opremljenostSobe,
 			boolean pusacka) {
 		Soba soba = nadjiSobu(brojSobe);
 		if (soba != null) {
@@ -97,17 +98,21 @@ public class SobaManager {
 			soba.setStatusSobe(statusSobe);
 			soba.setOpremljenostSobe(opremljenostSobe);
 			soba.setPusackaSoba(pusacka);
+			return true;
 		} else {
 			System.out.println("Soba sa brojem " + brojSobe + " ne postoji u sistemu.");
+			return false;
 		}
 	}
 	
-	public void obrisiSobu(int brojSobe) {
+	public boolean obrisiSobu(int brojSobe) {
 		Soba soba = nadjiSobu(brojSobe);
 		if (soba != null) {
 			sobe.remove(soba);
+			return true;
 		} else {
 			System.out.println("Soba sa brojem " + brojSobe + " ne postoji u sistemu.");
+			return false;
 		}
 	}
 	

@@ -85,12 +85,14 @@ public class OpremaManager {
 		}
 	}
 	
-	public void izbrisiOpremu(String nazivOpreme) {
+	public boolean izbrisiOpremu(String nazivOpreme) {
 		Oprema o = nadjiOpremu(nazivOpreme);
 		if (o != null) {
 			oprema.remove(o);
+			return true;
 		} else {
 			System.out.println("Oprema " + nazivOpreme + " ne postoji u sistemu.");
+			return false;
 		}
 
 	}

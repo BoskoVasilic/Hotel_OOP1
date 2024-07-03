@@ -103,16 +103,17 @@ public class SobaricaManager {
 		return null;
 	}
 	
-	public void dodajSobaricu(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa,
+	public boolean dodajSobaricu(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa,
 			String korisnickoIme, String lozinka, StrucnaSprema strucnaSprema, int godineStaza) {
 		if (nadjiSobaricu(korisnickoIme) != null) {
 			System.out.println("Sobarica sa korisnickim imenom " + korisnickoIme + " vec postoji!");
-			return;
+			return false;
 		}
 		sobarice.add(new Sobarica(ime, prezime, pol, datumRodjenja, telefon, adresa, korisnickoIme, lozinka, strucnaSprema, godineStaza));
+		return true;
 	}
 	
-	public void izmeniSobaricu(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa,
+	public boolean izmeniSobaricu(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa,
 			String korisnickoIme, String lozinka, StrucnaSprema strucnaSprema, int godineStaza) {
 		Sobarica sobarica = nadjiSobaricu(korisnickoIme);
 		if (sobarica != null) {
@@ -126,18 +127,22 @@ public class SobaricaManager {
 			sobarica.setLozinka(lozinka);
 			sobarica.setStrucnaSprema(strucnaSprema);
 			sobarica.setGodineStaza(godineStaza);
+			return true;
 		}
 		else {
 			System.out.println("Sobarica sa korisnickim imenom " + korisnickoIme + " ne postoji!");
+			return false;
 		}
 	}
 	
-	public void obrisiSobaricu(String korisnickoIme) {
+	public boolean obrisiSobaricu(String korisnickoIme) {
 		Sobarica sobarica = nadjiSobaricu(korisnickoIme);
 		if (sobarica != null) {
 			sobarice.remove(sobarica);
+			return true;
 		} else {
 			System.out.println("Sobarica sa korisnickim imenom " + korisnickoIme + " ne postoji!");
+			return false;
 		}
 	}
 	
@@ -159,11 +164,12 @@ public class SobaricaManager {
         return sobarica;
     }
 	
-	public void ukloniSobuZaSredjivanje(Soba s) {
+	public boolean ukloniSobuZaSredjivanje(Soba s) {
 		Sobarica sobarica = getUlogovanaSobarica();
 		if (sobarica.getSobeZaSredjivanje().contains(s)) {
 			sobarica.getSobeZaSredjivanje().remove(s);
+			return true;
 		}
-		
+		return false;	
 	}
 }

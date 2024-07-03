@@ -185,7 +185,7 @@ public class RezervacijaManager {
 		return null;
 	}
 	
-	public void dodajRezervacijuPoTipu(Gost gost, LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe, int brojLjudi,ArrayList<DodatnaUsluga> dodatneUsluge, ArrayList<Oprema> zahtevanaOprema) {
+	public boolean dodajRezervacijuPoTipu(Gost gost, LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe, int brojLjudi,ArrayList<DodatnaUsluga> dodatneUsluge, ArrayList<Oprema> zahtevanaOprema) {
 		double cena = 0;
 		int id;
 		if(rezervacije.size() == 0) {
@@ -198,6 +198,7 @@ public class RezervacijaManager {
 		rezervacije.add(r);
 		gm.nadjiGosta(gost.getKorisnickoIme()).getRezervacije().add(r);
 		gm.sacuvajGoste();
+		return true;
 	}
 	
 	public boolean dodajRezervacijuPoBrojuLjudi(Gost gost, LocalDate datumPrijave, LocalDate datumOdjave, int brojLjudi, ArrayList<DodatnaUsluga> dodatneUsluge, ArrayList<Oprema> zahtevanaOprema) {
@@ -237,7 +238,7 @@ public class RezervacijaManager {
 		return false;
 	}
 	
-	public void izmeniRezervaciju(int id, Gost gost, LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe,
+	public boolean izmeniRezervaciju(int id, Gost gost, LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe,
 			int brojLjudi, ArrayList<DodatnaUsluga> dodatneUsluge) {
 		Rezervacija r = nadjiRezervaciju(id);
 		if (r != null) {
@@ -247,22 +248,26 @@ public class RezervacijaManager {
 			r.setTipSobe(tipSobe);
 			r.setBrojLjudi(brojLjudi);
 			r.setDodatneUsluge(dodatneUsluge);
-			r.setUkupnaCena(r.izracunajUkupnuCenu());;
+			r.setUkupnaCena(r.izracunajUkupnuCenu());
+			return true;
 		} else {
 			System.out.println("Rezervacija sa id " + id + " ne postoji u sistemu.");
+			return false;
 		}
 	}
 	
-	public void obrisiRezervaciju(int id) {
+	public boolean obrisiRezervaciju(int id) {
 		Rezervacija r = nadjiRezervaciju(id);
 		if (r != null) {
 			rezervacije.remove(r);
+			return true;
 		} else {
 			System.out.println("Rezervacija sa id " + id + " ne postoji u sistemu.");
+			return false;
 		}
 	}
 	
-	private HashMap<String, ArrayList<ArrayList<Oprema>>> pronadjiSlobodneTipoveSoba(LocalDate pocetak, LocalDate kraj){
+	public HashMap<String, ArrayList<ArrayList<Oprema>>> pronadjiSlobodneTipoveSoba(LocalDate pocetak, LocalDate kraj){
 		HashMap<String, ArrayList<ArrayList<Oprema>>> slobodniTipovi = new HashMap<String, ArrayList<ArrayList<Oprema>>>();
 		HashMap<String, Integer> brojSobaPoTipu = sm.getBrojSobaPoTipu();
 		HashMap<String, ArrayList<ArrayList<Oprema>>> opremaPoTipu = sm.getOpremaPoTipuSobe();
@@ -459,9 +464,6 @@ public class RezervacijaManager {
 	            prihodiPoTipuSobe.get(ts.getNaziv()).add(0.0);
 	        }
 		}
-
-		
-			
 
 		long i = 11;
 		int j = 0;

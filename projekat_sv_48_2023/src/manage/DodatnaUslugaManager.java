@@ -85,12 +85,14 @@ public class DodatnaUslugaManager {
 		}
 	}
 	
-	public void obrisiDodatnuUslugu(String naziv) {
+	public boolean obrisiDodatnuUslugu(String naziv) {
 		DodatnaUsluga du = this.nadjiDodatnuUslugu(naziv);
 		if (du != null) {
 			dodatneUsluge.remove(du);
+			return true;
 		} else {
 			System.out.println("Dodatna usluga sa nazivom " + naziv + " ne postoji!");
+			return false;
 		}
 	}
 }

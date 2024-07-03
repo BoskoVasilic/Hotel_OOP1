@@ -125,16 +125,17 @@ public class CenovnikManager {
 		return cene;
     }
 	
-	public void dodajCenovnik(LocalDate pocetakVazenja, LocalDate krajVazenja) {
+	public boolean dodajCenovnik(LocalDate pocetakVazenja, LocalDate krajVazenja) {
 		for(Cenovnik c : cenovnici) {
 			if (proveriPreklapanjeDatuma(c.getPocetakVazenja(), c.getKrajVazenja(), pocetakVazenja, krajVazenja)) {
 				System.out.println("Vec postoji cenovnik za uneti period!");
-				return;
+				return false;
 			}
 		}
 		HashMap<String, HashMap<String, Double>> cene = unesiCene();
 		Cenovnik c = new Cenovnik(pocetakVazenja, krajVazenja, cene);
 		this.cenovnici.add(c);
+		return true;
 	}
 	
 	public boolean dodajCenovnikGui(LocalDate pocetakVazenja, LocalDate krajVazenja, HashMap<String, HashMap<String, Double>> cene) {
@@ -149,45 +150,54 @@ public class CenovnikManager {
 		return true;
 	}
 	
-	public void izmeniCenovnikKomplet(LocalDate pocetakVazenja, LocalDate krajVazenja) {
+	public boolean izmeniCenovnikKomplet(LocalDate pocetakVazenja, LocalDate krajVazenja) {
 		Cenovnik c = nadjiCenovnik(pocetakVazenja, krajVazenja);
 		if (c != null) {
 			HashMap<String, HashMap<String, Double>> cene = unesiCene();
 			c.setCene(cene);
+			return true;
 		} else {
 			System.out.println("Cenovnik za uneti period ne postoji u sistemu.");
+			return false;
 		}
 	}
 	
-	public void izmeniCenovnikKompletGUI(LocalDate pocetakVazenja, LocalDate krajVazenja, HashMap<String, HashMap<String, Double>> cene) {
+	public boolean izmeniCenovnikKompletGUI(LocalDate pocetakVazenja, LocalDate krajVazenja, HashMap<String, HashMap<String, Double>> cene) {
 		Cenovnik c = nadjiCenovnik(pocetakVazenja, krajVazenja);
 		if (c != null) {
 			c.setCene(cene);
+			return true;
 		} else {
 			System.out.println("Cenovnik za uneti period ne postoji u sistemu.");
+			return false;
 		}
 	}
 	
-	public void izmeniStavkuCenovnika(LocalDate pocetakVazenja, LocalDate krajVazenja, String grupa, String stavka,
+	public boolean izmeniStavkuCenovnika(LocalDate pocetakVazenja, LocalDate krajVazenja, String grupa, String stavka,
 			double cena) {
 		Cenovnik c = nadjiCenovnik(pocetakVazenja, krajVazenja);
 		if (c != null) {
 			if (c.getCene().containsKey(grupa)) {
 				c.getCene().get(grupa).put(stavka, cena);
+				return true;
 			} else {
 				System.out.println("Grupa " + grupa + " ne postoji u cenovniku.");
+				return false;
 			}
 		} else {
 			System.out.println("Cenovnik za uneti period ne postoji u sistemu.");
+			return false;
 		}
 	}
 	
-	public void obrisiCenovnik(LocalDate pocetakVazenja, LocalDate krajVazenja) {
+	public boolean obrisiCenovnik(LocalDate pocetakVazenja, LocalDate krajVazenja) {
 		Cenovnik c = nadjiCenovnik(pocetakVazenja, krajVazenja);
 		if (c != null) {
 			cenovnici.remove(c);
+			return true;
 		} else {
 			System.out.println("Cenovnik za uneti period ne postoji u sistemu.");
+			return false;
 		}
 	}
 }

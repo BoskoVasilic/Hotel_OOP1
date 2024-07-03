@@ -51,7 +51,7 @@ public class OsnovicaManager {
 	}
 	
 	
-	public boolean sacuvajOpremu() {
+	public boolean sacuvajOsnovicu() {
 		PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(new FileWriter(this.osnovicaFile, false));
@@ -62,6 +62,12 @@ public class OsnovicaManager {
 		} catch (IOException e) {
 			System.out.println("Greska prilikom upisa u fajl!");
 		}
+		return true;
+	}
+	
+	public boolean dodajOsnovicu(double iznos, Pozicija pozicija) {
+		Osnovica o = new Osnovica(iznos, pozicija);
+		osnovice.add(o);
 		return true;
 	}
 	

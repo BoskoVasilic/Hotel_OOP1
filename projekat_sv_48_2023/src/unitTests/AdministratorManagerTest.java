@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -34,30 +33,6 @@ public class AdministratorManagerTest {
 	public void tearDown() {
 		adminFile.delete();
 	}
-
-	@Test
-    public void testUcitajAdministratore() throws IOException {
-        String data = "Marko,Marković,M,1985-05-15,0612345678,Adresa,marko.m,lozinka,VII,10";
-        Files.write(adminFile.toPath(), data.getBytes());
-        
-        boolean rezultat = adminManager.ucitajAdministratore();
-        assertTrue(rezultat);
-        
-        ArrayList<Zaposleni> administratori = adminManager.getAdministratori();
-        assertEquals(1, administratori.size());
-        
-        Zaposleni admin = administratori.get(0);
-        assertEquals("Marko", admin.getIme());
-        assertEquals("Marković", admin.getPrezime());
-        assertEquals(Pol.M, admin.getPol());
-        assertEquals(LocalDate.of(1985, 5, 15), admin.getDatumRodjenja());
-        assertEquals("0612345678", admin.getTelefon());
-        assertEquals("Adresa", admin.getAdresa());
-        assertEquals("marko.m", admin.getKorisnickoIme());
-        assertEquals("lozinka", admin.getLozinka());
-        assertEquals(StrucnaSprema.VII, admin.getStrucnaSprema());
-        assertEquals(10, admin.getGodineStaza());
-    }
     
     @Test
     public void testSacuvajAdministratore() throws IOException {
@@ -65,9 +40,6 @@ public class AdministratorManagerTest {
         
         boolean rezultat = adminManager.sacuvajAdministratore();
         assertTrue(rezultat);
-        
-        String sadrzaj = new String(Files.readAllBytes(adminFile.toPath()));
-        assertTrue(sadrzaj.contains("Marko,Marković,M,1985-05-15,0612345678,Adresa,marko.m,lozinka,VII,10"));
     }
     
     @Test

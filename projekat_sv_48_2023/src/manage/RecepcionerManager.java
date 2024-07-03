@@ -70,16 +70,17 @@ public class RecepcionerManager {
 		return null;
 	}
 	
-	public void dodajRecepcionera(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa,
+	public boolean dodajRecepcionera(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa,
 			String korisnickoIme, String lozinka, StrucnaSprema strucnaSprema, int godineStaza) {
 		if (nadjiRecepcionera(korisnickoIme) != null) {
 			System.out.println("Recepcioner sa korisnickim imenom " + korisnickoIme + " vec postoji!");
-			return;
+			return false;
 		}
 		recepcioneri.add(new Zaposleni(ime, prezime, pol, datumRodjenja, telefon, adresa, korisnickoIme, lozinka, strucnaSprema, godineStaza, new Osnovica(om.nadjiOsnovicu(Pozicija.Recepcioner).getVrednost(), Pozicija.Recepcioner)));
+		return true;
 	}
 	
-	public void izmeniRecepcionera(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa,
+	public boolean izmeniRecepcionera(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa,
 			String korisnickoIme, String lozinka, StrucnaSprema strucnaSprema, int godineStaza) {
 		Zaposleni recepcioner = nadjiRecepcionera(korisnickoIme);
 		if (recepcioner != null) {
@@ -93,18 +94,22 @@ public class RecepcionerManager {
 			recepcioner.setLozinka(lozinka);
 			recepcioner.setStrucnaSprema(strucnaSprema);
 			recepcioner.setGodineStaza(godineStaza);
+			return true;
 		}
 		else {
 			System.out.println("Recepcioner sa korisnickim imenom " + korisnickoIme + " ne postoji!");
+			return false;
 		}
 	}
 	
-	public void obrisiRecepcionera(String korisnickoIme) {
+	public boolean obrisiRecepcionera(String korisnickoIme) {
 		Zaposleni recepcioner = nadjiRecepcionera(korisnickoIme);
 		if (recepcioner != null) {
 			recepcioneri.remove(recepcioner);
+			return true;
 		} else {
 			System.out.println("Recepcioner sa korisnickim imenom " + korisnickoIme + " ne postoji!");
+			return false;
 		}
 	}
 	

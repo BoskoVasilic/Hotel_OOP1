@@ -89,15 +89,16 @@ public class GostManager {
 		return null;
 	}
 	
-	public void dodajGosta(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa, String email, String brojPasosa) {
+	public boolean dodajGosta(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon, String adresa, String email, String brojPasosa) {
 		if (nadjiGosta(email) != null) {
 			System.out.println("Gost sa korisnickim imenom " + email + " vec postoji!");
-			return;
+			return false;
 		}
 		gosti.add(new Gost(ime, prezime, pol, datumRodjenja, telefon, adresa, email, brojPasosa));
+		return true;
 	}
 	
-	public void izmeniGosta(String korisnickoIme, String ime, String prezime, Pol pol, LocalDate datumRodjenja,
+	public boolean izmeniGosta(String korisnickoIme, String ime, String prezime, Pol pol, LocalDate datumRodjenja,
 			String telefon, String adresa, String lozinka) {
 		Gost g = nadjiGosta(korisnickoIme);
 		if (g != null) {
@@ -108,17 +109,21 @@ public class GostManager {
 			g.setTelefon(telefon);
 			g.setAdresa(adresa);
 			g.setLozinka(lozinka);
+			return true;
 		}else {
 			System.out.println("Gost sa korisnickim imenom " + korisnickoIme + " ne postoji!");
+			return false;
 		}
 	}
 	
-	public void obrisiGosta(String korisnickoIme) {
+	public boolean obrisiGosta(String korisnickoIme) {
 		Gost g = nadjiGosta(korisnickoIme);
 		if (g != null) {
 			gosti.remove(g);
+			return true;
 		} else {
 			System.out.println("Gost sa korisnickim imenom " + korisnickoIme + " ne postoji!");
+			return false;
 		}
 	}
 }
