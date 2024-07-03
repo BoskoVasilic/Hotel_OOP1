@@ -3,7 +3,17 @@ package view;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -13,20 +23,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import org.knowm.xchart.CategoryChart;
-import org.knowm.xchart.CategoryChartBuilder;
 import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.style.Styler;
 
 import manage.RezervacijaManager;
-
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import java.awt.event.ActionListener;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.awt.event.ActionEvent;
 
 
 public class AdminUI extends JFrame {
@@ -121,22 +123,31 @@ public class AdminUI extends JFrame {
 				LocalDate pocetak = LocalDate.now().minusMonths(12);
 		        LocalDate kraj = LocalDate.now();
 		        
-		        HashMap<String, Double> data = rm.getPrihodiPoTipuSobe(pocetak, kraj);
+		        HashMap<String, ArrayList<Double>> prihodiPoTipuSobe = rm.getPrihodiPoTipuSobe(pocetak, kraj);
 
-		        CategoryChart chart = new CategoryChartBuilder().width(800).height(600).title("Prihodi po tipu sobe").xAxisTitle("Tip sobe").yAxisTitle("Prihod").build();
-		        chart.getStyler().setLegendPosition(Styler.LegendPosition.OutsideS);
-	            chart.getStyler().setPlotGridLinesVisible(true);
-	            chart.getStyler().setChartTitleVisible(true);
-	            chart.getStyler().setChartTitleFont(new Font("Arial", Font.PLAIN, 18));
-	            chart.getStyler().setAxisTitleFont(new Font("Arial", Font.PLAIN, 14));
-	            chart.getStyler().setAxisTickLabelsFont(new Font("Arial", Font.PLAIN, 12));
+		        XYChart chart = new XYChartBuilder().width(800).height(600).title("Prihodi po tipu sobe")
+		                .xAxisTitle("Mesec").yAxisTitle("Prihod").build();
+
+		        chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
+
+		        List<Date> months = new ArrayList<>();
+                for (int i = 0; i < 12; i++) {
+                    LocalDate date = pocetak.plusMonths(i).withDayOfMonth(1);
+                    months.add(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                }
+                
+		        for (String tipSobe : prihodiPoTipuSobe.keySet()) {
+		            List<Double> values = prihodiPoTipuSobe.get(tipSobe);
+		            chart.addSeries(tipSobe, months, values);
+		        }
+
+		        SwingWrapper<XYChart> swingWrapper = new SwingWrapper<>(chart);
 		        
-		        chart.addSeries("Prihodi", new ArrayList<>(data.keySet()), new ArrayList<>(data.values()));
 
 		        Thread t = new Thread(new Runnable() {
 		            @Override
 		            public void run() {
-		            	new SwingWrapper<>(chart).displayChart();
+		            	swingWrapper.displayChart();
 		            }
 		        });
 		        t.start();

@@ -442,22 +442,36 @@ public class RezervacijaManager {
 		return prihod;
 	}
 	
-	public HashMap<String, Double> getPrihodiPoTipuSobe(LocalDate pocetak, LocalDate kraj) {
-		HashMap<String, Double> prihodiPoTipuSobe = new HashMap<String, Double>();
+	public HashMap<String, ArrayList<Double>> getPrihodiPoTipuSobe(LocalDate pocetak, LocalDate kraj) {
+		HashMap<String, ArrayList<Double>> prihodiPoTipuSobe = new HashMap<String, ArrayList<Double>>();
 		
 		for (TipSobe ts : tsm.getTipoviSoba()) {
-			prihodiPoTipuSobe.put(ts.getNaziv(), 0.0);
+			prihodiPoTipuSobe.put(ts.getNaziv(), new ArrayList<Double>());
+			while (prihodiPoTipuSobe.get(ts.getNaziv()).size() != 12) {
+	            prihodiPoTipuSobe.get(ts.getNaziv()).add(0.0);
+	        }
 		}
+
 		
-		for (Rezervacija r : rezervacije) {
-			if (r.getDatumPrijave().isAfter(pocetak) && r.getDatumOdjave().isBefore(kraj)) {
-				if (prihodiPoTipuSobe.containsKey(r.getTipSobe().getNaziv())) {
-					prihodiPoTipuSobe.put(r.getTipSobe().getNaziv(),
-							prihodiPoTipuSobe.get(r.getTipSobe().getNaziv()) + r.getUkupnaCena());
-				} else {
-					prihodiPoTipuSobe.put(r.getTipSobe().getNaziv(), r.getUkupnaCena());
+			
+
+		long i = 11;
+		int j = 0;
+		while(i >= 0) {
+			for (Rezervacija r : rezervacije) {
+				if (r.getDatumPrijave().isAfter(pocetak) && r.getDatumOdjave().isBefore(kraj.minusMonths(i))) {
+					if (prihodiPoTipuSobe.get(r.getTipSobe().getNaziv()).size() == 0) {
+                        prihodiPoTipuSobe.get(r.getTipSobe().getNaziv()).add(r.getUkupnaCena());
+                    } else {
+                        prihodiPoTipuSobe.get(r.getTipSobe().getNaziv()).set(j,
+                                prihodiPoTipuSobe.get(r.getTipSobe().getNaziv()).get(j) + r.getUkupnaCena());
+                    }
+				
 				}
 			}
+			j = j + 1;		
+            i = i - 1;
+			
 		}
 		return prihodiPoTipuSobe;
 	}
