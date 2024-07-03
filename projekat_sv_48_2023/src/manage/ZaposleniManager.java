@@ -23,7 +23,6 @@ public class ZaposleniManager {
 		this.sm = SobaricaManager.getInstance();
 		am.ucitajAdministratore();
 		rm.ucitajRecepcionere();
-		sm.ucitajSobarice();
 	}
 	
 	public ArrayList<Zaposleni> getZaposleni() {

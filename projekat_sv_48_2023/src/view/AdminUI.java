@@ -23,6 +23,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import org.knowm.xchart.PieChart;
+import org.knowm.xchart.PieChartBuilder;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
@@ -78,7 +80,11 @@ public class AdminUI extends JFrame {
 		menuBar.add(izvestaji);
 		JMenu grafikoni = new JMenu("Grafikoni");
 		JMenuItem prihodiUPrethodnojGodini = new JMenuItem("Prihodi u prethodnih 12 meseci");
+		JMenuItem optereceneSobarica = new JMenuItem("Opterećenje sobarica u prethodnih 30 dana ");
+		JMenuItem statusRezervacija = new JMenuItem("Status rezervacija u prethodnih 30 dana");
 		grafikoni.add(prihodiUPrethodnojGodini);
+		grafikoni.add(optereceneSobarica);
+		grafikoni.add(statusRezervacija);
 		menuBar.add(grafikoni);
 		
 		this.setJMenuBar(menuBar);
@@ -147,7 +153,72 @@ public class AdminUI extends JFrame {
 		        Thread t = new Thread(new Runnable() {
 		            @Override
 		            public void run() {
-		            	swingWrapper.displayChart();
+		            	JFrame chartFrame = swingWrapper.displayChart();
+		            	chartFrame.setTitle("Prihodi u prethodnih 12 meseci po tipu sobe");
+                        chartFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		            }
+		        });
+		        t.start();
+			}
+		});
+		
+		optereceneSobarica.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LocalDate pocetak = LocalDate.now().minusDays(30);
+				LocalDate kraj = LocalDate.now();
+				
+				HashMap<String, Integer> data = rm.getBrojOciscenihSobaPoSobarici(pocetak, kraj);
+
+		        PieChart chart = new PieChartBuilder().width(800).height(600).title("Opterecenje sobarica u prethodnih 30 dana").build();
+
+		        chart.getStyler().setLegendVisible(true);
+		        chart.getStyler().setPlotContentSize(0.7);
+
+		        for (String key : data.keySet()) {
+		            chart.addSeries(key, data.get(key));
+		        }
+		        
+		        SwingWrapper<PieChart> swingWrapper = new SwingWrapper<>(chart);
+		        
+
+		        Thread t = new Thread(new Runnable() {
+		            @Override
+		            public void run() {
+		            	JFrame chartFrame = swingWrapper.displayChart();
+		            	chartFrame.setTitle("Opterecenje sobarica u prethodnih 30 dana");
+                        chartFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		            }
+		        });
+		        t.start();
+				
+			}
+		});
+		
+		statusRezervacija.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LocalDate pocetak = LocalDate.now().minusDays(30);
+				LocalDate kraj = LocalDate.now();
+
+				HashMap<String, Integer> data = rm.getBrojRezervacijaPoStatusu(pocetak, kraj);
+
+		        PieChart chart = new PieChartBuilder().width(800).height(600).title("Status rezervacija u prethodnih 30 dana").build();
+
+		        chart.getStyler().setLegendVisible(true);
+		        chart.getStyler().setPlotContentSize(0.7);
+
+		        for (String key : data.keySet()) {
+		            chart.addSeries(key, data.get(key));
+		        }
+		        
+		        SwingWrapper<PieChart> swingWrapper = new SwingWrapper<>(chart);
+		        
+
+		        Thread t = new Thread(new Runnable() {
+		            @Override
+		            public void run() {
+		            	JFrame chartFrame = swingWrapper.displayChart();
+		            	chartFrame.setTitle("Status rezervacija u prethodnih 30 dana");
+                        chartFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		            }
 		        });
 		        t.start();

@@ -15,6 +15,7 @@ import entity.Gost;
 import entity.Oprema;
 import entity.Rezervacija;
 import entity.Soba;
+import entity.Sobarica;
 import entity.StatusRezervacije;
 import entity.TipSobe;
 
@@ -28,6 +29,7 @@ public class RezervacijaManager {
 	private SobaManager sm;
 	private ArrayList<Rezervacija> filtriraneRezervacije;
 	private OpremaManager om;
+	private SobaricaManager sbm;
 	
 	private RezervacijaManager(String rezervacijaFile) {
 		this.rezervacijaFile = rezervacijaFile;
@@ -38,7 +40,7 @@ public class RezervacijaManager {
 		this.dum = new DodatnaUslugaManager("data/dodatneUsluge.csv");
 		this.sm = new SobaManager("data/sobe.csv");
 		this.om = new OpremaManager("data/oprema.csv");
-		gm.ucitajGoste();
+		this.sbm = SobaricaManager.getInstance();
 		tsm.ucitajTipoveSoba();
 		dum.ucitajDodatneUsluge();
 		sm.ucitajSobe();
@@ -141,7 +143,13 @@ public class RezervacijaManager {
 				for (String nazivOpreme : tokeni[10].substring(1, tokeni[10].length() - 1).split(", ")) {
 					zahtevanaOprema.add(om.nadjiOpremu(nazivOpreme.trim()));
 				}
-				Rezervacija r = new Rezervacija(Integer.parseInt(tokeni[0]), gost, LocalDate.parse(tokeni[2]), LocalDate.parse(tokeni[3]), tipSobe, Integer.parseInt(tokeni[5]), dodatneUsluge, Double.parseDouble(tokeni[7]), StatusRezervacije.valueOf(tokeni[8]), soba, zahtevanaOprema);
+				Sobarica sobarica;
+				if(tokeni[11].equals("nema")) {
+					sobarica = null;
+				}else {
+					sobarica = sbm.nadjiSobaricu(tokeni[11]);
+				}
+				Rezervacija r = new Rezervacija(Integer.parseInt(tokeni[0]), gost, LocalDate.parse(tokeni[2]), LocalDate.parse(tokeni[3]), tipSobe, Integer.parseInt(tokeni[5]), dodatneUsluge, Double.parseDouble(tokeni[7]), StatusRezervacije.valueOf(tokeni[8]), soba, zahtevanaOprema, sobarica);
 				this.rezervacije.add(r);
 				gost.getRezervacije().add(r);
 			}
@@ -475,4 +483,51 @@ public class RezervacijaManager {
 		}
 		return prihodiPoTipuSobe;
 	}
+	
+	public HashMap<String, Integer> getBrojRezervacijaPoStatusu(LocalDate pocetak, LocalDate kraj) {
+        HashMap<String, Integer> brojRezervacijaPoStatusu = new HashMap<String, Integer>();
+        brojRezervacijaPoStatusu.put("NA_ČEKANJU", 0);
+        brojRezervacijaPoStatusu.put("POTVRĐENA", 0);
+        brojRezervacijaPoStatusu.put("U_TOKU", 0);
+        brojRezervacijaPoStatusu.put("ZAVRŠENA", 0);
+        brojRezervacijaPoStatusu.put("OTKAZANA", 0);
+        brojRezervacijaPoStatusu.put("ODBIJENA", 0);
+        
+        for (Rezervacija r : rezervacije) {
+            if (r.getDatumPrijave().isAfter(pocetak) && r.getDatumOdjave().isBefore(kraj)) {
+                brojRezervacijaPoStatusu.put(r.getStatusRezervacije().toString(), brojRezervacijaPoStatusu.get(r.getStatusRezervacije().toString()) + 1);
+            }
+        }
+        return brojRezervacijaPoStatusu;
+    }
+	
+	public HashMap<String, Integer> getBrojOciscenihSobaPoSobarici(LocalDate pocetak, LocalDate kraj) {
+		HashMap<String, Integer> brojOciscenihSobaPoSobarici = new HashMap<String, Integer>();
+		for (Sobarica s : sbm.getSobarice()) {
+			brojOciscenihSobaPoSobarici.put(s.getKorisnickoIme(), 0);
+		}
+		for (Rezervacija r : rezervacije) {
+			if (r.getDatumPrijave().isAfter(pocetak) && r.getDatumOdjave().isBefore(kraj)
+					&& r.getStatusRezervacije() == StatusRezervacije.ZAVRŠENA) {
+				brojOciscenihSobaPoSobarici.put(r.getSobuOcistila().getKorisnickoIme(),
+						brojOciscenihSobaPoSobarici.get(r.getSobuOcistila().getKorisnickoIme()) + 1);
+			}
+		}
+		return brojOciscenihSobaPoSobarici;
+	}
+	
+	public int getBrojSredjenihSobaPoSobarici(LocalDate pocetak, LocalDate kraj, String korisnickoImeSobarice) {
+		int brojSredjenihSoba = 0;
+		if (pocetak == null || kraj == null) {
+			return brojSredjenihSoba;
+		}
+        for (Rezervacija r : rezervacije) {
+            if (r.getDatumPrijave().isAfter(pocetak) && r.getDatumOdjave().isBefore(kraj)
+                    && r.getStatusRezervacije() == StatusRezervacije.ZAVRŠENA && r.getSobuOcistila().getKorisnickoIme().equals(korisnickoImeSobarice)) {
+                brojSredjenihSoba++;
+            }
+        }
+        return brojSredjenihSoba;
+	}
+		
 }

@@ -33,7 +33,7 @@ public class ZaposleniUI extends JFrame {
 	public ZaposleniUI() {
 		setTitle("Hotel - Pregled zaposlenih");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 1430, 500);
+		setBounds(100, 100, 1430, 350);
 		contentPane = new JPanel();
 		setLocationRelativeTo(null);
 		setResizable(false);

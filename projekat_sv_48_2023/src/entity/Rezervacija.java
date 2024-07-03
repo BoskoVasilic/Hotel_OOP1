@@ -19,6 +19,7 @@ public class Rezervacija {
 	protected StatusRezervacije statusRezervacije;
 	protected Soba dodeljenaSoba;
 	protected ArrayList<Oprema> zahtevanaOprema;
+	protected Sobarica sobuOcistila;
 	
 	public Rezervacija(int id, Gost rezervisao,LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe, int brojLjudi,
 			ArrayList<DodatnaUsluga> dodatneUsluge, double ukupnaCena, ArrayList<Oprema> zahtevanaOprema) {
@@ -33,10 +34,11 @@ public class Rezervacija {
 		this.statusRezervacije = StatusRezervacije.NA_ČEKANJU;
 		this.dodeljenaSoba = null;
 		this.zahtevanaOprema = zahtevanaOprema;
+		this.sobuOcistila = null;
 	}
 	
 	public Rezervacija(int id, Gost rezervisao, LocalDate datumPrijave, LocalDate datumOdjave, TipSobe tipSobe,
-			int brojLjudi, ArrayList<DodatnaUsluga> dodatneUsluge, double ukupnaCena, StatusRezervacije statusRezervacije, Soba dodeljenaSoba, ArrayList<Oprema> zahtevanaOprema) {
+			int brojLjudi, ArrayList<DodatnaUsluga> dodatneUsluge, double ukupnaCena, StatusRezervacije statusRezervacije, Soba dodeljenaSoba, ArrayList<Oprema> zahtevanaOprema, Sobarica sobuOcistila) {
 		this.id = id;
 		this.rezervisao = rezervisao;
 		this.datumPrijave = datumPrijave;
@@ -48,6 +50,7 @@ public class Rezervacija {
 		this.statusRezervacije = statusRezervacije;
 		this.dodeljenaSoba = dodeljenaSoba;
 		this.zahtevanaOprema = zahtevanaOprema;
+		this.sobuOcistila = sobuOcistila;
 	}
 
 	public int getId() {
@@ -138,6 +141,14 @@ public class Rezervacija {
 		this.zahtevanaOprema = zahtevanaOprema;
 	}
 	
+	public Sobarica getSobuOcistila() {
+		return sobuOcistila;
+	}
+	
+	public void setSobuOcistila(Sobarica sobuOcistila) {
+		this.sobuOcistila = sobuOcistila;
+	}
+	
 	public double izracunajUkupnuCenu() {
 		double ukupnaCena = 0;
 		CenovnikManager cm = new CenovnikManager("data/cenovnik.csv");
@@ -153,12 +164,12 @@ public class Rezervacija {
 	@Override
 	public String toString() {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
-		return "Datum prijave: " + datumPrijave.format(format) + "\nDatum odjave: " + datumOdjave.format(format) + "\nTip sobe: " + tipSobe.getNaziv() + "\nBroj ljudi: " + brojLjudi + "\nDodatne usluge: " + dodatneUsluge + "\nUkupna cena: " + ukupnaCena + "\nStatus rezervacije: " + statusRezervacije + "\nDodeljena soba: " + (dodeljenaSoba != null ? dodeljenaSoba.getBrojSobe() : "jos nije dodeljena") + "\nZahtevana oprema: " + zahtevanaOprema;
+		return "Datum prijave: " + datumPrijave.format(format) + "\nDatum odjave: " + datumOdjave.format(format) + "\nTip sobe: " + tipSobe.getNaziv() + "\nBroj ljudi: " + brojLjudi + "\nDodatne usluge: " + dodatneUsluge + "\nUkupna cena: " + ukupnaCena + "\nStatus rezervacije: " + statusRezervacije + "\nDodeljena soba: " + (dodeljenaSoba != null ? dodeljenaSoba.getBrojSobe() : "jos nije dodeljena") + "\nZahtevana oprema: " + zahtevanaOprema + "\nSobu ocistila: " + (sobuOcistila != null ? sobuOcistila.getKorisnickoIme() : "jos nije ociscena") + "\n";
 
 	}
 	
 	public String toFile() {
-        return id + "," + rezervisao.getKorisnickoIme() + "," + datumPrijave + "," + datumOdjave + "," + tipSobe.getNaziv() + "," + brojLjudi + "," + dodatneUsluge + "," + ukupnaCena + "," + statusRezervacije + "," + (dodeljenaSoba != null ? dodeljenaSoba.getBrojSobe() : "nema") + "," + zahtevanaOprema;
+        return id + "," + rezervisao.getKorisnickoIme() + "," + datumPrijave + "," + datumOdjave + "," + tipSobe.getNaziv() + "," + brojLjudi + "," + dodatneUsluge + "," + ukupnaCena + "," + statusRezervacije + "," + (dodeljenaSoba != null ? dodeljenaSoba.getBrojSobe() : "nema") + "," + zahtevanaOprema + "," + (sobuOcistila != null ? sobuOcistila.getKorisnickoIme() : "nema");
     }
 	
 }

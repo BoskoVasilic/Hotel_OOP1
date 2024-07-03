@@ -22,6 +22,7 @@ import javax.swing.table.TableRowSorter;
 import entity.DodatnaUsluga;
 import entity.Rezervacija;
 import entity.Soba;
+import entity.Sobarica;
 import entity.StatusRezervacije;
 import entity.StatusSobe;
 import entity.TipSobe;
@@ -168,7 +169,8 @@ public class CheckInOutUI extends JFrame {
 							rezervacija.setStatusRezervacije(StatusRezervacije.ZAVRŠENA);
 							sm.nadjiSobu(rezervacija.getDodeljenaSoba().getBrojSobe()).setStatusSobe(StatusSobe.SPREMANJE);
 							sm.sacuvajSobe();
-							soM.dodajSobuZaSredjivanje(rezervacija.getDodeljenaSoba());
+							Sobarica sobarica = soM.dodajSobuZaSredjivanje(rezervacija.getDodeljenaSoba());
+							rezervacija.setSobuOcistila(sobarica);
 							soM.sacuvajSobarice();
 							rm.sacuvajRezervacije();
 							if (tableCheckOut.getRowSorter() != null) {

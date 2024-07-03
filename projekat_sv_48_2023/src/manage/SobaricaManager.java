@@ -152,10 +152,11 @@ public class SobaricaManager {
 		
 	}
 	
-	public void dodajSobuZaSredjivanje(Soba s) {
+	public Sobarica dodajSobuZaSredjivanje(Soba s) {
 		Sobarica sobarica = nadjiSobaricuSaNajmanjeDodeljenihSoba();
         sobarica.getSobeZaSredjivanje().add(s);
         sobarica.setBrojSobaZaSredjivanje(sobarica.getBrojSobaZaSredjivanje() + 1);
+        return sobarica;
     }
 	
 	public void ukloniSobuZaSredjivanje(Soba s) {
