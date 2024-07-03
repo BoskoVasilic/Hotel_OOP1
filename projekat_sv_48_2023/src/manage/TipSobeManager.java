@@ -76,22 +76,26 @@ public class TipSobeManager {
 	}
 	
 
-	public void izmeniTipSobe(String naziv, int brojKreveta, int brojOsoba) {
+	public boolean izmeniTipSobe(String naziv, int brojKreveta, int brojOsoba) {
 		TipSobe ts = this.nadjiTipSobe(naziv);
 		if (ts != null) {
 			ts.setBrojKreveta(brojKreveta);
 			ts.setBrojOsoba(brojOsoba);
+			return true;
 		} else {
 			System.out.println("Tip sobe " + naziv + " ne postoji u sistemu.");
+			return false;
 		}
 	}
 	
-	public void obrisiTipSobe(String naziv) {
+	public boolean obrisiTipSobe(String naziv) {
 		TipSobe ts = this.nadjiTipSobe(naziv);
 		if (ts != null) {
 			tipoviSoba.remove(ts);
+			return true;
 		} else {
 			System.out.println("Tip sobe " + naziv + " ne postoji u sistemu.");
+			return false;
 		}
 	}
 	

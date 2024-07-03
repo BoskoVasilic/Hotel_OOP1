@@ -64,51 +64,63 @@ public class ZaposleniManager {
 		return z;
 	}
 	
-	public void dodajZaposlenog(Zaposleni z) {
+	public boolean dodajZaposlenog(Zaposleni z) {
 		if(z.getOsnovica().getPozicija() == Pozicija.Administrator) {
 			am.dodajAdministratora(z.getIme(), z.getPrezime(), z.getPol(), z.getDatumRodjenja(), z.getTelefon(),
 					z.getAdresa(), z.getKorisnickoIme(), z.getLozinka(), z.getStrucnaSprema(), z.getGodineStaza());
 			am.sacuvajAdministratore();
+			return true;
 		} else if (z.getOsnovica().getPozicija() == Pozicija.Recepcioner) {
 			rm.dodajRecepcionera(z.getIme(), z.getPrezime(), z.getPol(), z.getDatumRodjenja(), z.getTelefon(),
 					z.getAdresa(), z.getKorisnickoIme(), z.getLozinka(), z.getStrucnaSprema(), z.getGodineStaza());
 			rm.sacuvajRecepcionere();
+			return true;
 		} else if (z.getOsnovica().getPozicija() == Pozicija.Sobarica) {
 			sm.dodajSobaricu(z.getIme(), z.getPrezime(), z.getPol(), z.getDatumRodjenja(), z.getTelefon(),
 					z.getAdresa(), z.getKorisnickoIme(), z.getLozinka(), z.getStrucnaSprema(), z.getGodineStaza());
 			sm.sacuvajSobarice();
+			return true;
 		}
+		return false;
 	}
 	
-	public void obrisiZaposlenog(String korisnickoIme, Pozicija pozicija) {
+	public boolean obrisiZaposlenog(String korisnickoIme, Pozicija pozicija) {
 		if (pozicija == Pozicija.Administrator) {
 			am.obrisiAdministratora(korisnickoIme);
 			am.sacuvajAdministratore();
+			return true;
 		} else if (pozicija == Pozicija.Recepcioner) {
 			rm.obrisiRecepcionera(korisnickoIme);
 			rm.sacuvajRecepcionere();
+			return true;
 		} else if (pozicija == Pozicija.Sobarica) {
 			sm.obrisiSobaricu(korisnickoIme);
 			sm.sacuvajSobarice();
+			return true;
 		}
+		return false;
 	}
 	
-	public void izmeniZaposlenog(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon,
+	public boolean izmeniZaposlenog(String ime, String prezime, Pol pol, LocalDate datumRodjenja, String telefon,
 			String adresa, String korisnickoIme, String lozinka, StrucnaSprema strucnaSprema, int godineStaza,
 			Pozicija pozicija) {
 		if (pozicija == Pozicija.Administrator) {
 			am.izmeniAdministratora(ime, prezime, pol, datumRodjenja, telefon, adresa, korisnickoIme, lozinka,
 					strucnaSprema, godineStaza);
 			am.sacuvajAdministratore();
+			return true;
 		} else if (pozicija == Pozicija.Recepcioner) {
 			rm.izmeniRecepcionera(ime, prezime, pol, datumRodjenja, telefon, adresa, korisnickoIme, lozinka,
 					strucnaSprema, godineStaza);
 			rm.sacuvajRecepcionere();
+			return true;
 		} else if (pozicija == Pozicija.Sobarica) {
 			sm.izmeniSobaricu(ime, prezime, pol, datumRodjenja, telefon, adresa, korisnickoIme, lozinka, strucnaSprema,
 					godineStaza);
 			sm.sacuvajSobarice();
+			return true;
 		}
+		return false;
 	}
 	
 	public Zaposleni nadjiZaposlenog(String korisnickoIme, Pozicija pozicija) {

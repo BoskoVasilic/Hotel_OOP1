@@ -146,7 +146,7 @@ public class SobaricaManager {
 		}
 	}
 	
-	private Sobarica nadjiSobaricuSaNajmanjeDodeljenihSoba() {
+	public Sobarica nadjiSobaricuSaNajmanjeDodeljenihSoba() {
 		Sobarica minSoba = sobarice.get(0);
 		for (Sobarica sobarica : sobarice) {
 			if (sobarica.getBrojSobaZaSredjivanje() < minSoba.getBrojSobaZaSredjivanje()) {
