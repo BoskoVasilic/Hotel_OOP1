@@ -29,6 +29,11 @@ public class SobaManagerTest {
 	public void setUp() {
 		sobaFile = new File("data/test/sobe.csv");
 		sm = new SobaManager(sobaFile.getAbsolutePath());
+		TipSobe tipSobe = new TipSobe("Jednokrevetna (1)", 1, 1);
+        StatusSobe statusSobe = StatusSobe.SLOBODNA;
+        ArrayList<Oprema> oprema = new ArrayList<>(Arrays.asList(new Oprema("TV"), new Oprema("Klima")));
+        boolean pusacka = false;
+        sm.dodajSobu(101, tipSobe, statusSobe, oprema, pusacka);
 	}
 
 	@After
@@ -38,11 +43,6 @@ public class SobaManagerTest {
 
     @Test
     public void testNadjiSobu() {
-    	TipSobe tipSobe = new TipSobe("Jednokrevetna (1)", 1, 1);
-        StatusSobe statusSobe = StatusSobe.SLOBODNA;
-        ArrayList<Oprema> oprema = new ArrayList<>(Arrays.asList(new Oprema("TV"), new Oprema("Klima")));
-        boolean pusacka = false;
-        sm.dodajSobu(101, tipSobe, statusSobe, oprema, pusacka);
         Soba soba = sm.nadjiSobu(101);
         assertNotNull(soba);
 
@@ -63,11 +63,6 @@ public class SobaManagerTest {
 
     @Test
     public void testIzmeniSobu() {
-    	TipSobe tipSobe = new TipSobe("Jednokrevetna (1)", 1, 1);
-        StatusSobe statusSobe = StatusSobe.SLOBODNA;
-        ArrayList<Oprema> oprema = new ArrayList<>(Arrays.asList(new Oprema("TV"), new Oprema("Klima")));
-        boolean pusacka = false;
-        sm.dodajSobu(101, tipSobe, statusSobe, oprema, pusacka);
         Soba soba = sm.nadjiSobu(101);
         assertNotNull(soba);
 
@@ -88,12 +83,7 @@ public class SobaManagerTest {
 
     @Test
     public void testObrisiSobu() {
-    	TipSobe tipSobe = new TipSobe("Jednokrevetna (1)", 1, 1);
-        StatusSobe statusSobe = StatusSobe.SLOBODNA;
-        ArrayList<Oprema> oprema = new ArrayList<>(Arrays.asList(new Oprema("TV"), new Oprema("Klima")));
-        boolean pusacka = false;
-        sm.dodajSobu(102, tipSobe, statusSobe, oprema, pusacka);
-        boolean rezultat = sm.obrisiSobu(102);
+        boolean rezultat = sm.obrisiSobu(101);
         assertTrue(rezultat);
 
         rezultat = sm.obrisiSobu(999);
@@ -106,7 +96,6 @@ public class SobaManagerTest {
         StatusSobe statusSobe = StatusSobe.SLOBODNA;
         ArrayList<Oprema> oprema = new ArrayList<>(Arrays.asList(new Oprema("TV"), new Oprema("Klima")));
         boolean pusacka = false;
-        sm.dodajSobu(108, tipSobe, statusSobe, oprema, pusacka);
         sm.dodajSobu(105, tipSobe, statusSobe, oprema, pusacka);
         
         HashMap<String, Integer> brojSobaPoTipu = sm.getBrojSobaPoTipu();
@@ -117,10 +106,6 @@ public class SobaManagerTest {
     @Test
     public void testGetSlobodneSobeTipa() {
         TipSobe tip = new TipSobe("Jednokrevetna (1)", 1, 1);
-        StatusSobe statusSobe = StatusSobe.SLOBODNA;
-        ArrayList<Oprema> oprema = new ArrayList<>(Arrays.asList(new Oprema("TV"), new Oprema("Klima")));
-        boolean pusacka = false;
-        sm.dodajSobu(101, tip, statusSobe, oprema, pusacka);
         ArrayList<Oprema> zahtevanaOprema = new ArrayList<>(Arrays.asList(new Oprema("TV")));
 
         ArrayList<String> slobodneSobe = sm.getSlobodneSobeTipa(tip, zahtevanaOprema);
@@ -134,7 +119,6 @@ public class SobaManagerTest {
         StatusSobe statusSobe = StatusSobe.SLOBODNA;
         ArrayList<Oprema> oprema = new ArrayList<>(Arrays.asList(new Oprema("TV"), new Oprema("Klima")));
         boolean pusacka = false;
-        sm.dodajSobu(108, tipSobe, statusSobe, oprema, pusacka);
         sm.dodajSobu(105, tipSobe, statusSobe, oprema, pusacka);
         
         HashMap<String, ArrayList<ArrayList<Oprema>>> opremaPoTipu = sm.getOpremaPoTipuSobe();

@@ -27,6 +27,7 @@ public class AdministratorManagerTest {
 	public void setUp() {
 		adminFile = new File("data/test/administratori.csv");
 		adminManager = new AdministratorManager(adminFile.getAbsolutePath());
+		adminManager.dodajAdministratora("Marko", "Marković", Pol.M, LocalDate.of(1985, 5, 15), "0612345678", "Adresa", "marko.m", "lozinka", StrucnaSprema.VII, 10);
 	}
 
 	@After
@@ -43,9 +44,7 @@ public class AdministratorManagerTest {
     }
     
     @Test
-    public void testNadjiAdministratora() {
-        adminManager.dodajAdministratora("Marko", "Marković", Pol.M, LocalDate.of(1985, 5, 15), "0612345678", "Adresa", "marko.m", "lozinka", StrucnaSprema.VII, 10);
-        
+    public void testNadjiAdministratora() {       
         Zaposleni admin = adminManager.nadjiAdministratora("marko.m");
         assertNotNull(admin);
         assertEquals("marko.m", admin.getKorisnickoIme());
@@ -56,20 +55,18 @@ public class AdministratorManagerTest {
     
     @Test
     public void testDodajAdministratora() {
-        adminManager.dodajAdministratora("Marko", "Marković", Pol.M, LocalDate.of(1985, 5, 15), "0612345678", "Adresa", "marko.m", "lozinka", StrucnaSprema.VII, 10);
+        adminManager.dodajAdministratora("Nikola", "Nikolic", Pol.M, LocalDate.of(1985, 5, 15), "0612345678", "Adresa", "nikola.n", "lozinka", StrucnaSprema.VII, 10);
         
         ArrayList<Zaposleni> administratori = adminManager.getAdministratori();
-        assertEquals(1, administratori.size());
+        assertEquals(2, administratori.size());
         
-        Zaposleni admin = administratori.get(0);
-        assertEquals("Marko", admin.getIme());
-        assertEquals("Marković", admin.getPrezime());
+        Zaposleni admin = administratori.get(1);
+        assertEquals("Nikola", admin.getIme());
+        assertEquals("Nikolic", admin.getPrezime());
     }
     
     @Test
-    public void testIzmeniAdministratora() {
-        adminManager.dodajAdministratora("Marko", "Marković", Pol.M, LocalDate.of(1985, 5, 15), "0612345678", "Adresa", "marko.m", "lozinka", StrucnaSprema.VII, 10);
-        
+    public void testIzmeniAdministratora() {      
         adminManager.izmeniAdministratora("Milos", "Milić", Pol.Z, LocalDate.of(1990, 10, 10), "0698765432", "Nova Adresa", "marko.m", "novalozinka", StrucnaSprema.VIII, 5);
         
         Zaposleni admin = adminManager.nadjiAdministratora("marko.m");
@@ -85,9 +82,7 @@ public class AdministratorManagerTest {
     }
     
     @Test
-    public void testObrisiAdministratora() {
-        adminManager.dodajAdministratora("Marko", "Marković", Pol.M, LocalDate.of(1985, 5, 15), "0612345678", "Adresa", "marko.m", "lozinka", StrucnaSprema.VII, 10);
-        
+    public void testObrisiAdministratora() {       
         adminManager.obrisiAdministratora("marko.m");
         
         ArrayList<Zaposleni> administratori = adminManager.getAdministratori();

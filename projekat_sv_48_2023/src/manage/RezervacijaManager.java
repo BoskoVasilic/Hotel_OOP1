@@ -125,6 +125,7 @@ public class RezervacijaManager {
 			BufferedReader br = new BufferedReader(new FileReader(this.rezervacijaFile));
 			String linija = null;
 			String regex = ",(?![^\\[]*\\])";
+			boolean promena = false;
 			while ((linija = br.readLine()) != null) {
 				String[] tokeni = linija.split(regex);
 				Gost gost = gm.nadjiGosta(tokeni[1]);
@@ -150,14 +151,25 @@ public class RezervacijaManager {
 					sobarica = sbm.nadjiSobaricu(tokeni[11]);
 				}
 				Rezervacija r = new Rezervacija(Integer.parseInt(tokeni[0]), gost, LocalDate.parse(tokeni[2]), LocalDate.parse(tokeni[3]), tipSobe, Integer.parseInt(tokeni[5]), dodatneUsluge, Double.parseDouble(tokeni[7]), StatusRezervacije.valueOf(tokeni[8]), soba, zahtevanaOprema, sobarica);
+				LocalDate danas = LocalDate.now();
+				
+				if (r.getDatumPrijave().isBefore(danas) && r.getStatusRezervacije() == StatusRezervacije.NA_ČEKANJU) {
+					r.setStatusRezervacije(StatusRezervacije.ODBIJENA);
+					promena = true;
+				}
 				this.rezervacije.add(r);
 				gost.getRezervacije().add(r);
 			}
+			if (promena) {
+                sacuvajRezervacije();
+			}
 			br.close();
+			
 		} catch (IOException e) {
 			System.out.println("Greska prilikom citanja fajla!");
 			return false;
 		}
+		
 		return true;
 	}
 	
@@ -345,10 +357,12 @@ public class RezervacijaManager {
 		tipoviSoba = this.pronadjiSlobodneTipoveSoba(pocetak, kraj);
 		ArrayList<TipSobe> tipoviSobaKojeZadovoljavajuUslove = new ArrayList<TipSobe>();
 		for (Soba s : sm.getSobe()) {
-			for(ArrayList<Oprema> dostupnaOprema : tipoviSoba.get(s.getTipSobe().getNaziv())){
-				if (tipoviSoba.containsKey(s.getTipSobe().getNaziv()) && (oprema.size() == 0 || (s.getOpremljenostSobe().containsAll(oprema) && dostupnaOprema.containsAll(oprema))) && tipoviSobaKojeZadovoljavajuUslove.contains(s.getTipSobe()) == false) {
-					tipoviSobaKojeZadovoljavajuUslove.add(s.getTipSobe());
-					break;
+			if(tipoviSoba.get(s.getTipSobe().getNaziv()) != null) {
+				for(ArrayList<Oprema> dostupnaOprema : tipoviSoba.get(s.getTipSobe().getNaziv())){
+					if (tipoviSoba.containsKey(s.getTipSobe().getNaziv()) && (oprema.size() == 0 || (s.getOpremljenostSobe().containsAll(oprema) && dostupnaOprema.containsAll(oprema))) && tipoviSobaKojeZadovoljavajuUslove.contains(s.getTipSobe()) == false) {
+						tipoviSobaKojeZadovoljavajuUslove.add(s.getTipSobe());
+						break;
+					}
 				}
 			}
 			
@@ -439,6 +453,16 @@ public class RezervacijaManager {
 		return brojNocenja;
 	}
 	
+	public HashMap<Integer, Gost> getGostiPoSobama(){
+		HashMap<Integer, Gost> gostiPoSobama = new HashMap<Integer, Gost>();
+		for (Rezervacija r : rezervacije) {
+			if (r.getDodeljenaSoba() != null && r.getStatusRezervacije() == StatusRezervacije.U_TOKU) {
+				gostiPoSobama.put(r.getDodeljenaSoba().getBrojSobe(), r.getRezervisao());
+			}
+		}
+		return gostiPoSobama;
+	}
+	
 	public double getPrihodPoSobi(LocalDate pocetak, LocalDate kraj, int brojSobe) {
 		double prihod = 0;
 		
@@ -455,6 +479,22 @@ public class RezervacijaManager {
 		return prihod;
 	}
 	
+	public HashMap<String, ArrayList<Rezervacija>> getDnevniOdlasciDolasci(LocalDate datum){
+		HashMap<String, ArrayList<Rezervacija>> dnevniOdlasciDolasci = new HashMap<String, ArrayList<Rezervacija>>();
+		dnevniOdlasciDolasci.put("Odlasci", new ArrayList<Rezervacija>());
+		dnevniOdlasciDolasci.put("Dolasci", new ArrayList<Rezervacija>());
+
+		for (Rezervacija r : rezervacije) {
+			if (r.getDatumOdjave().isEqual(datum) && r.getStatusRezervacije() == StatusRezervacije.ZAVRŠENA) {
+				dnevniOdlasciDolasci.get("Odlasci").add(r);
+			}
+			if (r.getDatumPrijave().isEqual(datum) && r.getStatusRezervacije() == StatusRezervacije.U_TOKU) {
+				dnevniOdlasciDolasci.get("Dolasci").add(r);
+			}
+		}
+		return dnevniOdlasciDolasci;
+	}
+	
 	public HashMap<String, ArrayList<Double>> getPrihodiPoTipuSobe(LocalDate pocetak, LocalDate kraj) {
 		HashMap<String, ArrayList<Double>> prihodiPoTipuSobe = new HashMap<String, ArrayList<Double>>();
 		
@@ -469,7 +509,7 @@ public class RezervacijaManager {
 		int j = 0;
 		while(i >= 0) {
 			for (Rezervacija r : rezervacije) {
-				if (r.getDatumPrijave().isAfter(pocetak) && r.getDatumOdjave().isBefore(kraj.minusMonths(i))) {
+				if (r.getDatumPrijave().isAfter(pocetak.plusMonths(j)) && r.getDatumOdjave().isBefore(kraj.minusMonths(i)) && r.getStatusRezervacije() != StatusRezervacije.NA_ČEKANJU) {
 					if (prihodiPoTipuSobe.get(r.getTipSobe().getNaziv()).size() == 0) {
                         prihodiPoTipuSobe.get(r.getTipSobe().getNaziv()).add(r.getUkupnaCena());
                     } else {

@@ -8,6 +8,9 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -59,12 +62,27 @@ public class CheckInOutUI extends JFrame {
 		sm.ucitajSobe();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setResizable(false);
-		setBounds(100, 100, 1000, 600);
+		setBounds(100, 100, 1000, 640);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
+		
+		JMenuBar menuBar = new JMenuBar();
+		JMenu info = new JMenu("Info");
+		JMenuItem dnevniOdlasciDolasci = new JMenuItem("Dnevni dolasci i odlasci gostiju");
+		info.add(dnevniOdlasciDolasci);
+		menuBar.add(info);
+		
+		this.setJMenuBar(menuBar);
+		
+		dnevniOdlasciDolasci.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DnevniOdlasciDolasciUI frame = new DnevniOdlasciDolasciUI();
+				frame.setVisible(true);
+			}
+		});
 		
 		JTable table = new JTable(new CheckInRezervacijeModel(rm));
 		table.setFont(new Font("Tahoma", Font.PLAIN, 12));
